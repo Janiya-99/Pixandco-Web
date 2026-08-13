@@ -1,0 +1,43 @@
+import type { Project } from "@/types/project"
+
+export const projects: Project[] = [
+  {
+    slug: "atlas-operations",
+    title: "Atlas Operations",
+    year: "2026",
+    industry: "Industrial logistics",
+    summary: "A connected operations layer that turns fragmented routing, inventory, and dispatch decisions into one clear system.",
+    coverImage: "/images/terrain-system.png",
+    services: ["Systems design", "AI orchestration", "Workflow automation"],
+    challenge: "Critical dispatch decisions lived across disconnected tools, manual checks, and individual experience. Growth increased complexity faster than the team could absorb it.",
+    approach: "We mapped every decision point, designed a shared operational data model, and built an orchestration layer that routes exceptions to people while automating the predictable work.",
+    result: "Teams now work from one operating picture. Planning cycles are shorter, exceptions surface earlier, and the system improves with every completed route.",
+    metrics: [{ value: "42%", label: "Faster planning" }, { value: "18h", label: "Saved each week" }, { value: "3.1x", label: "More capacity" }],
+  },
+  {
+    slug: "kinetic-production",
+    title: "Kinetic Production",
+    year: "2025",
+    industry: "Advanced manufacturing",
+    summary: "An intelligent quality-control workflow that catches production variance before it becomes expensive rework.",
+    coverImage: "/images/robotic-system.png",
+    services: ["AI integration", "Quality automation", "Data systems"],
+    challenge: "Inspection data arrived too late to prevent defects from moving downstream, creating costly rework and uncertain delivery windows.",
+    approach: "We connected machine signals, inspection records, and operator context, then built an exception engine that identifies patterns and recommends the next action.",
+    result: "Quality teams moved from retrospective reporting to live intervention, with fewer false alarms and a clearer trail behind every decision.",
+    metrics: [{ value: "31%", label: "Less rework" }, { value: "67%", label: "Faster response" }, { value: "99.4%", label: "Traceability" }],
+  },
+  {
+    slug: "signal-revenue",
+    title: "Signal Revenue",
+    year: "2025",
+    industry: "B2B technology",
+    summary: "A revenue intelligence system that turns scattered buyer signals into timely, human sales action.",
+    coverImage: "/images/hero-portal.png",
+    services: ["Revenue operations", "Agent design", "CRM integration"],
+    challenge: "High-intent activity was buried across product, CRM, and support data. Sellers reacted late and spent too much time assembling context.",
+    approach: "We defined meaningful buying signals, built an agent that assembles account context, and placed concise next steps directly inside the team's existing workflow.",
+    result: "Sellers spend less time researching and more time in relevant conversations, without sacrificing judgment or personalisation.",
+    metrics: [{ value: "2.4x", label: "Reply rate" }, { value: "11h", label: "Saved per rep" }, { value: "28%", label: "Shorter cycle" }],
+  },
+]

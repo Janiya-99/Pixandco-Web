@@ -1,0 +1,24 @@
+"use client"
+
+import { useState, type FormEvent } from "react"
+import { ArrowUpRight, Check } from "lucide-react"
+import { contactSchema } from "@/lib/validations/contact"
+
+type FieldErrors = Partial<Record<"fullName" | "email" | "message" | "consent", string>>
+
+export function ContactForm() {
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle")
+  const [errors, setErrors] = useState<FieldErrors>({})
+  async function submit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault(); setErrors({})
+    const form = new FormData(event.currentTarget)
+    const values = { fullName: String(form.get("fullName") ?? ""), email: String(form.get("email") ?? ""), company: String(form.get("company") ?? ""), budget: String(form.get("budget") ?? ""), message: String(form.get("message") ?? ""), consent: form.get("consent") === "on", website: String(form.get("website") ?? "") }
+    const parsed = contactSchema.safeParse(values)
+    if (!parsed.success) { const flat = parsed.error.flatten().fieldErrors; setErrors({ fullName: flat.fullName?.[0], email: flat.email?.[0], message: flat.message?.[0], consent: flat.consent?.[0] }); return }
+    setStatus("loading")
+    try { const response = await fetch("/api/contact", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(parsed.data) }); if (!response.ok) throw new Error(); setStatus("success"); event.currentTarget.reset() } catch { setStatus("error") }
+  }
+  if (status === "success") return <div className="grid min-h-[420px] place-items-center border-y border-white/10 text-center"><div><Check className="mx-auto size-8" /><h2 className="mt-7 text-4xl tracking-[-.04em]">Message received.</h2><p className="mt-4 text-sm text-white/50">We’ll come back to you within two working days.</p></div></div>
+  const fieldClass = "focus-ring min-h-14 w-full border-0 border-b border-white/15 bg-transparent py-4 text-base outline-none transition placeholder:text-white/25 focus:border-white/65"
+  return <form onSubmit={submit} noValidate className="grid gap-x-8 md:grid-cols-2"><div><label className="eyebrow text-white/40" htmlFor="fullName">Full name</label><input className={fieldClass} id="fullName" name="fullName" placeholder="Your name" aria-invalid={!!errors.fullName} aria-describedby="fullName-error" />{errors.fullName && <p id="fullName-error" className="mt-2 text-xs text-red-300">{errors.fullName}</p>}</div><div><label className="eyebrow text-white/40" htmlFor="email">Email address</label><input className={fieldClass} id="email" name="email" type="email" placeholder="you@company.com" aria-invalid={!!errors.email} aria-describedby="email-error" />{errors.email && <p id="email-error" className="mt-2 text-xs text-red-300">{errors.email}</p>}</div><div className="mt-9"><label className="eyebrow text-white/40" htmlFor="company">Company</label><input className={fieldClass} id="company" name="company" placeholder="Company name" /></div><div className="mt-9"><label className="eyebrow text-white/40" htmlFor="budget">Investment range</label><select className={`${fieldClass} text-white/60`} id="budget" name="budget" defaultValue=""><option value="" className="bg-black">Select a range</option><option value="5-15" className="bg-black">$5k – $15k</option><option value="15-40" className="bg-black">$15k – $40k</option><option value="40+" className="bg-black">$40k+</option></select></div><div className="mt-9 md:col-span-2"><label className="eyebrow text-white/40" htmlFor="message">What should work better?</label><textarea className={`${fieldClass} min-h-32 resize-y`} id="message" name="message" placeholder="Tell us about the workflow, constraint, or opportunity…" aria-invalid={!!errors.message} aria-describedby="message-error" />{errors.message && <p id="message-error" className="mt-2 text-xs text-red-300">{errors.message}</p>}</div><input className="hidden" name="website" tabIndex={-1} autoComplete="off" aria-hidden /><div className="mt-8 md:col-span-2"><label className="flex cursor-pointer items-start gap-3 text-sm leading-6 text-white/50"><input type="checkbox" name="consent" className="mt-1 size-4 accent-white" />I agree that Northline may use these details to respond to my inquiry.</label>{errors.consent && <p className="mt-2 text-xs text-red-300">{errors.consent}</p>}</div><div className="mt-10 flex flex-wrap items-center gap-5 md:col-span-2"><button type="submit" disabled={status === "loading"} className="focus-ring group inline-flex min-h-12 items-center gap-10 rounded-[8px] bg-white px-5 text-xs font-medium uppercase tracking-[.12em] text-black disabled:opacity-50">{status === "loading" ? "Sending…" : "Send inquiry"}<ArrowUpRight className="size-4 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" /></button>{status === "error" && <p className="text-sm text-red-300" role="alert">Something went wrong. Please email hello@northline.studio.</p>}</div></form>
+}
