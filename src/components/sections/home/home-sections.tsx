@@ -10,6 +10,7 @@ import { TextReveal } from "@/components/motion/text-reveal"
 import { Reveal } from "@/components/motion/reveal"
 import { Counter } from "@/components/motion/counter"
 import { RollingButton } from "@/components/ui/rolling-button"
+import { ScrambleText } from "@/components/ui/scramble-text"
 import { SectionHeader } from "@/components/ui/section-header"
 import { ArticleCard } from "@/components/blog/article-card"
 import { AmbientVideo } from "@/components/media/ambient-video"
@@ -49,8 +50,10 @@ export function HeroSection() {
 
         <div className="mt-auto grid items-end gap-8 md:grid-cols-[1fr_auto]">
           <div>
-            <span className="eyebrow inline-flex bg-[#1a1a1d] border border-white/5 px-3 py-1.5 text-white/75">WE AUTOMATE 100+ BUSINESSES</span>
-            <TextReveal className="display mt-5 w-full" lines={["Clear. Precise. Automated."]} />
+            <span className="eyebrow inline-flex bg-[#1a1a1d] border border-white/5 px-3 py-1.5 text-white/75">
+              <ScrambleText text="WE AUTOMATE 100+ BUSINESSES" chars=">?/@#$%^&*<-+" delay={0.5} />
+            </span>
+            <TextReveal animateOnMount className="display mt-5 w-full" lines={["Clear. Precise. Automated."]} />
           </div>
           <div className="rounded-[9px] border border-white/15 bg-[#111114]/90 p-2 backdrop-blur-md">
             <div className="flex items-center gap-3">

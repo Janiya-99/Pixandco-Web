@@ -5,6 +5,7 @@ import { motion } from "framer-motion"
 import { Container } from "@/components/layout/container"
 import { Section } from "@/components/layout/section"
 import { TextReveal } from "@/components/motion/text-reveal"
+import { ScrambleText } from "@/components/ui/scramble-text"
 import { services } from "@/content/site"
 
 export function ServicesSection() {
@@ -28,8 +29,8 @@ export function ServicesSection() {
             {services.map((service, index) => (
               <motion.article 
                 key={service.number} 
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
+                initial={{ opacity: 0, x: 50 }}
+                whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: false, margin: "-50px" }}
                 transition={{ duration: 0.8, ease: "easeOut" }}
                 className="overflow-hidden rounded-[9px] border border-[#2b2b2f] bg-[#17171a]"
@@ -37,7 +38,7 @@ export function ServicesSection() {
                 <div className="grid md:grid-cols-2">
                   <div className="p-6">
                     <p className="eyebrow text-white/30">/ {service.number}</p>
-                    <h3 className="mt-5 text-2xl tracking-[-.04em]">{service.title}</h3>
+                    <h3 className="mt-5 text-2xl tracking-[-.04em]"><ScrambleText text={service.title} /></h3>
                     <p className="mt-3 text-sm text-white/40">{service.description}</p>
                   </div>
                   <div className="relative min-h-52">

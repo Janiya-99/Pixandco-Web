@@ -64,15 +64,17 @@ interface FloatingBadgeProps {
   triggerRange: [number, number];
   scrollYProgress: MotionValue<number>;
   floatDuration: number;
+  index: number;
 }
 
-export function FloatingBadge({ label, position, floatDuration }: FloatingBadgeProps) {
+export function FloatingBadge({ label, position, triggerRange, scrollYProgress, floatDuration }: FloatingBadgeProps) {
+  const opacity = useTransform(scrollYProgress, triggerRange, [0, 1]);
+  const y = useTransform(scrollYProgress, triggerRange, [20, 0]);
+  const scale = useTransform(scrollYProgress, triggerRange, [0.9, 1]);
+
   return (
     <motion.div
-      initial={{ opacity: 0, scale: 0.9 }}
-      whileInView={{ opacity: 1, scale: 1 }}
-      viewport={{ once: true, margin: "-100px" }}
-      transition={{ duration: 0.8 }}
+      style={{ opacity, y, scale }}
       className={`absolute z-20 ${position}`}
     >
       <motion.div
@@ -90,11 +92,11 @@ export function FloatingBadge({ label, position, floatDuration }: FloatingBadgeP
 // --- COMBINED SECTION ---
 
 const BADGES = [
-  { id: "wasted-resources", label: "Wasted Resources", position: "top-[32%] right-[18%]", floatDuration: 4.2 },
-  { id: "siloed-comm", label: "Siloed Communication", position: "bottom-[32%] left-[22%]", floatDuration: 3.5 },
-  { id: "lack-visibility", label: "Lack of Visibility", position: "top-[20%] left-[45%]", floatDuration: 4.8 },
-  { id: "tedious-onboarding", label: "Tedious Onboarding", position: "top-[42%] left-[12%]", floatDuration: 3.8 },
-  { id: "fragmented-workflows", label: "Fragmented Workflows", position: "bottom-[24%] right-[16%]", floatDuration: 4.5 },
+  { id: "wasted-resources", label: "Wasted Resources", position: "top-[32%] right-[18%]", floatDuration: 4.2, triggerRange: [0.1, 0.2] as [number, number] },
+  { id: "siloed-comm", label: "Siloed Communication", position: "bottom-[32%] left-[22%]", floatDuration: 3.5, triggerRange: [0.25, 0.35] as [number, number] },
+  { id: "lack-visibility", label: "Lack of Visibility", position: "top-[20%] left-[45%]", floatDuration: 4.8, triggerRange: [0.4, 0.5] as [number, number] },
+  { id: "tedious-onboarding", label: "Tedious Onboarding", position: "top-[42%] left-[12%]", floatDuration: 3.8, triggerRange: [0.55, 0.65] as [number, number] },
+  { id: "fragmented-workflows", label: "Fragmented Workflows", position: "bottom-[24%] right-[16%]", floatDuration: 4.5, triggerRange: [0.7, 0.8] as [number, number] },
 ];
 
 export function ConcentricScrollSection() {
@@ -118,12 +120,15 @@ export function ConcentricScrollSection() {
           <div className="absolute bottom-[26%] right-[14%] h-px w-32 rotate-[-42deg] bg-gradient-to-r from-transparent to-white/25 pointer-events-none" />
 
           {/* Orbiting Floating Badges */}
-          {BADGES.map((badge) => (
+          {BADGES.map((badge, index) => (
             <FloatingBadge
               key={badge.id}
               label={badge.label}
               position={badge.position}
               floatDuration={badge.floatDuration}
+              index={index}
+              scrollYProgress={scrollYProgress}
+              triggerRange={badge.triggerRange}
             />
           ))}
         </>

@@ -1,30 +1,32 @@
 "use client"
 
 import Link from "next/link"
-import { useCallback, useEffect, useRef } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import { gsap } from "gsap"
 import { ScrambleTextPlugin } from "gsap/ScrambleTextPlugin"
 import { cn } from "@/lib/utils"
 
 gsap.registerPlugin(ScrambleTextPlugin)
 
-const SCRAMBLE_CHARACTERS = "01X/"
+const SCRAMBLE_CHARACTERS = "@$&*$#"
 
-function useScrambleText(text: string, playOnMount: boolean, delay: number) {
+function useScrambleText(text: string, playOnMount: boolean, delay: number, chars: string = SCRAMBLE_CHARACTERS) {
   const textRef = useRef<HTMLSpanElement>(null)
   const tweenRef = useRef<gsap.core.Tween | gsap.core.Timeline | null>(null)
+  const [isComplete, setIsComplete] = useState(!playOnMount)
 
   const scramble = useCallback(() => {
     const element = textRef.current
     if (!element || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return
 
+    setIsComplete(false)
     tweenRef.current?.kill()
     tweenRef.current = gsap.to(element, {
       duration: 0.72,
       ease: "none",
       scrambleText: {
         text,
-        chars: SCRAMBLE_CHARACTERS,
+        chars: chars,
         speed: 0.55,
         revealDelay: 0.08,
         tweenLength: false,
@@ -32,13 +34,17 @@ function useScrambleText(text: string, playOnMount: boolean, delay: number) {
       keyframes: {
         color: ["#FF3B30", "#9C27B0", "#FF9500", ""],
         easeEach: "none"
-      }
+      },
+      onComplete: () => setIsComplete(true)
     })
-  }, [text])
+  }, [text, chars])
 
   useEffect(() => {
     const element = textRef.current
-    if (!element || !playOnMount || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return
+    if (!element || !playOnMount || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setIsComplete(true)
+      return
+    }
 
     const timer = window.setTimeout(scramble, delay * 1000)
     return () => {
@@ -48,17 +54,25 @@ function useScrambleText(text: string, playOnMount: boolean, delay: number) {
     }
   }, [delay, playOnMount, scramble, text])
 
-  return { textRef, scramble }
+  return { textRef, scramble, isComplete }
 }
 
-export function ScrambleText({ text, className, delay = 0 }: { text: string; className?: string; delay?: number }) {
-  const { textRef, scramble } = useScrambleText(text, true, delay)
+export function ScrambleText({ text, className, delay = 0, showCursor = false, chars }: { text: string; className?: string; delay?: number; showCursor?: boolean; chars?: string }) {
+  const { textRef, scramble, isComplete } = useScrambleText(text, true, delay, chars)
+  const [isHovered, setIsHovered] = useState(false)
 
   return (
-    <span className={cn("inline-grid", className)} onPointerEnter={scramble}>
-      <span className="invisible col-start-1 row-start-1" aria-hidden>{text}</span>
-      <span ref={textRef} className="col-start-1 row-start-1" aria-hidden>{text}</span>
-      <span className="sr-only">{text}</span>
+    <span 
+      className={cn("inline-flex items-center", className)} 
+      onPointerEnter={() => { setIsHovered(true); scramble(); }}
+      onPointerLeave={() => setIsHovered(false)}
+    >
+      <span className="inline-grid">
+        <span className="invisible col-start-1 row-start-1" aria-hidden>{text}</span>
+        <span ref={textRef} className="col-start-1 row-start-1" aria-hidden>{text}</span>
+        <span className="sr-only">{text}</span>
+      </span>
+      {showCursor && isComplete && isHovered && <span className="nav-caret ml-[1ch]" aria-hidden />}
     </span>
   )
 }
@@ -76,7 +90,7 @@ export function ScrambleLink({
   delay?: number
   active?: boolean
 }) {
-  const { textRef, scramble } = useScrambleText(text, true, delay)
+  const { textRef, scramble, isComplete } = useScrambleText(text, true, delay)
 
   return (
     <Link
