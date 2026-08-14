@@ -17,7 +17,7 @@ const footerLinks = [
 
 export function SiteFooter() {
   return (
-    <footer className="overflow-hidden border-t border-[#212121] bg-[#010004] pb-8 pt-16 lg:pt-[100px]">
+    <footer className="overflow-hidden bg-[#010004] pb-8 pt-16 lg:pt-[100px]">
       <Container>
         <div className="grid gap-16 lg:grid-cols-[1.05fr_.55fr_.85fr] lg:gap-20">
           <div>

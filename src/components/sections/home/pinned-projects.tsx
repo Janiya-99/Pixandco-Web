@@ -26,40 +26,17 @@ export function PinnedProjects() {
         {
           opacity: 1, 
           scale: 1,
+          duration: 1,
+          ease: "power2.out",
           scrollTrigger: {
             trigger: card,
             start: "top bottom-=100",
-            end: "top center",
-            scrub: true,
+            toggleActions: "play none none none"
           }
         }
       );
 
-      // Fade out image slightly when the next card covers it
-      if (index < cards.length - 1) {
-        const nextCard = cards[index + 1];
-        gsap.to(image, {
-          opacity: 0.2,
-          scrollTrigger: {
-            trigger: nextCard,
-            start: "top bottom",
-            end: "top top+=12vh",
-            scrub: true,
-          }
-        });
-        
-        // Also fade out the content slightly
-        const content = card.querySelector(".project-content");
-        gsap.to(content, {
-          opacity: 0.4,
-          scrollTrigger: {
-            trigger: nextCard,
-            start: "top bottom",
-            end: "top top+=12vh",
-            scrub: true,
-          }
-        });
-      }
+      // Removed fade out of image and content when the next card covers it
     });
   }, { scope: containerRef });
 

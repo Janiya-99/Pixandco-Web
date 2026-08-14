@@ -7,7 +7,7 @@ export const posts: Post[] = [
     category: "Perspective",
     date: "July 24, 2026",
     excerpt: "The best automation disappears into the work. A practical framework for choosing systems that create real leverage.",
-    image: "/images/hero-portal.png",
+    image: "/images/site/2l8Wl4e6GvRUtl6qrfXsaZKZassb2ef.jpg",
     readingTime: "6 min read",
     content: [
       { heading: "Start with the constraint", body: "Useful automation begins with an operational constraint, not a technology demonstration. The work is to identify where decisions slow down, context disappears, or repetitive coordination consumes skilled attention." },
@@ -21,7 +21,7 @@ export const posts: Post[] = [
     category: "Systems",
     date: "July 11, 2026",
     excerpt: "Why connected operational context matters more than adding another interface to the stack.",
-    image: "/images/terrain-system.png",
+    image: "/images/site/KmimP8fJf3KTg25QrfWgNhSOI4e64.jpg",
     readingTime: "8 min read",
     content: [
       { heading: "Fragmentation is the tax", body: "Most teams do not lack software. They lack a coherent layer between software, decisions, and daily work. That gap is paid for through manual reconciliation and lost context." },
@@ -34,7 +34,7 @@ export const posts: Post[] = [
     category: "Field notes",
     date: "June 28, 2026",
     excerpt: "A clear model for deciding what machines should execute, recommend, or leave entirely to people.",
-    image: "/images/robotic-system.png",
+    image: "/images/site/jpIBn59XJaU6dp08UvhhxX984e2e.jpg",
     readingTime: "5 min read",
     content: [
       { heading: "Separate judgment from repetition", body: "The goal is not to remove people from work. It is to protect their attention for ambiguity, relationships, and consequential judgment while systems handle repeatable coordination." },

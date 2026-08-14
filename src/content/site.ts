@@ -1,8 +1,8 @@
 export const services = [
-  { number: "01", title: "Workflow automation", description: "We remove repetitive coordination and rebuild the flow around clear decisions, reliable data, and measurable outcomes.", items: ["Process mapping", "Approvals", "Notifications", "Exception routing"], image: "/images/terrain-system.png" },
-  { number: "02", title: "AI-powered systems", description: "Purpose-built agents that understand context, use the right tools, and keep people in control where judgment matters.", items: ["Agent design", "Knowledge systems", "Evaluation", "Human oversight"], image: "/images/hero-portal.png" },
-  { number: "03", title: "Revenue automation", description: "Connected systems that surface intent, prepare context, and help commercial teams act at exactly the right moment.", items: ["Lead intelligence", "CRM orchestration", "Lifecycle systems", "Reporting"], image: "/images/robotic-system.png" },
-  { number: "04", title: "Systems integration", description: "A clean operating layer across the tools you already use—designed for resilience, observability, and change.", items: ["Architecture", "Data sync", "API integration", "Optimization"], image: "/images/terrain-system.png" },
+  { number: "01", title: "Workflow automation", description: "We remove repetitive coordination and rebuild the flow around clear decisions, reliable data, and measurable outcomes.", items: ["Process mapping", "Approvals", "Notifications", "Exception routing"], image: "/images/site/KmimP8fJf3KTg25QrfWgNhSOI4e64.jpg" },
+  { number: "02", title: "AI-powered systems", description: "Purpose-built agents that understand context, use the right tools, and keep people in control where judgment matters.", items: ["Agent design", "Knowledge systems", "Evaluation", "Human oversight"], image: "/images/site/2l8Wl4e6GvRUtl6qrfXsaZKZassb2ef.jpg" },
+  { number: "03", title: "Revenue automation", description: "Connected systems that surface intent, prepare context, and help commercial teams act at exactly the right moment.", items: ["Lead intelligence", "CRM orchestration", "Lifecycle systems", "Reporting"], image: "/images/site/jpIBn59XJaU6dp08UvhhxX984e2e.jpg" },
+  { number: "04", title: "Systems integration", description: "A clean operating layer across the tools you already use—designed for resilience, observability, and change.", items: ["Architecture", "Data sync", "API integration", "Optimization"], image: "/images/site/KmimP8fJf3KTg25QrfWgNhSOI4e64.jpg" },
 ] as const
 
 export const faqs = [

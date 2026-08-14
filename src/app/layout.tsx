@@ -11,8 +11,8 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://northline.studio"),
   title: { default: "Northline Systems — Intelligent operations, built clearly", template: "%s — Northline Systems" },
   description: "We design AI-powered operating systems that remove repetitive work and make complex businesses run clearly.",
-  openGraph: { type: "website", title: "Northline Systems", description: "Intelligent operations, built clearly.", images: ["/images/hero-portal.png"] },
-  twitter: { card: "summary_large_image", title: "Northline Systems", description: "Intelligent operations, built clearly.", images: ["/images/hero-portal.png"] },
+  openGraph: { type: "website", title: "Northline Systems", description: "Intelligent operations, built clearly.", images: ["/images/site/2l8Wl4e6GvRUtl6qrfXsaZKZassb2ef.jpg"] },
+  twitter: { card: "summary_large_image", title: "Northline Systems", description: "Intelligent operations, built clearly.", images: ["/images/site/2l8Wl4e6GvRUtl6qrfXsaZKZassb2ef.jpg"] },
 }
 export const viewport: Viewport = { themeColor: "#050505", colorScheme: "dark" }
 

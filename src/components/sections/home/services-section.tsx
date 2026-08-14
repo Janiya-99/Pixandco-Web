@@ -14,14 +14,15 @@ export function ServicesSection() {
       <Container>
         <div className="grid gap-16 lg:grid-cols-[.7fr_1.3fr]">
           <div className="lg:sticky lg:top-28 lg:self-start">
-            <p className="eyebrow inline-flex border border-white/15 bg-white/5 px-3 py-2 text-white/60">
-              Services
+            <p className="eyebrow mb-7 inline-flex border-l-2 border-white/50 bg-[#1a1a1d] px-3 py-1.5 text-white/70 uppercase">
+              SERVICES
             </p>
-            <TextReveal 
-              className="section-title mt-6" 
-              lines={["Built to simplify", "operations"]} 
-            />
-            <p className="mt-6 max-w-sm text-sm leading-7 text-white/45">
+            <h2 className="section-title mt-6">
+              Built to Simplify
+              <br />
+              Operations
+            </h2>
+            <p className="mt-6 max-w-sm text-[15px] leading-[1.6] text-white/50">
               We design intelligent systems that streamline workflows, strengthen revenue processes, and connect your tools into one cohesive ecosystem.
             </p>
           </div>

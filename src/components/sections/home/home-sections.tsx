@@ -53,7 +53,7 @@ export function HeroSection() {
             <span className="eyebrow inline-flex bg-[#1a1a1d] border border-white/5 px-3 py-1.5 text-white/75">
               <ScrambleText text="WE AUTOMATE 100+ BUSINESSES" chars=">?/@#$%^&*<-+" delay={0.5} />
             </span>
-            <TextReveal animateOnMount className="display mt-5 w-full" lines={["Clear. Precise. Automated."]} />
+            <TextReveal animateOnMount className="display mt-5 w-full" lines={["Clear. Precise.", "Automated."]} />
           </div>
           <div className="rounded-[9px] border border-white/15 bg-[#111114]/90 p-2 backdrop-blur-md">
             <div className="flex items-center gap-3">
@@ -116,7 +116,7 @@ function TrustSection() {
                 visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } }
               }}
               key={company.name}
-              className="group flex min-h-[110px] items-center justify-center border-b border-r border-[#212121] px-4 text-white/40 transition-colors duration-300 hover:bg-[#1a1a1d] hover:text-white/80"
+              className="group relative flex min-h-[110px] items-center justify-center border-b border-r border-[#212121] px-4 text-white/40 transition-all duration-300 hover:z-10 hover:scale-105 hover:bg-[#1a1a1d] hover:shadow-2xl hover:text-white/80"
             >
               <div className="flex items-center gap-3">
                 <span className="grid size-7 place-items-center border border-current text-[9px] font-semibold tracking-[-.04em] opacity-75" aria-hidden>{company.mark}</span>
@@ -135,9 +135,9 @@ export function HomeSections() { return <>
 
   <ConcentricScrollSection />
 
-  <Section><Container><SectionHeader align="center" eyebrow="Our work" title={<>Structured. Automated.<br />Delivered.</>} description="Selected workflow transformations across operations, revenue, and internal systems." /><PinnedProjects /><div className="flex justify-center"><RollingButton variant="outline" href="/projects" className="mt-12">See all case studies</RollingButton></div></Container></Section>
+  <Section><Container><SectionHeader align="center" eyebrow="Our works" title={<>Structured. Automated.<br />Delivered.</>} description="Selected workflow transformations across operations, revenue, and internal systems." /><PinnedProjects /><div className="flex justify-center"><RollingButton variant="outline" href="/projects" className="mt-12">See all case studies</RollingButton></div></Container></Section>
 
-  <Section><Container><SectionHeader align="center" eyebrow="How it works" title={<>A simple, structured<br />approach to automation</>} description="We design systems that remove friction, sharpen workflows, and help your team operate with clarity and control." /><div className="mt-16 grid gap-6 md:grid-cols-3">{[{n:"1",t:"Understand your workflow",d:"We analyze your workflow, tools, and bottlenecks.",img:"/images/terrain-system.png"},{n:"2",t:"Design & build the system",d:"We implement automation tailored to your business.",img:"/images/hero-portal.png"},{n:"3",t:"Optimize & scale",d:"We refine, improve, and scale as your operations evolve.",img:"/images/robotic-system.png"}].map(step => <Reveal key={step.n}><div className="group relative aspect-square overflow-hidden rounded-[9px] border border-[#2b2b2f]"><Image src={step.img} alt="" fill sizes="33vw" className="cinematic-image object-cover transition-transform duration-1000 ease-out group-hover:scale-105" /><div className="absolute inset-0 bg-gradient-to-t from-[#010004]/90 via-[#010004]/30 to-transparent transition-opacity duration-500 group-hover:opacity-80" /><div className="absolute inset-x-0 bottom-0 flex flex-col justify-end p-6 md:p-8"><h3 className="text-xl font-medium tracking-[-.04em] text-white">{step.n}. {step.t}</h3><p className="mt-3 text-sm leading-6 text-white/60">{step.d}</p></div></div></Reveal>)}</div></Container></Section>
+  <Section><Container><SectionHeader align="center" eyebrow="How it works" title={<>A simple, structured<br />approach to automation</>} description="We design systems that remove friction, sharpen workflows, and help your team operate with clarity and control." /><div className="mt-16 grid gap-6 md:grid-cols-3 pb-16">{[{n:"1",t:"Understand Your Workflow",d:"We analyze your workflow, tools, and bottlenecks.",img:"/images/site/pGKzMvVMxZif17kRFV5Tn7pC3382fe7.jpg"},{n:"2",t:"Design & Build the System",d:"We implement automation tailored to your business.",img:"/images/site/5G1JBCX3fkqZAKYA6QK55SRIiZo4e2e.jpg"},{n:"3",t:"Optimize & Scale",d:"We refine, improve, and scale as your operations.",img:"/images/site/GoY7QtIQYXxZ0jQ1f9q10cj7cMId19d.jpg"}].map((step, i) => <Reveal key={step.n} className={`${i === 1 ? 'md:mt-10' : i === 2 ? 'md:mt-20' : ''}`}><div className="group relative aspect-[4/5] overflow-hidden rounded-[12px] border border-[#2b2b2f]"><Image src={step.img} alt="" fill sizes="33vw" className="cinematic-image object-cover transition-transform duration-1000 ease-out group-hover:scale-105" /><div className="absolute inset-0 bg-gradient-to-t from-[#010004]/90 via-[#010004]/20 to-transparent transition-opacity duration-500 group-hover:opacity-80" /><div className="absolute inset-x-0 bottom-0 flex flex-col justify-end p-6 md:p-8"><h4 className="text-xl font-medium tracking-[-.04em] text-white">{step.n}. {step.t}</h4><p className="mt-3 text-[15px] leading-6 text-white/60">{step.d}</p></div></div></Reveal>)}</div></Container></Section>
 
   <IntegrationSection />
 
@@ -150,7 +150,7 @@ export function HomeSections() { return <>
 
   <Section><Container><SectionHeader align="center" eyebrow="Pricing" title={<>Flexible plans for your<br />automation goals</>} /><Reveal className="mt-14"><Pricing /></Reveal></Container></Section>
 
-  <Section><Container><div className="flex items-end justify-between gap-8"><div><p className="eyebrow inline-flex border border-white/15 bg-white/5 px-3 py-2 text-white/60">Blog</p><h2 className="section-title mt-6">Insights on AI & automation</h2></div><RollingButton variant="outline" href="/blog">See more</RollingButton></div><div className="mt-12 grid gap-8 md:grid-cols-3">{posts.map(post => <Reveal key={post.slug}><ArticleCard post={post} /></Reveal>)}</div></Container></Section>
+  <Section><Container><div className="flex items-end justify-between gap-8"><div><p className="eyebrow mb-7 inline-flex border-l-2 border-white/50 bg-[#1a1a1d] px-3 py-1.5 text-white/70 uppercase">Blog</p><h2 className="section-title mt-6">Insights on AI & automation</h2></div><RollingButton variant="outline" href="/blog">See more</RollingButton></div><div className="mt-12 grid gap-8 md:grid-cols-3">{posts.map(post => <Reveal key={post.slug}><ArticleCard post={post} /></Reveal>)}</div></Container></Section>
 
   <Section><Container><div className="grid gap-14 lg:grid-cols-[.55fr_1fr]"><div className="flex flex-col items-start"><SectionHeader eyebrow="FAQ" title={<>Have questions?<br />Check out the FAQs</>} /><Reveal className="mt-auto pt-16"><MiniCallCard /></Reveal></div><Reveal><Faq /></Reveal></div></Container></Section>
   </> }

@@ -13,12 +13,30 @@ const links = [{ href: "/projects", label: "Projects" }, { href: "/about", label
 export function SiteHeader() {
   const pathname = usePathname()
   const [scrolled, setScrolled] = useState(false)
+  const [hidden, setHidden] = useState(false)
   const [open, setOpen] = useState(false)
   const isActive = (href: string) => pathname === href || pathname.startsWith(`${href}/`)
-  useEffect(() => { const update = () => setScrolled(window.scrollY > 30); update(); window.addEventListener("scroll", update, { passive: true }); return () => window.removeEventListener("scroll", update) }, [])
+  
+  useEffect(() => { 
+    let lastScrollY = window.scrollY
+    const update = () => {
+      const currentScrollY = window.scrollY
+      setScrolled(currentScrollY > 30)
+      if (currentScrollY > 100 && currentScrollY > lastScrollY) {
+        setHidden(true)
+      } else {
+        setHidden(false)
+      }
+      lastScrollY = currentScrollY
+    }
+    update()
+    window.addEventListener("scroll", update, { passive: true })
+    return () => window.removeEventListener("scroll", update)
+  }, [])
+  
   useEffect(() => { document.body.style.overflow = open ? "hidden" : ""; return () => { document.body.style.overflow = "" } }, [open])
   return (
-    <header className={`fixed inset-x-0 top-0 z-50 border-b transition-all duration-500 ${scrolled || open ? "border-[#212121] bg-[#010004]/88 backdrop-blur-xl" : "border-transparent bg-transparent"}`}>
+    <header className={`fixed inset-x-0 top-0 z-50 border-b transition-all duration-500 ${scrolled || open ? "border-[#212121] bg-[#010004]/88 backdrop-blur-xl" : "border-transparent bg-transparent"} ${hidden && !open ? "-translate-y-full" : "translate-y-0"}`}>
       <Container className="flex h-[76px] items-center justify-between">
         <Link className="focus-ring relative z-[60] flex items-center gap-3" href="/" onClick={() => setOpen(false)}><span className="grid size-7 place-items-center border border-white/50 text-[10px] font-semibold">N</span><ScrambleText className="text-sm font-medium tracking-[.14em]" text="NORTHLINE" delay={0.12} showCursor /></Link>
         <nav className="hidden items-center gap-8 lg:flex" aria-label="Primary">{links.map((link, index) => <ScrambleLink active={isActive(link.href)} className={isActive(link.href) ? "text-xs uppercase tracking-[.12em] text-white" : "text-xs uppercase tracking-[.12em] text-white/65 transition-colors hover:text-white"} href={link.href} text={link.label} delay={0.2 + index * 0.06} key={link.href} />)}</nav>

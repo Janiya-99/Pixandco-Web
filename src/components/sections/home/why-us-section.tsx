@@ -19,7 +19,7 @@ export function WhyUsSection() {
   return (
     <Section className="relative overflow-hidden py-24 lg:py-40">
       <Image
-        src="/images/terrain-system.png"
+        src="/images/site/KmimP8fJf3KTg25QrfWgNhSOI4e64.jpg"
         alt=""
         fill
         sizes="100vw"

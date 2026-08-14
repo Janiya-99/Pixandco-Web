@@ -68,9 +68,34 @@ interface FloatingBadgeProps {
 }
 
 export function FloatingBadge({ label, position, triggerRange, scrollYProgress, floatDuration }: FloatingBadgeProps) {
-  const opacity = useTransform(scrollYProgress, triggerRange, [0, 1]);
-  const y = useTransform(scrollYProgress, triggerRange, [20, 0]);
-  const scale = useTransform(scrollYProgress, triggerRange, [0.9, 1]);
+  const maxProgress = useRef(0);
+
+  const getProgress = (val: number) => {
+    if (val === 0) maxProgress.current = 0;
+    if (val > maxProgress.current) maxProgress.current = val;
+    return maxProgress.current;
+  };
+
+  const opacity = useTransform(scrollYProgress, (val) => {
+    const p = getProgress(val);
+    if (p <= triggerRange[0]) return 0;
+    if (p >= triggerRange[1]) return 1;
+    return (p - triggerRange[0]) / (triggerRange[1] - triggerRange[0]);
+  });
+
+  const y = useTransform(scrollYProgress, (val) => {
+    const p = getProgress(val);
+    if (p <= triggerRange[0]) return 20;
+    if (p >= triggerRange[1]) return 0;
+    return 20 - ((p - triggerRange[0]) / (triggerRange[1] - triggerRange[0])) * 20;
+  });
+
+  const scale = useTransform(scrollYProgress, (val) => {
+    const p = getProgress(val);
+    if (p <= triggerRange[0]) return 0.9;
+    if (p >= triggerRange[1]) return 1;
+    return 0.9 + ((p - triggerRange[0]) / (triggerRange[1] - triggerRange[0])) * 0.1;
+  });
 
   return (
     <motion.div
@@ -114,10 +139,6 @@ export function ConcentricScrollSection() {
           </Reveal>
 
           <ConcentricRings scrollYProgress={scrollYProgress} />
-
-          {/* Diagonal Light Rays */}
-          <div className="absolute left-[12%] top-[28%] h-px w-24 rotate-[-58deg] bg-gradient-to-r from-transparent to-white/20 pointer-events-none" />
-          <div className="absolute bottom-[26%] right-[14%] h-px w-32 rotate-[-42deg] bg-gradient-to-r from-transparent to-white/25 pointer-events-none" />
 
           {/* Orbiting Floating Badges */}
           {BADGES.map((badge, index) => (
