@@ -8,6 +8,7 @@ import { useGSAP } from "@gsap/react"
 import { Container } from "@/components/layout/container"
 import { Section } from "@/components/layout/section"
 import { ScrambleText } from "@/components/ui/scramble-text"
+import { AnimatedEyebrow } from "@/components/ui/animated-eyebrow"
 import { services } from "@/content/site"
 
 gsap.registerPlugin(useGSAP)
@@ -73,9 +74,7 @@ export function ServicesSection() {
       <Container>
         <div className="grid gap-16 lg:grid-cols-[.7fr_1.3fr]">
           <div className="lg:sticky lg:top-28 lg:self-start">
-            <p className="eyebrow mb-7 inline-flex border-l-2 border-white/50 bg-[#1a1a1d] px-3 py-1.5 text-white/70 uppercase">
-              SERVICES
-            </p>
+            <AnimatedEyebrow text="SERVICES" />
             <h2 className="section-title mt-6 tracking-[-.04em] font-primary">
               Built to Simplify
               <br />

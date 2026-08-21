@@ -6,6 +6,7 @@ import { motion, useScroll, useTransform } from "framer-motion"
 import { Container } from "@/components/layout/container"
 import { Reveal } from "@/components/motion/reveal"
 import { RollingButton } from "@/components/ui/rolling-button"
+import { AnimatedEyebrow } from "@/components/ui/animated-eyebrow"
 
 export function FinalCta() {
   const containerRef = useRef<HTMLElement>(null)
@@ -29,7 +30,7 @@ export function FinalCta() {
       <div className="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-[#010004] to-transparent z-10" />
       <Container className="relative z-20">
         <Reveal className="mx-auto max-w-2xl text-center">
-          <p className="eyebrow mb-7 inline-flex border-l-2 border-white/50 bg-[#1a1a1d] px-3 py-1.5 text-white/70 uppercase">Let&apos;s get started</p>
+          <AnimatedEyebrow text="Let's get started" />
           <h2 className="section-title mt-7">Ready to Refine Your Workflow?</h2>
           <p className="mx-auto mt-6 max-w-lg text-sm leading-7 text-white/65">
             Share your current process. We’ll help identify what can be automated and where efficiency can be improved.

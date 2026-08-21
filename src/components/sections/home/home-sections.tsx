@@ -19,7 +19,8 @@ import { ArticleCard } from "@/components/blog/article-card"
 import { AmbientVideo } from "@/components/media/ambient-video"
 import { projects } from "@/content/projects"
 import { posts } from "@/content/posts"
-import { Faq, Pricing, Testimonials } from "./interactive-sections"
+import { Testimonials, Pricing, Faq } from "./interactive-sections"
+import { AnimatedEyebrow } from "@/components/ui/animated-eyebrow"
 import { ConcentricScrollSection } from "./concentric-scroll-section"
 import { PinnedProjects } from "./pinned-projects"
 import { IntegrationSection } from "./integration-section"
@@ -234,11 +235,11 @@ export function HomeSections() {
     <WhyUsSection />
 
     <Section><Container><Testimonials /></Container></Section>
-    <section><Container className="grid grid-cols-2 border-l border-t border-[#303034] lg:grid-cols-4">{[{ v: 100, s: "+", l: "workflows automated" }, { v: 50, s: "%", l: "time saved" }, { v: 3, s: "x", l: "process efficiency" }, { v: 70, s: "%", l: "less human error" }].map(stat => <Reveal key={stat.l} className="border-b border-r border-[#303034] px-6 py-8"><p className="text-4xl tracking-[-.05em] md:text-5xl"><Counter value={stat.v} suffix={stat.s} /></p><p className="eyebrow mt-4 text-white/35 font-mono">{stat.l}</p></Reveal>)}</Container></section>
+    <section><Container><div className="grid grid-cols-2 border-l border-t border-[#303034] lg:grid-cols-4">{[{ v: 100, s: "+", l: "workflows automated" }, { v: 50, s: "%", l: "time saved" }, { v: 3, s: "x", l: "process efficiency" }, { v: 70, s: "%", l: "less human error" }].map(stat => <Reveal key={stat.l} className="border-b border-r border-[#303034] px-6 lg:px-8 py-8 flex items-start gap-3"><div className="text-4xl tracking-[-.05em] md:text-[3.5rem] leading-none"><Counter value={stat.v} /></div><div className="flex flex-col mt-0.5"><span className="text-lg md:text-xl leading-none">{stat.s}</span><span className="eyebrow mt-2 text-white/40 uppercase font-mono max-w-[100px] leading-[1.3]">{stat.l}</span></div></Reveal>)}</div></Container></section>
 
     <Section><Container><SectionHeader align="center" eyebrow="PRICING" title={<>Flexible plans for your<br />automation goals</>} /><Reveal className="mt-14"><Pricing /></Reveal></Container></Section>
 
-    <Section><Container><div className="flex items-end justify-between gap-8"><div><p className="eyebrow mb-7 inline-flex border-l-2 border-white/50 bg-[#1a1a1d] px-3 py-1.5 text-white/70 uppercase">BLOG</p><h2 className="section-title mt-6 tracking-[-.04em]">Insights on AI & automation</h2></div><RollingButton variant="outline" href="/blog">See more</RollingButton></div><div className="mt-12 grid gap-8 md:grid-cols-3">{posts.map(post => <Reveal key={post.slug}><ArticleCard post={post} /></Reveal>)}</div></Container></Section>
+    <Section><Container><div className="flex items-end justify-between gap-8"><div><AnimatedEyebrow text="BLOG" /><h2 className="section-title mt-6 tracking-[-.04em]">Insights on AI & automation</h2></div><RollingButton variant="outline" href="/blog">See more</RollingButton></div><div className="mt-12 grid gap-8 md:grid-cols-3">{posts.map(post => <Reveal key={post.slug}><ArticleCard post={post} /></Reveal>)}</div></Container></Section>
 
     <Section><Container><div className="grid gap-14 lg:grid-cols-[.55fr_1fr]"><div className="flex flex-col items-start"><SectionHeader eyebrow="FAQ" title={<>Have questions?<br />Check out the FAQs</>} /><Reveal className="mt-auto pt-16"><MiniCallCard /></Reveal></div><Reveal><Faq /></Reveal></div></Container></Section>
   </>
