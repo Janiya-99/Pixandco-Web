@@ -12,6 +12,7 @@ interface HyperTextProps {
   className?: string;
   animateOnLoad?: boolean;
   showCursor?: boolean;
+  onComplete?: () => void;
 }
 
 const alphabets = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
@@ -20,7 +21,7 @@ const getRandomInt = (max: number) => Math.floor(Math.random() * max);
 
 export function HyperText({
   text,
-  duration = 800,
+  duration = 400,
   framerProps = {
     initial: { opacity: 0, y: -10 },
     animate: { opacity: 1, y: 0 },
@@ -30,6 +31,7 @@ export function HyperText({
   animateOnLoad = true,
   triggerAnimation = false,
   showCursor = true,
+  onComplete,
 }: HyperTextProps & { triggerAnimation?: boolean }) {
   const [displayText, setDisplayText] = useState(text.split(""));
   const [trigger, setTrigger] = useState(false);
@@ -62,17 +64,20 @@ export function HyperText({
               l === " "
                 ? l
                 : i <= interations.current
-                  ? text[i]
-                  : alphabets[getRandomInt(26)],
+                  ? text[i] ?? ""
+                  : alphabets[getRandomInt(26)] ?? "",
             ),
           );
-          interations.current = interations.current + 0.1;
+          interations.current = interations.current + 0.25;
         } else {
-          setTrigger(false);
           clearInterval(interval);
+          if (trigger) {
+            onComplete?.();
+          }
+          setTrigger(false);
         }
       },
-      duration / (text.length * 10),
+      duration / (text.length * 4),
     );
     // Clean up interval on unmount
     return () => clearInterval(interval);

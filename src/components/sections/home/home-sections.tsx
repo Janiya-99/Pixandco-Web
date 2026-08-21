@@ -128,9 +128,9 @@ function TrustCard({ company }: { company: typeof trustedCompanies[number] }) {
     <motion.div
       ref={container}
       variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { type: "spring", bounce: 0, duration: 1 } } }}
-      className="relative flex min-h-[110px] items-center justify-center border-b border-r border-[#212121] px-4 text-white/40"
+      className="group relative flex min-h-[110px] items-center justify-center border-b border-r border-[#212121] px-4 text-white/40"
     >
-      <div className="flex items-center gap-3 pointer-events-none">
+      <div className="flex items-center gap-3 pointer-events-none transition-transform duration-300 ease-out group-hover:-translate-y-2 group-hover:translate-x-2">
         <span className="grid size-7 place-items-center border border-current text-[9px] font-semibold tracking-[-.04em] opacity-75" aria-hidden>{company.mark}</span>
         <span className={`text-lg md:text-xl ${company.style}`}>{company.name}</span>
       </div>
