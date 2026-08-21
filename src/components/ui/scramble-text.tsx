@@ -41,7 +41,13 @@ function useScrambleText(text: string, playOnMount: boolean, delay: number, char
 
   useEffect(() => {
     const element = textRef.current
-    if (!element || !playOnMount || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    if (!element || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setIsComplete(true)
+      return
+    }
+
+    if (!playOnMount) {
+      element.textContent = ""
       setIsComplete(true)
       return
     }
@@ -50,15 +56,14 @@ function useScrambleText(text: string, playOnMount: boolean, delay: number, char
     return () => {
       window.clearTimeout(timer)
       tweenRef.current?.kill()
-      element.textContent = text
     }
   }, [delay, playOnMount, scramble, text])
 
   return { textRef, scramble, isComplete }
 }
 
-export function ScrambleText({ text, className, delay = 0, showCursor = false, chars }: { text: string; className?: string; delay?: number; showCursor?: boolean; chars?: string }) {
-  const { textRef, scramble, isComplete } = useScrambleText(text, true, delay, chars)
+export function ScrambleText({ text, className, delay = 0, showCursor = false, chars, trigger = true }: { text: string; className?: string; delay?: number; showCursor?: boolean; chars?: string; trigger?: boolean }) {
+  const { textRef, scramble, isComplete } = useScrambleText(text, trigger, delay, chars)
   const [isHovered, setIsHovered] = useState(false)
 
   return (
