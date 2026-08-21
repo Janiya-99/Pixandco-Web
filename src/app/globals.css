@@ -70,6 +70,12 @@ button, input, textarea, select { font: inherit; }
 @keyframes accordion-down { from { height: 0; opacity: 0; } to { height: var(--radix-accordion-content-height); opacity: 1; } }
 @keyframes accordion-up { from { height: var(--radix-accordion-content-height); opacity: 1; } to { height: 0; opacity: 0; } }
 @keyframes caret-blink { 0%, 48% { opacity: 1; } 49%, 100% { opacity: 0; } }
+@keyframes ripple {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); }
+  50% { transform: translate(-50%, -50%) scale(0.9); }
+}
+
+.animate-ripple { animation: ripple var(--duration, 2s) ease infinite; }
 .marquee-track { animation: marquee 36s linear infinite; }
 .nav-caret {
   display: inline-block;

@@ -6,7 +6,7 @@ import { Menu, X } from "lucide-react"
 import { useEffect, useState } from "react"
 import { AnimatePresence, motion } from "motion/react"
 import { Container } from "@/components/layout/container"
-import { ScrambleLink, ScrambleText } from "@/components/ui/scramble-text"
+import { HyperText } from "@/components/ui/hyper-text"
 
 const links = [{ href: "/projects", label: "Projects" }, { href: "/about", label: "About" }, { href: "/blog", label: "Journal" }, { href: "/contact", label: "Contact" }]
 
@@ -40,10 +40,10 @@ export function SiteHeader() {
       <Container className="flex h-[76px] items-center justify-between">
         <Link className="focus-ring relative z-[60] flex items-center gap-3" href="/" onClick={() => setOpen(false)}>
           <span className="grid size-7 place-items-center border border-white/50 text-[10px] font-semibold">P</span>
-          <ScrambleText className="text-sm font-medium tracking-[.14em]" text="PIXANDCO" delay={0.12} showCursor />
+          <HyperText className="text-sm font-medium tracking-[.14em]" text="PIXANDCO" showCursor />
         </Link>
-        <nav className="hidden items-center gap-8 lg:flex" aria-label="Primary">{links.map((link, index) => <ScrambleLink active={isActive(link.href)} className={isActive(link.href) ? "text-xs uppercase tracking-[.12em] text-white" : "text-xs uppercase tracking-[.12em] text-white/65 transition-colors hover:text-white"} href={link.href} text={link.label} delay={0.2 + index * 0.06} key={link.href} />)}</nav>
-        <ScrambleLink className="hidden border-b border-white/40 text-xs uppercase tracking-[.12em] lg:inline-flex" href="/contact" text="Start a project" delay={0.5} />
+        <nav className="hidden items-center gap-8 lg:flex" aria-label="Primary">{links.map((link, index) => <Link key={link.href} className={isActive(link.href) ? "text-xs uppercase tracking-[.12em] text-white" : "text-xs uppercase tracking-[.12em] text-white/65 transition-colors hover:text-white"} href={link.href}><HyperText text={link.label} className={isActive(link.href) ? "text-xs uppercase tracking-[.12em] text-white" : "text-xs uppercase tracking-[.12em] text-white/65 transition-colors hover:text-white"} /></Link>)}</nav>
+        <Link className="hidden border-b border-white/40 text-xs uppercase tracking-[.12em] lg:inline-flex" href="/contact"><HyperText text="Start a project" className="text-xs uppercase tracking-[.12em]" /></Link>
         <button className="focus-ring relative z-[60] grid size-11 place-items-center lg:hidden" onClick={() => setOpen(value => !value)} aria-expanded={open} aria-controls="mobile-menu" aria-label={open ? "Close menu" : "Open menu"}>{open ? <X /> : <Menu />}</button>
       </Container>
       <AnimatePresence>

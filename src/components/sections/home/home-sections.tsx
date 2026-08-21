@@ -13,7 +13,7 @@ import { TextReveal } from "@/components/motion/text-reveal"
 import { Reveal } from "@/components/motion/reveal"
 import { Counter } from "@/components/motion/counter"
 import { RollingButton } from "@/components/ui/rolling-button"
-import { ScrambleText } from "@/components/ui/scramble-text"
+import { HyperText } from "@/components/ui/hyper-text"
 import { SectionHeader } from "@/components/ui/section-header"
 import { ArticleCard } from "@/components/blog/article-card"
 import { AmbientVideo } from "@/components/media/ambient-video"
@@ -26,6 +26,7 @@ import { PinnedProjects } from "./pinned-projects"
 import { IntegrationSection } from "./integration-section"
 import { ServicesSection } from "./services-section"
 import { WhyUsSection } from "./why-us-section"
+import { Ripple } from "@/components/ui/ripple"
 
 gsap.registerPlugin(useGSAP)
 
@@ -63,7 +64,7 @@ export function HeroSection() {
         <div className="grid items-end gap-8 md:grid-cols-[1fr_auto] w-full">
           <div className="flex flex-col items-start">
             <motion.span initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ type: "spring", bounce: 0, duration: 1, delay: 0.5 }} className="eyebrow inline-flex bg-[#1a1a1d] border border-white/5 px-3 py-1.5 text-white/75">
-              <ScrambleText text="WE AUTOMATE 100+ BUSINESSES" chars=">?/@#$%^&*<-+" delay={0.5} />
+              <HyperText text="WE AUTOMATE 100+ BUSINESSES" className="font-mono text-[10px] tracking-widest text-white/50" />
             </motion.span>
             
             {/* Desktop Heading */}
@@ -116,10 +117,10 @@ function TrustCard({ company }: { company: typeof trustedCompanies[number] }) {
   useGSAP(() => {
     if (!container.current) return
     container.current.addEventListener("mouseenter", () => {
-      gsap.to(container.current, { y: -8, backgroundColor: "#1a1a1d", color: "#ffffff", boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.5)", zIndex: 10, duration: 0.4, ease: "power2.out" })
+      gsap.to(container.current, { backgroundColor: "#1a1a1d", color: "#ffffff", duration: 0.8, ease: "power2.out" })
     })
     container.current.addEventListener("mouseleave", () => {
-      gsap.to(container.current, { y: 0, backgroundColor: "transparent", color: "rgba(255, 255, 255, 0.4)", boxShadow: "none", zIndex: 1, duration: 0.4, ease: "power2.out" })
+      gsap.to(container.current, { backgroundColor: "transparent", color: "rgba(255, 255, 255, 0.4)", duration: 0.8, ease: "power2.out" })
     })
   }, { scope: container })
 
@@ -163,8 +164,9 @@ function MiniCallCard() {
 
 function TrustSection() {
   return (
-    <section className="bg-[#010004] pt-8 pb-16 lg:pt-[60px] lg:pb-[100px]">
-      <Container>
+    <section className="relative overflow-hidden bg-[#010004] pt-8 pb-16 lg:pt-[60px] lg:pb-[100px]">
+      <Ripple mainCircleSize={400} numCircles={6} mainCircleOpacity={0.15} />
+      <Container className="relative z-10">
         <p className="eyebrow mb-10 text-center text-white/45 tracking-[0.2em]">TRUSTED COMPANIES ACROSS INDUSTRIES</p>
         <motion.div
           initial="hidden"

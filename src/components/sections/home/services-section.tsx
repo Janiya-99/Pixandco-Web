@@ -7,7 +7,7 @@ import gsap from "gsap"
 import { useGSAP } from "@gsap/react"
 import { Container } from "@/components/layout/container"
 import { Section } from "@/components/layout/section"
-import { ScrambleText } from "@/components/ui/scramble-text"
+import { HyperText } from "@/components/ui/hyper-text"
 import { AnimatedEyebrow } from "@/components/ui/animated-eyebrow"
 import { services } from "@/content/site"
 
@@ -43,7 +43,7 @@ function ServiceCard({ service, index }: { service: (typeof services)[number], i
       <div className="grid md:grid-cols-2">
         <div className="p-6">
           <p className="eyebrow text-white/30 font-mono">/ {service.number}</p>
-          <h3 className="mt-5 text-2xl tracking-[-.04em] font-primary"><ScrambleText text={service.title} /></h3>
+          <h3 className="mt-5 text-2xl tracking-[-.04em] font-primary"><HyperText text={service.title} /></h3>
           <p className="mt-3 text-sm text-white/40 font-secondary">{service.description}</p>
         </div>
         <div className="relative min-h-52 overflow-hidden">
