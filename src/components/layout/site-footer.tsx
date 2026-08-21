@@ -23,7 +23,7 @@ export function SiteFooter() {
           <div>
             <Link className="focus-ring inline-flex items-center gap-3" href="/">
               <span className="grid size-8 place-items-center border border-white/60 text-[11px] font-semibold">N</span>
-              <span className="text-xl font-medium tracking-[-.03em]">northline</span>
+              <span className="text-xl font-medium tracking-[-.03em]">pixandco</span>
             </Link>
             <h2 className="mt-9 max-w-md text-[clamp(2.5rem,4vw,3.5rem)] leading-[.98] tracking-[-.06em]">Clear. Precise.<br />Automated.</h2>
             <AmbientVideo
@@ -57,7 +57,7 @@ export function SiteFooter() {
 
             <div className="mt-7">
               <p className="eyebrow text-white/45">Email</p>
-              <a className="focus-ring mt-3 inline-block text-2xl tracking-[-.04em] hover:text-white/70 md:text-3xl" href="mailto:hello@northline.studio">hello@northline.studio</a>
+              <a className="focus-ring mt-3 inline-block text-2xl tracking-[-.04em] hover:text-white/70 md:text-3xl" href="mailto:hello@pixandco.studio">hello@pixandco.studio</a>
             </div>
 
             <div className="mt-7">
@@ -76,7 +76,7 @@ export function SiteFooter() {
         </div>
 
         <div className="mt-16 flex flex-col gap-4 border-t border-[#212121] pt-6 font-mono text-[10px] uppercase tracking-[.1em] text-white/35 md:flex-row md:items-center md:justify-between">
-          <p>© 2026 Northline. All rights reserved.</p>
+          <p>© 2026 PIXANDCO. All rights reserved.</p>
           <div className="flex gap-6"><Link href="/privacy">Privacy</Link><Link href="/terms">Terms</Link></div>
           <p>Designed for useful progress</p>
         </div>

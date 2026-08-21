@@ -16,33 +16,37 @@ const values = [
 ]
 
 const team = [
-  { name: "John Smith", role: "Product Manager", img: "/images/workflow-1.jpg" },
-  { name: "Sarah Jenkins", role: "Software Engineer", img: "/images/workflow-2.jpg" },
-  { name: "Hannah Brown", role: "System Designer", img: "/images/workflow-3.jpg" },
-  { name: "David Chen", role: "Operations Lead", img: "/images/workflow-1.jpg" },
-  { name: "Maya Patel", role: "Data Scientist", img: "/images/workflow-2.jpg" },
-  { name: "Emily Watson", role: "UX Researcher", img: "/images/workflow-3.jpg" }
+  { name: "John Smith", role: "Product Manager", img: "/images/site/dqnCbtTjxB2BMDWIbbltr5HnYff71.jpg" },
+  { name: "Sarah Jenkins", role: "Software Engineer", img: "/images/site/fJCyipaZmFOAcrvMpcNWnkeQpuQ4b29.jpg" },
+  { name: "Hannah Brown", role: "System Designer", img: "/images/site/GH4QoaMu8RYFLKuhxm439mvWGfY9dd3.jpg" },
+  { name: "David Chen", role: "Operations Lead", img: "/images/site/GoY7QtIQYXxZ0jQ1f9q10cj7cMI7744.jpg" },
+  { name: "Maya Patel", role: "Data Scientist", img: "/images/site/ho4zNmz230ij3u9hxzoHO7liY40531.jpg" },
+  { name: "Emily Watson", role: "UX Researcher", img: "/images/site/fJCyipaZmFOAcrvMpcNWnkeQpuQ4b29.jpg" }
 ]
 
 export function AboutContent() {
   return (
     <>
       {/* 1. Hero Section */}
-      <section className="relative flex min-h-[90vh] flex-col items-center justify-end overflow-hidden pb-16 pt-32 text-center">
+      <section className="relative flex min-h-[750px] lg:min-h-[85vh] flex-col overflow-hidden">
         <div className="absolute inset-0 z-0">
-          <Image src="/images/site/about-1.png" alt="Team Background" fill className="object-cover opacity-90" />
+          <Image src="/images/site/about-1.png" alt="Team Background" fill priority className="object-cover opacity-90" />
           <div className="absolute inset-0 bg-gradient-to-t from-[#010004] via-[#010004]/60 to-transparent" />
         </div>
-        <Container className="relative z-10 flex flex-col items-center">
-          <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="mb-6 inline-flex rounded-[4px] bg-[#2a2a2a] px-3 py-1.5 text-[10px] font-medium text-white/80 uppercase tracking-widest">
-            ABOUT US
-          </motion.p>
-          <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.1 }} className="mx-auto max-w-4xl text-5xl font-medium tracking-[-.04em] md:text-6xl lg:text-7xl">
-            The Minds Behind the<br />Automation
-          </motion.h1>
-          <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.2 }} className="mx-auto mt-6 max-w-xl text-[16px] text-white/70">
-            Ideas, strategies, and practical guides to help businesses streamline operations and grow with AI.
-          </motion.p>
+        <Container className="relative z-10 flex min-h-[750px] lg:min-h-[85vh] flex-col pb-12 pt-32 md:pb-16 md:pt-36 lg:pb-20 lg:pt-48">
+          <div className="mt-auto flex flex-col items-center text-center gap-4">
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
+              <span className="eyebrow inline-flex bg-[#1a1a1d] border border-white/5 px-3 py-1.5 text-[10px] uppercase tracking-widest text-white/75">
+                ABOUT US
+              </span>
+            </motion.div>
+            <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.1 }} className="display mt-2 w-full text-center">
+              The Minds Behind the<br />Automation
+            </motion.h1>
+            <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.2 }} className="mt-2 max-w-xl text-[16px] text-white/70 text-center">
+              Ideas, strategies, and practical guides to help businesses streamline operations and grow with AI.
+            </motion.p>
+          </div>
         </Container>
       </section>
 
@@ -53,7 +57,7 @@ export function AboutContent() {
             <motion.div initial={{ opacity: 0, x: -40 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true, margin: "-50px" }} transition={{ duration: 0.7 }} className="flex flex-col">
               <p className="eyebrow text-white/40">OUR STORY</p>
               <h2 className="mt-6 text-3xl font-medium leading-[1.2] tracking-[-.02em] md:text-4xl">Designing an Automation System to Simplify Campaign Management.</h2>
-              <p className="mt-6 text-[15px] leading-relaxed text-white/50">Northline was formed around a simple belief: intelligent systems should reduce cognitive load, not add another layer of complexity. We work close to the people doing the work, understand the decisions underneath it, and build the smallest system capable of changing the outcome.</p>
+              <p className="mt-6 text-[15px] leading-relaxed text-white/50">PIXANDCO was formed around a simple belief: intelligent systems should reduce cognitive load, not add another layer of complexity. We work close to the people doing the work, understand the decisions underneath it, and build the smallest system capable of changing the outcome.</p>
               <div className="mt-10">
                 <a href="#" className="inline-flex items-center gap-3 rounded-[6px] border border-white/10 bg-white/5 px-4 py-2.5 text-[11px] font-medium uppercase tracking-[.1em] text-white transition-colors hover:bg-white/10">View Case Study <ArrowRight className="size-3.5" /></a>
               </div>
@@ -146,7 +150,7 @@ export function AboutContent() {
               </h2>
               <div className="mt-12 flex flex-col gap-1.5">
                 <p className="text-[17px] font-medium text-white/90">Bagus William</p>
-                <p className="eyebrow text-[10px] tracking-[0.15em] text-white/40 uppercase">CEO & CO-FOUNDER OF SANJAYA</p>
+                <p className="eyebrow text-[10px] tracking-[0.15em] text-white/40 uppercase">CEO & CO-FOUNDER OF PIXANDCO</p>
               </div>
             </motion.div>
             <motion.div initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true, margin: "-50px" }} transition={{ duration: 0.6 }} className="relative w-full max-w-sm shrink-0 md:max-w-md">
@@ -164,7 +168,7 @@ export function AboutContent() {
         <Container>
           <div className="text-center">
             <p className="eyebrow text-white/40">MEET OUR</p>
-            <h2 className="mt-4 text-4xl font-medium tracking-[-.04em] md:text-5xl">The People Behind Sanjaya</h2>
+            <h2 className="mt-4 text-4xl font-medium tracking-[-.04em] md:text-5xl">The People Behind PIXANDCO</h2>
           </div>
           <div className="mt-20 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {team.map((member, i) => (

@@ -8,8 +8,8 @@ import { useState } from "react"
 import { faqs } from "@/content/site"
 
 const testimonials = [
-  { quote: "Sanjaya helped us turn a messy process into a clear system. Tasks that used to take hours of manual work now run automatically, and our team can focus on what really matters.", name: "Cristin Tambun", role: "FOUNDER OF PANDAWA", company: "Pandawa™", image: "/images/site/jpIBn59XJaU6dp08UvhhxX984e2e.jpg" },
-  { quote: "Working with Sanjaya completely changed how we handle our operations. What used to feel chaotic is now organized, automated, and much easier to track.", name: "Simo Tedjo", role: "FOUNDER OF SHINTA", company: "Shinta", image: "/images/site/2l8Wl4e6GvRUtl6qrfXsaZKZassb2ef.jpg" },
+  { quote: "PIXANDCO helped us turn a messy process into a clear system. Tasks that used to take hours of manual work now run automatically, and our team can focus on what really matters.", name: "Cristin Tambun", role: "FOUNDER OF PANDAWA", company: "Pandawa™", image: "/images/site/jpIBn59XJaU6dp08UvhhxX984e2e.jpg" },
+  { quote: "Working with PIXANDCO completely changed how we handle our operations. What used to feel chaotic is now organized, automated, and much easier to track.", name: "Simo Tedjo", role: "FOUNDER OF SHINTA", company: "Shinta", image: "/images/site/2l8Wl4e6GvRUtl6qrfXsaZKZassb2ef.jpg" },
   { quote: "We shipped the first useful workflow in weeks. Adoption was natural because the design met our team inside the work they already knew.", name: "Asha Morgan", role: "REVENUE DIRECTOR, CURRENT", company: "Current", image: "/images/site/KmimP8fJf3KTg25QrfWgNhSOI4e64.jpg" },
 ]
 

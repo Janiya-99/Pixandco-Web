@@ -1,19 +1,68 @@
 "use client"
 
 import Image from "next/image"
+import { useRef } from "react"
 import { motion } from "framer-motion"
+import gsap from "gsap"
+import { useGSAP } from "@gsap/react"
 import { Container } from "@/components/layout/container"
 import { Section } from "@/components/layout/section"
 import { SectionHeader } from "@/components/ui/section-header"
 
+gsap.registerPlugin(useGSAP)
+
 const comparisonData = [
-  ["", "Northline", "Other agencies", "Hire in-house"],
+  ["", "PIXANDCO", "Other agencies", "Hire in-house"],
   ["Approach", "✓  Process mapping first", "△  Tool-first approach", "△  Depends on hire"],
   ["Workflow", "✓  Around your operations", "×  Mostly templated", "✓  If expertise exists"],
   ["Speed", "✓  Weeks, not months", "△  Most often delayed", "×  Hiring & onboarding"],
   ["Optimization", "✓  Continuous improvement", "△  Setup & disappear", "△  Limited by bandwidth"],
   ["Cost efficiency", "✓  Fixed project clarity", "△  Scope creep common", "×  Salary + overhead"],
 ]
+
+function ComparisonRow({ row, rowIndex }: { row: string[], rowIndex: number }) {
+  const rowRef = useRef<HTMLDivElement>(null)
+
+  useGSAP(() => {
+    const el = rowRef.current
+    if (!el) return
+    const children = el.children
+    
+    el.addEventListener('mouseenter', () => {
+      gsap.to(children, { backgroundColor: "rgba(255,255,255,0.05)", duration: 0.3 })
+      if (children.length > 1) {
+        gsap.to(children[1] as Element, { backgroundColor: "rgba(255,255,255,0.18)", duration: 0.3 })
+      }
+    })
+    
+    el.addEventListener('mouseleave', () => {
+      gsap.to(children, { backgroundColor: "transparent", duration: 0.3 })
+      if (children.length > 1) {
+        gsap.to(children[1] as Element, { backgroundColor: "rgba(255,255,255,0.13)", duration: 0.3 })
+      }
+    })
+  }, { scope: rowRef })
+
+  return (
+    <motion.div 
+      ref={rowRef}
+      className="grid grid-cols-[.6fr_1fr_1fr_1fr] cursor-default"
+      variants={{
+        hidden: { opacity: 0, y: 15 },
+        visible: { opacity: 1, y: 0, transition: { type: "spring", bounce: 0, duration: 1 } }
+      }}
+    >
+      {row.map((cell, index) => (
+        <div
+          key={`${rowIndex}-${index}`}
+          className={`border-b border-r border-[#303034] px-5 py-5 text-sm font-secondary ${index === 1 ? "bg-white/[.13] text-white" : index > 1 ? "text-white/60" : "text-white/75"}`}
+        >
+          {cell}
+        </div>
+      ))}
+    </motion.div>
+  )
+}
 
 export function WhyUsSection() {
   return (
@@ -30,7 +79,7 @@ export function WhyUsSection() {
       <Container className="relative z-10">
         <SectionHeader
           align="center"
-          eyebrow="Why us"
+          eyebrow="WHY US"
           title={
             <>
               Built for real business
@@ -55,23 +104,7 @@ export function WhyUsSection() {
             }}
           >
             {comparisonData.map((row, rowIndex) => (
-              <motion.div 
-                key={rowIndex} 
-                className="grid grid-cols-[.6fr_1fr_1fr_1fr]"
-                variants={{
-                  hidden: { opacity: 0, y: 15 },
-                  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } }
-                }}
-              >
-                {row.map((cell, index) => (
-                  <div
-                    key={`${rowIndex}-${index}`}
-                    className={`border-b border-r border-[#303034] px-5 py-5 text-sm ${index === 1 ? "bg-white/[.13] text-white" : index > 1 ? "text-white/60" : "text-white/75"}`}
-                  >
-                    {cell}
-                  </div>
-                ))}
-              </motion.div>
+              <ComparisonRow key={rowIndex} row={row} rowIndex={rowIndex} />
             ))}
           </motion.div>
         </div>

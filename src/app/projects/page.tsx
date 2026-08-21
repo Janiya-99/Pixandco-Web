@@ -6,16 +6,16 @@ import { FinalCta } from "@/components/sections/shared/final-cta"
 import Image from "next/image"
 import { projects } from "@/content/projects"
 
-export const metadata: Metadata = { title: "Projects", description: "Selected intelligent systems and workflow automation work by Northline Systems." }
+export const metadata: Metadata = { title: "Projects", description: "Selected intelligent systems and workflow automation work by PIXANDCO Systems." }
 
 export default function ProjectsPage() { 
   return (
     <>
-      {/* Custom Centered Hero */}
-      <section className="relative flex flex-col items-center justify-center overflow-hidden pt-48 pb-40 text-center">
+      {/* 1. Hero Section */}
+      <section className="relative flex min-h-[70vh] flex-col items-center justify-center overflow-hidden pt-32 pb-24 text-center">
         <div className="absolute inset-0 z-0">
-          <Image src="/images/site/KmimP8fJf3KTg25QrfWgNhSOI4e64.jpg" alt="Projects Background" fill className="object-cover opacity-60" />
-          <div className="absolute inset-0 bg-gradient-to-b from-[#010004]/10 via-transparent to-[#010004]" />
+          <Image src="/images/site/KmimP8fJf3KTg25QrfWgNhSOI4e64.jpg" alt="Projects Background" fill priority className="object-cover opacity-60" />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#010004]/50 via-[#010004]/80 to-[#010004]" />
         </div>
         <Container className="relative z-10 flex flex-col items-center">
           <p className="mb-6 inline-flex rounded-[4px] bg-[#2a2a2a] px-3 py-1.5 text-[10px] font-medium text-white/80 uppercase tracking-widest">

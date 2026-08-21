@@ -2,7 +2,10 @@
 
 import Image from "next/image"
 import Link from "next/link"
+import { useRef } from "react"
 import { motion } from "framer-motion"
+import gsap from "gsap"
+import { useGSAP } from "@gsap/react"
 import { ArrowRight } from "lucide-react"
 import { Container } from "@/components/layout/container"
 import { Section } from "@/components/layout/section"
@@ -23,46 +26,54 @@ import { IntegrationSection } from "./integration-section"
 import { ServicesSection } from "./services-section"
 import { WhyUsSection } from "./why-us-section"
 
+gsap.registerPlugin(useGSAP)
+
 export function HeroSection() {
   return (
-    <section className="relative min-h-[750px] lg:min-h-screen overflow-hidden">
+    <section className="relative min-h-[750px] overflow-hidden">
       <AmbientVideo
         src="/videos/ruNWMG1hPz7eOeYESQefyP03dc.mp4"
         poster="/images/video-posters/hero-system.webp"
-        alt="Reflective precision-engineered machine surface"
+        alt="Hero background video"
         priority
         sizes="100vw"
         className="absolute inset-0"
-        mediaClassName="object-cover grayscale brightness-[.58] contrast-[1.12]"
+        mediaClassName="object-cover brightness-[.58] contrast-[1.12]"
       />
-      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,rgba(1,0,4,.72)_0%,rgba(1,0,4,.18)_58%,rgba(1,0,4,.08)_100%)]" />
       <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(1,0,4,.05)_0%,transparent_48%,rgba(1,0,4,.88)_100%)]" />
 
-      <Container className="relative z-10 flex min-h-[750px] lg:min-h-screen flex-col pb-14 pt-32 md:pb-16 md:pt-36 lg:pb-24 lg:pt-48">
+      <Container className="relative z-10 flex min-h-[700px] flex-col justify-between pt-24 md:pt-28 pb-12 md:pb-16 lg:pb-20">
         <div className="grid gap-8 md:grid-cols-2">
           <div className="flex flex-col items-start gap-3">
-            <span className="eyebrow text-white/70">/ AI AUTOMATION</span>
-            <span className="eyebrow text-white/70">/ AI INTEGRATION</span>
-            <span className="eyebrow text-white/70">/ AI AGENT DEVELOPMENT</span>
+            <motion.span initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ type: "spring", bounce: 0, duration: 1, delay: 0.5 }} className="eyebrow text-white/70">/ AI AUTOMATION</motion.span>
+            <motion.span initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ type: "spring", bounce: 0, duration: 1, delay: 0.6 }} className="eyebrow text-white/70">/ AI INTEGRATION</motion.span>
+            <motion.span initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ type: "spring", bounce: 0, duration: 1, delay: 0.7 }} className="eyebrow text-white/70">/ AI AGENT DEVELOPMENT</motion.span>
           </div>
-          <p className="max-w-sm justify-self-end text-base leading-6 text-white/80 md:text-right">We design automation that brings clarity, precision, and efficiency to the way your company operates.</p>
+          <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ type: "spring", bounce: 0, duration: 1, delay: 0.6 }} className="max-w-sm justify-self-start text-sm leading-6 text-white/80 md:justify-self-end md:text-right md:text-base">We design automation that brings clarity, precision, and efficiency to the way your company operates.</motion.p>
         </div>
 
         <div className="mt-auto grid items-end gap-8 md:grid-cols-[1fr_auto]">
           <div>
-            <span className="eyebrow inline-flex bg-[#1a1a1d] border border-white/5 px-3 py-1.5 text-white/75">
+            <motion.span initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ type: "spring", bounce: 0, duration: 1, delay: 0.5 }} className="eyebrow inline-flex bg-[#1a1a1d] border border-white/5 px-3 py-1.5 text-white/75">
               <ScrambleText text="WE AUTOMATE 100+ BUSINESSES" chars=">?/@#$%^&*<-+" delay={0.5} />
-            </span>
-            <TextReveal animateOnMount className="display mt-5 w-full" lines={["Clear. Precise.", "Automated."]} />
+            </motion.span>
+            <TextReveal animateOnMount className="display mt-5 w-full tracking-[-.04em]" lines={["Clear. Precise.", "Automated."]} />
           </div>
-          <div className="rounded-[9px] border border-white/15 bg-[#111114]/90 p-2 backdrop-blur-md">
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ type: "spring", bounce: 0, duration: 1, delay: 1.0 }} className="rounded-[9px] border border-white/15 bg-[#111114]/90 p-2 backdrop-blur-md">
             <div className="flex items-center gap-3">
-              <div className="relative size-16 overflow-hidden rounded-[4px] bg-[#202024] flex items-center justify-center text-white/50 text-xl font-medium">
-                C
+              <div className="relative w-20 h-24 overflow-hidden rounded-[4px] bg-[#202024] flex items-center justify-center text-white/50 text-xl font-medium">
+                <video 
+                  src="/videos/girl.mp4"
+                  autoPlay 
+                  muted 
+                  loop 
+                  playsInline 
+                  className="absolute inset-0 size-full object-cover"
+                />
               </div>
-              <div className="min-w-44"><p className="text-sm">Talk with Clarissa</p><p className="eyebrow mt-2 text-white/40">DIRECTOR OF SANJAYA</p><Link href="/contact" className="focus-ring mt-3 flex min-h-9 items-center justify-between rounded-[6px] bg-white px-3 text-xs font-medium text-black">Book 15-mins call <ArrowRight className="size-3.5" /></Link></div>
+              <div className="min-w-44"><p className="text-sm">Talk with Clarissa</p><p className="eyebrow mt-2 text-white/40 tracking-[0.2em]">DIRECTOR OF PIXANDCO</p><Link href="/contact" style={{ color: '#000' }} className="group focus-ring mt-3 flex min-h-9 items-center justify-between rounded-[6px] bg-white px-3 text-xs font-medium transition-colors hover:bg-white/90"><span className="relative block overflow-hidden leading-none"><span className="block transition-transform duration-500 group-hover:-translate-y-full">Book 15-min call</span><span aria-hidden className="absolute left-0 top-full block transition-transform duration-500 group-hover:-translate-y-full">Book 15-min call</span></span><ArrowRight className="size-3.5 transition-transform duration-500 group-hover:translate-x-1" /></Link></div>
             </div>
-          </div>
+          </motion.div>
         </div>
       </Container>
     </section>
@@ -82,47 +93,72 @@ const trustedCompanies = [
   { name: "Fieldwork", mark: "FW", style: "font-semibold tracking-[-.02em]" },
 ] as const
 
-function MiniCallCard() {
-  return <div className="inline-flex items-center gap-3 rounded-[9px] border border-white/15 bg-[#1a1a1d] p-2"><div className="grid size-16 place-items-center bg-[#27272b] text-xl font-semibold">N</div><div className="min-w-44"><p className="text-sm">Talk with Northline</p><p className="eyebrow mt-2 text-white/40">Systems studio</p><Link href="/contact" className="focus-ring mt-3 flex min-h-9 items-center justify-between rounded-[6px] bg-white px-3 text-xs font-medium text-black">Book 15-min call <ArrowRight className="size-3.5" /></Link></div></div>
+function TrustCard({ company }: { company: typeof trustedCompanies[number] }) {
+  const container = useRef<HTMLDivElement>(null)
+
+  useGSAP(() => {
+    if (!container.current) return
+    container.current.addEventListener("mouseenter", () => {
+      gsap.to(container.current, { y: -8, backgroundColor: "#1a1a1d", color: "#ffffff", boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.5)", zIndex: 10, duration: 0.4, ease: "power2.out" })
+    })
+    container.current.addEventListener("mouseleave", () => {
+      gsap.to(container.current, { y: 0, backgroundColor: "transparent", color: "rgba(255, 255, 255, 0.4)", boxShadow: "none", zIndex: 1, duration: 0.4, ease: "power2.out" })
+    })
+  }, { scope: container })
+
+  return (
+    <motion.div
+      ref={container}
+      variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { type: "spring", bounce: 0, duration: 1 } } }}
+      className="relative flex min-h-[110px] items-center justify-center border-b border-r border-[#212121] px-4 text-white/40"
+    >
+      <div className="flex items-center gap-3 pointer-events-none">
+        <span className="grid size-7 place-items-center border border-current text-[9px] font-semibold tracking-[-.04em] opacity-75" aria-hidden>{company.mark}</span>
+        <span className={`text-lg md:text-xl ${company.style}`}>{company.name}</span>
+      </div>
+    </motion.div>
+  )
 }
 
-function ProjectShowcaseRow({ project }: { project: (typeof projects)[number] }) {
-  return <article className="grid overflow-hidden rounded-[9px] border border-[#303034] bg-[#1a1a1d] md:grid-cols-2"><div className="relative min-h-72 md:min-h-[420px]"><Image src={project.coverImage} alt={`${project.title} project`} fill sizes="(max-width: 768px) 100vw, 50vw" className="cinematic-image object-cover" /></div><div className="flex flex-col p-6 md:p-8"><div className="flex items-center gap-2 border-b border-white/10 pb-4"><span className="eyebrow text-white/50">{project.year}</span><span className="text-white/20">•</span><span className="eyebrow text-white/50">{project.industry}</span></div><p className="mt-5 text-xl text-white/50">{project.title}</p><h3 className="mt-7 text-3xl leading-[1.05] tracking-[-.05em]">{project.summary}</h3><Link href={`/projects/${project.slug}`} className="focus-ring mt-6 inline-flex min-h-10 w-fit items-center gap-5 rounded-[6px] bg-white/10 px-4 text-xs font-medium">View case study <ArrowRight className="size-3.5" /></Link><div className="mt-auto grid grid-cols-2 gap-5 border-t border-white/10 pt-6">{project.metrics.slice(0,2).map(metric => <div key={metric.label}><p className="text-3xl tracking-[-.04em]">{metric.value}</p><p className="eyebrow mt-3 text-white/35">{metric.label}</p></div>)}</div></div></article>
+function MiniCallCard() {
+  return (
+    <div className="inline-flex items-center gap-3 rounded-[9px] border border-white/15 bg-[#1a1a1d] p-2">
+      <div className="relative w-20 h-24 overflow-hidden rounded-[4px] bg-[#27272b]">
+        <video
+          src="/videos/girl.mp4"
+          autoPlay
+          muted
+          loop
+          playsInline
+          className="absolute inset-0 size-full object-cover"
+        />
+      </div>
+      <div className="min-w-44">
+        <p className="text-sm">Talk with Clarissa</p>
+        <p className="eyebrow mt-2 text-white/40">DIRECTOR OF PIXANDCO</p>
+        <Link href="/contact" style={{ color: '#000' }} className="group focus-ring mt-3 flex min-h-9 items-center justify-between rounded-[6px] bg-white px-3 text-xs font-medium transition-colors hover:bg-white/90">
+          <span className="relative block overflow-hidden leading-none"><span className="block transition-transform duration-500 group-hover:-translate-y-full">Book 15-min call</span><span aria-hidden className="absolute left-0 top-full block transition-transform duration-500 group-hover:-translate-y-full">Book 15-min call</span></span> <ArrowRight className="size-3.5 transition-transform duration-500 group-hover:translate-x-1" />
+        </Link>
+      </div>
+    </div>
+  )
 }
 
 function TrustSection() {
   return (
     <section className="bg-[#010004] pt-8 pb-16 lg:pt-[60px] lg:pb-[100px]">
       <Container>
-        <p className="eyebrow mb-10 text-center text-white/45">TRUSTED COMPANIES ACROSS INDUSTRIES</p>
-        <motion.div 
+        <p className="eyebrow mb-10 text-center text-white/45 tracking-[0.2em]">TRUSTED COMPANIES ACROSS INDUSTRIES</p>
+        <motion.div
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: "-50px" }}
-          variants={{
-            hidden: { opacity: 0 },
-            visible: {
-              opacity: 1,
-              transition: { staggerChildren: 0.05 }
-            }
-          }}
+          variants={{ hidden: { opacity: 0 }, visible: { opacity: 1, transition: { staggerChildren: 0.05 } } }}
           className="grid grid-cols-2 border-l border-t border-[#212121] md:grid-cols-5"
           style={{ maskImage: "linear-gradient(to right, transparent, black 15%, black 85%, transparent)", WebkitMaskImage: "linear-gradient(to right, transparent, black 15%, black 85%, transparent)" }}
         >
           {trustedCompanies.map((company) => (
-            <motion.div
-              variants={{
-                hidden: { opacity: 0, y: 20 },
-                visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } }
-              }}
-              key={company.name}
-              className="group relative flex min-h-[110px] items-center justify-center border-b border-r border-[#212121] px-4 text-white/40 transition-all duration-300 hover:z-10 hover:scale-105 hover:bg-[#1a1a1d] hover:shadow-2xl hover:text-white/80"
-            >
-              <div className="flex items-center gap-3">
-                <span className="grid size-7 place-items-center border border-current text-[9px] font-semibold tracking-[-.04em] opacity-75" aria-hidden>{company.mark}</span>
-                <span className={`text-lg md:text-xl ${company.style}`}>{company.name}</span>
-              </div>
-            </motion.div>
+            <TrustCard key={company.name} company={company} />
           ))}
         </motion.div>
       </Container>
@@ -130,27 +166,64 @@ function TrustSection() {
   )
 }
 
-export function HomeSections() { return <>
-  <TrustSection />
+function StepCard({ step, index }: { step: { n: string, t: string, d: string, img: string }, index: number }) {
+  const cardRef = useRef<HTMLDivElement>(null)
 
-  <ConcentricScrollSection />
+  useGSAP(() => {
+    if (!cardRef.current) return
+    const img = cardRef.current.querySelector('img')
+    const overlay = cardRef.current.querySelector('.overlay-bg')
 
-  <Section><Container><SectionHeader align="center" eyebrow="Our works" title={<>Structured. Automated.<br />Delivered.</>} description="Selected workflow transformations across operations, revenue, and internal systems." /><PinnedProjects /><div className="flex justify-center"><RollingButton variant="outline" href="/projects" className="mt-12">See all case studies</RollingButton></div></Container></Section>
+    cardRef.current.addEventListener('mouseenter', () => {
+      gsap.to(img, { scale: 1.05, duration: 1, ease: "power2.out" })
+      gsap.to(overlay, { opacity: 0.8, duration: 0.5 })
+      gsap.to(cardRef.current, { borderColor: "rgba(255,255,255,0.15)", duration: 0.3 })
+    })
 
-  <Section><Container><SectionHeader align="center" eyebrow="How it works" title={<>A simple, structured<br />approach to automation</>} description="We design systems that remove friction, sharpen workflows, and help your team operate with clarity and control." /><div className="mt-16 grid gap-6 md:grid-cols-3 pb-16">{[{n:"1",t:"Understand Your Workflow",d:"We analyze your workflow, tools, and bottlenecks.",img:"/images/site/pGKzMvVMxZif17kRFV5Tn7pC3382fe7.jpg"},{n:"2",t:"Design & Build the System",d:"We implement automation tailored to your business.",img:"/images/site/5G1JBCX3fkqZAKYA6QK55SRIiZo4e2e.jpg"},{n:"3",t:"Optimize & Scale",d:"We refine, improve, and scale as your operations.",img:"/images/site/GoY7QtIQYXxZ0jQ1f9q10cj7cMId19d.jpg"}].map((step, i) => <Reveal key={step.n} className={`${i === 1 ? 'md:mt-10' : i === 2 ? 'md:mt-20' : ''}`}><div className="group relative aspect-[4/5] overflow-hidden rounded-[12px] border border-[#2b2b2f]"><Image src={step.img} alt="" fill sizes="33vw" className="cinematic-image object-cover transition-transform duration-1000 ease-out group-hover:scale-105" /><div className="absolute inset-0 bg-gradient-to-t from-[#010004]/90 via-[#010004]/20 to-transparent transition-opacity duration-500 group-hover:opacity-80" /><div className="absolute inset-x-0 bottom-0 flex flex-col justify-end p-6 md:p-8"><h4 className="text-xl font-medium tracking-[-.04em] text-white">{step.n}. {step.t}</h4><p className="mt-3 text-[15px] leading-6 text-white/60">{step.d}</p></div></div></Reveal>)}</div></Container></Section>
+    cardRef.current.addEventListener('mouseleave', () => {
+      gsap.to(img, { scale: 1, duration: 1, ease: "power2.out" })
+      gsap.to(overlay, { opacity: 1, duration: 0.5 })
+      gsap.to(cardRef.current, { borderColor: "#2b2b2f", duration: 0.3 })
+    })
+  }, { scope: cardRef })
 
-  <IntegrationSection />
+  return (
+    <Reveal className={`${index === 1 ? 'md:mt-10' : index === 2 ? 'md:mt-20' : ''}`}>
+      <div ref={cardRef} className="relative aspect-[4/5] overflow-hidden rounded-[12px] border border-[#2b2b2f] bg-[#1a1a1d]">
+        <Image src={step.img} alt="" fill sizes="33vw" className="cinematic-image object-cover" />
+        <div className="overlay-bg absolute inset-0 bg-gradient-to-t from-[#010004]/90 via-[#010004]/45 to-transparent opacity-100" />
+        <div className="absolute inset-x-0 bottom-0 flex flex-col justify-end p-6 md:p-8 pointer-events-none">
+          <h4 className="text-xl font-medium tracking-[-.04em] text-white font-primary">{step.n}. {step.t}</h4>
+          <p className="mt-3 text-[15px] leading-6 text-white/60 font-secondary">{step.d}</p>
+        </div>
+      </div>
+    </Reveal>
+  )
+}
 
-  <ServicesSection />
+export function HomeSections() {
+  return <>
+    <TrustSection />
 
-  <WhyUsSection />
+    <ConcentricScrollSection />
 
-  <Section><Container><Testimonials /></Container></Section>
-  <section><Container className="grid grid-cols-2 border-l border-t border-[#303034] lg:grid-cols-4">{[{v:100,s:"+",l:"workflows automated"},{v:50,s:"%",l:"time saved"},{v:3,s:"x",l:"process efficiency"},{v:70,s:"%",l:"less human error"}].map(stat => <Reveal key={stat.l} className="border-b border-r border-[#303034] px-6 py-8"><p className="text-4xl tracking-[-.05em] md:text-5xl"><Counter value={stat.v} suffix={stat.s} /></p><p className="eyebrow mt-4 text-white/35">{stat.l}</p></Reveal>)}</Container></section>
+    <Section><Container><SectionHeader align="center" eyebrow="OUR WORKS" title={<>Structured. Automated.<br />Delivered.</>} description="Selected workflow transformations across operations, revenue, and internal systems." /><PinnedProjects /><div className="flex justify-center"><RollingButton variant="outline" href="/projects" className="mt-12">See all case studies</RollingButton></div></Container></Section>
 
-  <Section><Container><SectionHeader align="center" eyebrow="Pricing" title={<>Flexible plans for your<br />automation goals</>} /><Reveal className="mt-14"><Pricing /></Reveal></Container></Section>
+    <Section><Container><SectionHeader align="center" eyebrow="HOW IT WORKS" title={<>A simple, structured<br />approach to automation</>} description="We design systems that remove friction, sharpen workflows, and help your team operate with clarity and control." /><div className="mt-16 grid gap-6 md:grid-cols-3 pb-16">{[{ n: "1", t: "Understand Your Workflow", d: "We analyze your workflow, tools, and bottlenecks.", img: "/images/site/pGKzMvVMxZif17kRFV5Tn7pC3382fe7.jpg" }, { n: "2", t: "Design & Build the System", d: "We implement automation tailored to your business.", img: "/images/site/5G1JBCX3fkqZAKYA6QK55SRIiZo4e2e.jpg" }, { n: "3", t: "Optimize & Scale", d: "We refine, improve, and scale as your operations.", img: "/images/site/GoY7QtIQYXxZ0jQ1f9q10cj7cMId19d.jpg" }].map((step, i) => <StepCard key={step.n} step={step} index={i} />)}</div></Container></Section>
 
-  <Section><Container><div className="flex items-end justify-between gap-8"><div><p className="eyebrow mb-7 inline-flex border-l-2 border-white/50 bg-[#1a1a1d] px-3 py-1.5 text-white/70 uppercase">Blog</p><h2 className="section-title mt-6">Insights on AI & automation</h2></div><RollingButton variant="outline" href="/blog">See more</RollingButton></div><div className="mt-12 grid gap-8 md:grid-cols-3">{posts.map(post => <Reveal key={post.slug}><ArticleCard post={post} /></Reveal>)}</div></Container></Section>
+    <IntegrationSection />
 
-  <Section><Container><div className="grid gap-14 lg:grid-cols-[.55fr_1fr]"><div className="flex flex-col items-start"><SectionHeader eyebrow="FAQ" title={<>Have questions?<br />Check out the FAQs</>} /><Reveal className="mt-auto pt-16"><MiniCallCard /></Reveal></div><Reveal><Faq /></Reveal></div></Container></Section>
-  </> }
+    <ServicesSection />
+
+    <WhyUsSection />
+
+    <Section><Container><Testimonials /></Container></Section>
+    <section><Container className="grid grid-cols-2 border-l border-t border-[#303034] lg:grid-cols-4">{[{ v: 100, s: "+", l: "workflows automated" }, { v: 50, s: "%", l: "time saved" }, { v: 3, s: "x", l: "process efficiency" }, { v: 70, s: "%", l: "less human error" }].map(stat => <Reveal key={stat.l} className="border-b border-r border-[#303034] px-6 py-8"><p className="text-4xl tracking-[-.05em] md:text-5xl"><Counter value={stat.v} suffix={stat.s} /></p><p className="eyebrow mt-4 text-white/35 font-mono">{stat.l}</p></Reveal>)}</Container></section>
+
+    <Section><Container><SectionHeader align="center" eyebrow="PRICING" title={<>Flexible plans for your<br />automation goals</>} /><Reveal className="mt-14"><Pricing /></Reveal></Container></Section>
+
+    <Section><Container><div className="flex items-end justify-between gap-8"><div><p className="eyebrow mb-7 inline-flex border-l-2 border-white/50 bg-[#1a1a1d] px-3 py-1.5 text-white/70 uppercase">BLOG</p><h2 className="section-title mt-6 tracking-[-.04em]">Insights on AI & automation</h2></div><RollingButton variant="outline" href="/blog">See more</RollingButton></div><div className="mt-12 grid gap-8 md:grid-cols-3">{posts.map(post => <Reveal key={post.slug}><ArticleCard post={post} /></Reveal>)}</div></Container></Section>
+
+    <Section><Container><div className="grid gap-14 lg:grid-cols-[.55fr_1fr]"><div className="flex flex-col items-start"><SectionHeader eyebrow="FAQ" title={<>Have questions?<br />Check out the FAQs</>} /><Reveal className="mt-auto pt-16"><MiniCallCard /></Reveal></div><Reveal><Faq /></Reveal></div></Container></Section>
+  </>
+}

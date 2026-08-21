@@ -32,7 +32,7 @@ function useScrambleText(text: string, playOnMount: boolean, delay: number, char
         tweenLength: false,
       },
       keyframes: {
-        color: ["#FF3B30", "#9C27B0", "#FF9500", ""],
+        color: ["#00ff51", "#00ff51", "#00ff51", ""],
         easeEach: "none"
       },
       onComplete: () => setIsComplete(true)
@@ -91,6 +91,7 @@ export function ScrambleLink({
   active?: boolean
 }) {
   const { textRef, scramble, isComplete } = useScrambleText(text, true, delay)
+  const [isHovered, setIsHovered] = useState(false)
 
   return (
     <Link
@@ -98,14 +99,16 @@ export function ScrambleLink({
       aria-label={text}
       aria-current={active ? "page" : undefined}
       className={cn("focus-ring inline-flex min-h-11 items-center", className)}
-      onPointerEnter={scramble}
-      onFocus={scramble}
+      onPointerEnter={() => { setIsHovered(true); scramble(); }}
+      onPointerLeave={() => setIsHovered(false)}
+      onFocus={() => { setIsHovered(true); scramble(); }}
+      onBlur={() => setIsHovered(false)}
     >
       <span className="inline-grid" aria-hidden>
         <span className="invisible col-start-1 row-start-1">{text}</span>
         <span ref={textRef} className="col-start-1 row-start-1">{text}</span>
       </span>
-      {active && <span className="nav-caret ml-1.5" aria-hidden />}
+      {isHovered && isComplete && <span className="nav-caret ml-1.5" aria-hidden />}
     </Link>
   )
 }
