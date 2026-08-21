@@ -80,7 +80,8 @@ export function HyperText({
 
   return (
     <span
-      className={cn("inline-flex items-center overflow-hidden transition-colors duration-300", trigger ? "text-[#00ff51]" : "", className)}
+      className={cn("inline-flex items-center overflow-hidden transition-colors duration-300", className)}
+      style={{ color: trigger ? "#00ff51" : undefined }}
       onMouseEnter={() => {
         setIsHovered(true);
         startAnimation();
