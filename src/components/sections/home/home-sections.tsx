@@ -40,9 +40,8 @@ export function HeroSection() {
         priority
         sizes="100vw"
         className="absolute inset-0"
-        mediaClassName="object-cover object-center brightness-[.58] contrast-[1.12] scale-[1.3] md:scale-100"
+        mediaClassName="object-cover object-center brightness-[.85] contrast-[1.12] scale-[1.3] md:scale-100"
       />
-      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(1,0,4,.05)_0%,transparent_48%,rgba(1,0,4,.88)_100%)]" />
 
       <Container className="relative z-10 flex min-h-[750px] flex-col pt-24 md:pt-28 pb-12 md:pb-16 lg:pb-20">
         

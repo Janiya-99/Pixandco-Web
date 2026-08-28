@@ -1,13 +1,17 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useRef } from "react";
+import { motion, useScroll, useTransform, MotionValue, useMotionValue, useMotionValueEvent } from "framer-motion";
 import { Reveal } from "@/components/motion/reveal";
 
 // --- REUSABLE COMPONENTS ---
 
-export function ConcentricRings() {
+export function ConcentricRings({ scrollYProgress }: { scrollYProgress: MotionValue<number> }) {
+  // Map scroll progress to fade rings in and out smoothly
+  const ringOpacity = useTransform(scrollYProgress, [0, 0.15, 0.85, 1], [0, 1, 1, 0]);
+
   const Ring = ({ sizeClasses, duration, reverse = false, delay = 0, initialRotate = 0 }: { sizeClasses: string, duration: number, reverse?: boolean, delay?: number, initialRotate?: number }) => (
-    <div className={`absolute ${sizeClasses} rounded-full border border-white/10`}>
+    <div className={`absolute ${sizeClasses} rounded-full`}>
       <motion.div
         initial={{ rotate: initialRotate }}
         animate={{ rotate: initialRotate + (reverse ? -360 : 360) }}
@@ -23,11 +27,14 @@ export function ConcentricRings() {
   );
 
   return (
-    <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+    <motion.div
+      style={{ opacity: ringOpacity }}
+      className="absolute inset-0 flex items-center justify-center pointer-events-none"
+    >
       <Ring sizeClasses="h-[230px] w-[230px] md:h-[410px] md:w-[410px] lg:h-[560px] lg:w-[560px]" duration={15} initialRotate={0} />
       <Ring sizeClasses="h-[390px] w-[390px] md:h-[610px] md:w-[610px] lg:h-[820px] lg:w-[820px]" duration={25} reverse delay={-5} initialRotate={120} />
       <Ring sizeClasses="h-[560px] w-[560px] md:h-[820px] md:w-[820px] lg:h-[1120px] lg:w-[1120px]" duration={35} delay={-10} initialRotate={240} />
-    </div>
+    </motion.div>
   );
 }
 
@@ -35,11 +42,35 @@ interface FloatingBadgeProps {
   label: string;
   position: string;
   floatDuration: number;
+  triggerRange: [number, number];
+  scrollYProgress: MotionValue<number>;
 }
 
-export function FloatingBadge({ label, position, floatDuration }: FloatingBadgeProps) {
+export function FloatingBadge({ label, position, floatDuration, triggerRange, scrollYProgress }: FloatingBadgeProps) {
+  // Manually clamp and calculate values to avoid any useTransform mapping bugs
+  const opacity = useMotionValue(0);
+  const scale = useMotionValue(0.8);
+
+  // Use a completely manual calculation that guarantees the opacity is exactly 1 once loaded
+  useMotionValueEvent(scrollYProgress, "change", (latest) => {
+    if (latest <= triggerRange[0]) {
+      opacity.set(0);
+      scale.set(0.8);
+    } else if (latest >= triggerRange[1]) {
+      opacity.set(1);
+      scale.set(1);
+    } else {
+      const progress = (latest - triggerRange[0]) / (triggerRange[1] - triggerRange[0]);
+      opacity.set(progress);
+      scale.set(0.8 + progress * 0.2);
+    }
+  });
+
   return (
-    <div className={`absolute z-20 ${position}`}>
+    <motion.div
+      style={{ opacity, scale }}
+      className={`absolute z-20 ${position}`}
+    >
       <motion.div
         animate={{ y: [0, -8, 0] }}
         transition={{ duration: floatDuration, repeat: Infinity, ease: "easeInOut" }}
@@ -48,43 +79,53 @@ export function FloatingBadge({ label, position, floatDuration }: FloatingBadgeP
         <span className="size-1.5 rounded-[2px] bg-neutral-500" />
         {label}
       </motion.div>
-    </div>
+    </motion.div>
   );
 }
 
 // --- COMBINED SECTION ---
 
-const BADGES = [
-  { id: "wasted-resources", label: "Wasted Resources", position: "top-[32%] right-[18%]", floatDuration: 4.2 },
-  { id: "siloed-comm", label: "Siloed Communication", position: "bottom-[32%] left-[22%]", floatDuration: 3.5 },
-  { id: "lack-visibility", label: "Lack of Visibility", position: "top-[20%] left-[45%]", floatDuration: 4.8 },
-  { id: "tedious-onboarding", label: "Tedious Onboarding", position: "top-[42%] left-[12%]", floatDuration: 3.8 },
-  { id: "fragmented-workflows", label: "Fragmented Workflows", position: "bottom-[24%] right-[16%]", floatDuration: 4.5 },
+const BADGES: (Omit<FloatingBadgeProps, "scrollYProgress"> & { id: string })[] = [
+  { id: "wasted-resources", label: "Wasted Resources", position: "top-[32%] right-[18%]", floatDuration: 4.2, triggerRange: [0.1, 0.15] },
+  { id: "siloed-comm", label: "Siloed Communication", position: "bottom-[32%] left-[22%]", floatDuration: 3.5, triggerRange: [0.15, 0.2] },
+  { id: "lack-visibility", label: "Lack of Visibility", position: "top-[20%] left-[45%]", floatDuration: 4.8, triggerRange: [0.2, 0.25] },
+  { id: "tedious-onboarding", label: "Tedious Onboarding", position: "top-[42%] left-[12%]", floatDuration: 3.8, triggerRange: [0.25, 0.3] },
+  { id: "fragmented-workflows", label: "Fragmented Workflows", position: "bottom-[24%] right-[16%]", floatDuration: 4.5, triggerRange: [0.3, 0.35] },
 ];
 
 export function ConcentricScrollSection() {
+  const containerRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end end"],
+  });
+
   return (
-    <section id="problems" className="relative min-h-screen w-full flex items-center justify-center overflow-hidden bg-[#010004] text-white py-32">
-      <Reveal className="z-10 max-w-xl text-center px-4 flex flex-col items-center">
-        <p className="mb-4 text-[10px] font-mono text-neutral-500 uppercase tracking-[0.2em] eyebrow text-white/35">
-          / THE OPERATIONAL GAP
-        </p>
-        <h2 className="section-title max-w-lg">
-          The Hidden Cost <br /> of Manual Work
-        </h2>
-      </Reveal>
+    <section ref={containerRef} id="problems" className="relative h-[300vh] w-full bg-[#010004] text-white">
+      <div className="sticky top-0 flex h-screen w-full items-center justify-center overflow-hidden">
+        <Reveal className="z-10 max-w-xl text-center px-4 flex flex-col items-center">
+          <p className="mb-4 text-[10px] font-mono text-neutral-500 uppercase tracking-[0.2em] eyebrow text-white/35">
+            / THE OPERATIONAL GAP
+          </p>
+          <h2 className="section-title max-w-lg">
+            The Hidden Cost <br /> of Manual Work
+          </h2>
+        </Reveal>
 
-      <ConcentricRings />
+        <ConcentricRings scrollYProgress={scrollYProgress} />
 
-      {/* Orbiting Floating Badges */}
-      {BADGES.map((badge) => (
-        <FloatingBadge
-          key={badge.id}
-          label={badge.label}
-          position={badge.position}
-          floatDuration={badge.floatDuration}
-        />
-      ))}
+        {/* Orbiting Floating Badges */}
+        {BADGES.map((badge) => (
+          <FloatingBadge
+            key={badge.id}
+            label={badge.label}
+            position={badge.position}
+            floatDuration={badge.floatDuration}
+            triggerRange={badge.triggerRange}
+            scrollYProgress={scrollYProgress}
+          />
+        ))}
+      </div>
     </section>
   );
 }
