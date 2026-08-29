@@ -1,17 +1,17 @@
 "use client";
 
 import { useRef } from "react";
-import { motion, useScroll, useTransform, MotionValue, useMotionValue, useMotionValueEvent } from "framer-motion";
+import { motion, useScroll, useTransform, MotionValue, useMotionValue, useMotionValueEvent, useSpring } from "framer-motion";
 import { Reveal } from "@/components/motion/reveal";
 
 // --- REUSABLE COMPONENTS ---
 
 export function ConcentricRings({ scrollYProgress }: { scrollYProgress: MotionValue<number> }) {
-  // Map scroll progress to fade rings in and out smoothly
-  const ringOpacity = useTransform(scrollYProgress, [0, 0.15, 0.85, 1], [0, 1, 1, 0]);
+  // Map scroll progress to fade rings out at the very end smoothly so they remain clearly visible
+  const ringOpacity = useTransform(scrollYProgress, [0, 0.95, 1], [1, 1, 0]);
 
   const Ring = ({ sizeClasses, duration, reverse = false, delay = 0, initialRotate = 0 }: { sizeClasses: string, duration: number, reverse?: boolean, delay?: number, initialRotate?: number }) => (
-    <div className={`absolute ${sizeClasses} rounded-full`}>
+    <div className={`absolute flex items-center justify-center ${sizeClasses} rounded-full`}>
       <motion.div
         initial={{ rotate: initialRotate }}
         animate={{ rotate: initialRotate + (reverse ? -360 : 360) }}
@@ -47,24 +47,11 @@ interface FloatingBadgeProps {
 }
 
 export function FloatingBadge({ label, position, floatDuration, triggerRange, scrollYProgress }: FloatingBadgeProps) {
-  // Manually clamp and calculate values to avoid any useTransform mapping bugs
-  const opacity = useMotionValue(0);
-  const scale = useMotionValue(0.8);
+  const rawOpacity = useTransform(scrollYProgress, triggerRange, [0, 1]);
+  const rawScale = useTransform(scrollYProgress, triggerRange, [0.8, 1]);
 
-  // Use a completely manual calculation that guarantees the opacity is exactly 1 once loaded
-  useMotionValueEvent(scrollYProgress, "change", (latest) => {
-    if (latest <= triggerRange[0]) {
-      opacity.set(0);
-      scale.set(0.8);
-    } else if (latest >= triggerRange[1]) {
-      opacity.set(1);
-      scale.set(1);
-    } else {
-      const progress = (latest - triggerRange[0]) / (triggerRange[1] - triggerRange[0]);
-      opacity.set(progress);
-      scale.set(0.8 + progress * 0.2);
-    }
-  });
+  const opacity = useSpring(rawOpacity, { stiffness: 60, damping: 20, mass: 0.5 });
+  const scale = useSpring(rawScale, { stiffness: 60, damping: 20, mass: 0.5 });
 
   return (
     <motion.div

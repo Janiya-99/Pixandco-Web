@@ -66,16 +66,33 @@ button, input, textarea, select { font: inherit; }
 .rich-copy p { color: var(--foreground-soft); font-size: 1.08rem; line-height: 1.8; margin-top: 1.25rem; }
 .rich-copy h2 { font-size: clamp(1.8rem, 3vw, 2.7rem); letter-spacing: -.035em; margin-top: 4.5rem; }
 
-@keyframes marquee { to { transform: translateX(-50%); } }
-@keyframes accordion-down { from { height: 0; opacity: 0; } to { height: var(--radix-accordion-content-height); opacity: 1; } }
-@keyframes accordion-up { from { height: var(--radix-accordion-content-height); opacity: 1; } to { height: 0; opacity: 0; } }
-@keyframes caret-blink { 0%, 48% { opacity: 1; } 49%, 100% { opacity: 0; } }
-@keyframes ripple {
-  0%, 100% { transform: translate(-50%, -50%) scale(1); }
-  50% { transform: translate(-50%, -50%) scale(0.9); }
+@theme {
+  --animate-accordion-down: accordion-down 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  --animate-accordion-up: accordion-up 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  --animate-ripple: ripple var(--duration, 2s) ease infinite;
+
+  @keyframes marquee {
+    to { transform: translateX(-50%); }
+  }
+  @keyframes accordion-down {
+    from { height: 0; opacity: 0; }
+    to { height: var(--radix-accordion-content-height); opacity: 1; }
+  }
+  @keyframes accordion-up {
+    from { height: var(--radix-accordion-content-height); opacity: 1; }
+    to { height: 0; opacity: 0; }
+  }
+  @keyframes caret-blink {
+    0%, 48% { opacity: 1; }
+    49%, 100% { opacity: 0; }
+  }
+  @keyframes ripple {
+    0%, 100% { transform: translate(-50%, -50%) scale(1); }
+    50% { transform: translate(-50%, -50%) scale(0.9); }
+  }
 }
 
-.animate-ripple { animation: ripple var(--duration, 2s) ease infinite; }
+.animate-ripple { animation: var(--animate-ripple); }
 .marquee-track { animation: marquee 36s linear infinite; }
 .nav-caret {
   display: inline-block;

@@ -28,4 +28,52 @@ export function Pricing() {
   return <><div className="mb-12 flex justify-center"><div className="flex rounded-[9px] border border-white/15 bg-[#1a1a1d] p-1" aria-label="Billing period"><button onClick={() => setYearly(false)} className={`focus-ring min-h-10 rounded-[6px] px-7 text-xs transition ${!yearly ? "bg-white text-black" : "text-white/45"}`}>Monthly</button><button onClick={() => setYearly(true)} className={`focus-ring min-h-10 rounded-[6px] px-7 text-xs transition ${yearly ? "bg-white text-black" : "text-white/45"}`}>Yearly <span className="ml-1 text-[10px]">−20%</span></button></div></div><div className="grid items-start gap-6 lg:grid-cols-3">{plans.map((plan, index) => <article key={plan.name} className={`rounded-[9px] border border-[#303034] p-6 ${index === 1 ? "bg-[#1a1a1d]" : "bg-transparent"}`}><div className="grid size-9 place-items-center rounded-[7px] border border-white/15 bg-white/5 text-xs">0{index + 1}</div><div className="mt-5 flex items-center gap-2"><h3 className="text-xl">{plan.name}</h3>{index === 1 && <span className="eyebrow rounded-full border border-white/15 px-2 py-1 text-white/55">Popular</span>}</div><p className="mt-3 min-h-12 text-sm leading-6 text-white/45">{plan.text}</p><div className="mt-8 flex items-end gap-2"><AnimatePresence mode="wait"><motion.span key={String(yearly)} className="text-5xl tracking-[-.055em]" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }}>${(yearly ? plan.yearly : plan.monthly).toLocaleString()}</motion.span></AnimatePresence><span className="pb-1 text-xs text-white/35">/mo</span></div><button className={`focus-ring mt-8 flex min-h-11 w-full items-center justify-center gap-3 rounded-[6px] border text-xs font-medium ${index === 1 ? "border-white bg-white text-black" : "border-white/15 bg-white/5"}`}>Choose {plan.name} <ArrowRight className="size-3.5" /></button><p className="mt-4 text-center text-[11px] text-white/45">✓ 30-day implementation guarantee</p><ul className="mt-7 border-t border-white/10 pt-5">{plan.features.map(item => <li key={item} className="py-2 text-sm text-white/70">✓ <span className="ml-2">{item}</span></li>)}</ul></article>)}</div></>
 }
 
-export function Faq() { return <AccordionPrimitive.Root type="single" collapsible defaultValue="item-0" className="space-y-2">{faqs.map((faq, index) => <AccordionPrimitive.Item key={faq.question} value={`item-${index}`} className="overflow-hidden rounded-[7px] border border-[#303034] bg-[#1a1a1d]"><AccordionPrimitive.Header><AccordionPrimitive.Trigger className="group focus-ring flex min-h-16 w-full items-center justify-between gap-8 px-5 py-4 text-left text-base"><span>{faq.question}</span><span className="text-xl font-light text-white/60 transition-transform duration-300 group-data-[state=open]:rotate-45">+</span></AccordionPrimitive.Trigger></AccordionPrimitive.Header><AccordionPrimitive.Content className="overflow-hidden text-white/50 data-[state=closed]:animate-[accordion-up_.3s_ease-out] data-[state=open]:animate-[accordion-down_.3s_ease-out]"><p className="max-w-3xl px-5 pb-6 text-sm leading-7">{faq.answer}</p></AccordionPrimitive.Content></AccordionPrimitive.Item>)}</AccordionPrimitive.Root> }
+function FaqItem({ faq, isOpen, onToggle }: { faq: any; isOpen: boolean; onToggle: () => void }) {
+  return (
+    <div className="overflow-hidden rounded-[7px] border border-[#303034] bg-[#1a1a1d]">
+      <button 
+        onClick={onToggle}
+        className="group focus-ring flex min-h-16 w-full items-center justify-between gap-8 px-5 py-4 text-left text-base"
+        aria-expanded={isOpen}
+      >
+        <span>{faq.question}</span>
+        <span 
+          className={`text-xl font-light text-white/60 transition-transform ${isOpen ? "rotate-45" : ""}`} 
+          style={{ transitionDuration: "0.8s", transitionTimingFunction: "cubic-bezier(0.22, 1, 0.36, 1)" }}
+        >
+          +
+        </span>
+      </button>
+      <AnimatePresence initial={false}>
+        {isOpen && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+            className="overflow-hidden"
+          >
+            <p className="max-w-3xl px-5 pb-6 text-sm leading-7 text-white/50">{faq.answer}</p>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  )
+}
+
+export function Faq() { 
+  const [openIndex, setOpenIndex] = useState<number | null>(0)
+  
+  return (
+    <div className="space-y-2">
+      {faqs.map((faq, index) => (
+        <FaqItem 
+          key={faq.question} 
+          faq={faq} 
+          isOpen={openIndex === index}
+          onToggle={() => setOpenIndex(openIndex === index ? null : index)}
+        />
+      ))}
+    </div>
+  ) 
+}

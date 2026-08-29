@@ -4,6 +4,7 @@ import Image from "next/image"
 import { useRef } from "react"
 import { motion } from "framer-motion"
 import gsap from "gsap"
+import ScrollTrigger from "gsap/ScrollTrigger"
 import { useGSAP } from "@gsap/react"
 import { Container } from "@/components/layout/container"
 import { Section } from "@/components/layout/section"
@@ -11,7 +12,7 @@ import { HyperText } from "@/components/ui/hyper-text"
 import { AnimatedEyebrow } from "@/components/ui/animated-eyebrow"
 import { services } from "@/content/site"
 
-gsap.registerPlugin(useGSAP)
+gsap.registerPlugin(useGSAP, ScrollTrigger)
 
 function ServiceCard({ service, index }: { service: (typeof services)[number], index: number }) {
   const cardRef = useRef<HTMLDivElement>(null)
@@ -20,6 +21,24 @@ function ServiceCard({ service, index }: { service: (typeof services)[number], i
     if (!cardRef.current) return
     const imgs = cardRef.current.querySelectorAll('img')
     
+    imgs.forEach((img) => {
+      const targetOpacity = img.classList.contains('opacity-65') ? 0.65 : 1;
+      gsap.fromTo(img, 
+        { opacity: 0, scale: 1.1 },
+        {
+          opacity: targetOpacity, 
+          scale: 1,
+          duration: 1.8,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: cardRef.current,
+            start: "top bottom-=100",
+            toggleActions: "play none none none"
+          }
+        }
+      );
+    });
+
     cardRef.current.addEventListener('mouseenter', () => {
       gsap.to(cardRef.current, { scale: 1.02, borderColor: "rgba(255,255,255,0.15)", backgroundColor: "#1a1a1d", duration: 0.4, ease: "power2.out" })
       gsap.to(imgs, { scale: 1.05, duration: 1, ease: "power2.out" })

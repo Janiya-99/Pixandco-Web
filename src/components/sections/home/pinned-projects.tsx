@@ -16,37 +16,97 @@ export function PinnedProjects() {
 
   useGSAP(() => {
     const cards = gsap.utils.toArray<HTMLElement>(".project-card");
+    const mm = gsap.matchMedia();
 
-    cards.forEach((card, index) => {
+    // Desktop animations (min-width: 768px)
+    mm.add("(min-width: 768px)", () => {
+      cards.forEach((card, index) => {
+        const image = card.querySelector(".project-image");
+        const content = card.querySelector(".project-content");
+        
+        // Image fade-in and scale down (large to normal) as card enters
+        gsap.fromTo(image, 
+          { opacity: 0, scale: 1.1 },
+          {
+            opacity: 1, 
+            scale: 1,
+            duration: 1.8,
+            ease: "power2.out",
+            scrollTrigger: {
+              trigger: card,
+              start: "top bottom-=100",
+              toggleActions: "play none none none"
+            }
+          }
+        );
+
+        // When next card overlaps: current image fades to opacity 0.2, content to 0.4
+        if (index < cards.length - 1) {
+          const nextCard = cards[index + 1];
+          
+          gsap.to(image, {
+            opacity: 0.2,
+            ease: "none",
+            scrollTrigger: {
+              trigger: nextCard,
+              start: "top bottom-=100",
+              end: "top top+=120", // Roughly 12vh
+              scrub: true,
+            }
+          });
+          
+          gsap.to(content, {
+            opacity: 0.4,
+            ease: "none",
+            scrollTrigger: {
+              trigger: nextCard,
+              start: "top bottom-=100",
+              end: "top top+=120",
+              scrub: true,
+            }
+          });
+        }
+      });
+    });
+
+    // Mobile animations (max-width: 767px)
+    mm.add("(max-width: 767px)", () => {
+      cards.forEach((card) => {
+        const image = card.querySelector(".project-image");
+        
+        // Simple fade-in without scroll scrub and without overlapping logic
+        gsap.fromTo(image, 
+          { opacity: 0, scale: 0.95 },
+          {
+            opacity: 1, 
+            scale: 1,
+            duration: 1,
+            ease: "power2.out",
+            scrollTrigger: {
+              trigger: card,
+              start: "top bottom-=100",
+              toggleActions: "play none none none"
+            }
+          }
+        );
+      });
+    });
+
+    // Hover effects (apply generally)
+    cards.forEach((card) => {
       const image = card.querySelector(".project-image");
       
-      // Image fade-in and scale up (small to large) as card enters
-      gsap.fromTo(image, 
-        { opacity: 0, scale: 0.85 },
-        {
-          opacity: 1, 
-          scale: 1,
-          duration: 1,
-          ease: "power2.out",
-          scrollTrigger: {
-            trigger: card,
-            start: "top bottom-=100",
-            toggleActions: "play none none none"
-          }
-        }
-      );
-
-      // GSAP Hover Effect
       card.addEventListener("mouseenter", () => {
-        gsap.to(image, { scale: 1.05, duration: 0.8, ease: "power2.out" })
+        gsap.to(image, { scale: 1.05, duration: 0.8, ease: "power2.out", overwrite: "auto" })
         gsap.to(card, { borderColor: "rgba(255,255,255,0.15)", duration: 0.3 })
       });
 
       card.addEventListener("mouseleave", () => {
-        gsap.to(image, { scale: 1, duration: 0.8, ease: "power2.out" })
+        gsap.to(image, { scale: 1, duration: 0.8, ease: "power2.out", overwrite: "auto" })
         gsap.to(card, { borderColor: "#303034", duration: 0.3 })
       });
     });
+
   }, { scope: containerRef });
 
   return (
@@ -55,7 +115,7 @@ export function PinnedProjects() {
         {projects.map((project, index) => (
           <article 
             key={project.slug} 
-            className="project-card sticky top-[12vh] grid overflow-hidden rounded-[9px] border border-[#303034] bg-[#1a1a1d] md:grid-cols-2"
+            className="project-card relative md:sticky top-[12vh] grid overflow-hidden rounded-[9px] border border-[#303034] bg-[#1a1a1d] md:grid-cols-2"
             style={{ 
               zIndex: index + 10,
               boxShadow: "0 -20px 40px rgba(0,0,0,0.5)"

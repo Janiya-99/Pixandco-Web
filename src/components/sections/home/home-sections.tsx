@@ -208,7 +208,7 @@ function StepCard({ step, index }: { step: { n: string, t: string, d: string, im
   return (
     <Reveal className={`${index === 1 ? 'md:mt-10' : index === 2 ? 'md:mt-20' : ''}`}>
       <div ref={cardRef} className="relative aspect-[4/5] overflow-hidden rounded-[12px] border border-[#2b2b2f] bg-[#1a1a1d]">
-        <Image src={step.img} alt="" fill sizes="33vw" className="cinematic-image object-cover" />
+        <Image src={step.img} alt="" fill sizes="(min-width: 1200px) calc(max((min(100vw - 40px, 1240px) - 48px) / 3, 1px) + 0.5px), (min-width: 810px) and (max-width: 1199.98px) calc(max((min(100vw - 40px, 1240px) - 48px) / 3, 1px) + 0.5px), (max-width: 809.98px) calc(min(100vw - 40px, 1240px) + 0.5px)" className="object-cover" />
         <div className="overlay-bg absolute inset-0 bg-gradient-to-t from-[#010004]/90 via-[#010004]/45 to-transparent opacity-100" />
         <div className="absolute inset-x-0 bottom-0 flex flex-col justify-end p-6 md:p-8 pointer-events-none">
           <h4 className="text-xl font-medium tracking-[-.04em] text-white font-primary">{step.n}. {step.t}</h4>
@@ -225,9 +225,9 @@ export function HomeSections() {
 
     <ConcentricScrollSection />
 
-    <Section><Container><SectionHeader align="center" eyebrow="OUR WORKS" title={<>Structured. Automated.<br />Delivered.</>} description="Selected workflow transformations across operations, revenue, and internal systems." /><PinnedProjects /><div className="flex justify-center"><RollingButton variant="outline" href="/projects" className="mt-12">See all case studies</RollingButton></div></Container></Section>
+    <Section><Container><SectionHeader align="center" eyebrow="OUR WORKS" title={<>Structured. Automated.<br />Delivered.</>} description="Selected workflow transformations across operations, revenue, and internal systems." /><PinnedProjects /><Reveal className="mt-16 mb-24 flex justify-center"><RollingButton href="/projects">See all case studies</RollingButton></Reveal></Container></Section>
 
-    <Section><Container><SectionHeader align="center" eyebrow="HOW IT WORKS" title={<>A simple, structured<br />approach to automation</>} description="We design systems that remove friction, sharpen workflows, and help your team operate with clarity and control." /><div className="mt-16 grid gap-6 md:grid-cols-3 pb-16">{[{ n: "1", t: "Understand Your Workflow", d: "We analyze your workflow, tools, and bottlenecks.", img: "/images/site/pGKzMvVMxZif17kRFV5Tn7pC3382fe7.jpg" }, { n: "2", t: "Design & Build the System", d: "We implement automation tailored to your business.", img: "/images/site/5G1JBCX3fkqZAKYA6QK55SRIiZo4e2e.jpg" }, { n: "3", t: "Optimize & Scale", d: "We refine, improve, and scale as your operations.", img: "/images/site/GoY7QtIQYXxZ0jQ1f9q10cj7cMId19d.jpg" }].map((step, i) => <StepCard key={step.n} step={step} index={i} />)}</div></Container></Section>
+    <Section><Container><SectionHeader align="center" eyebrow="HOW IT WORKS" title={<>A simple, structured<br />approach to automation</>} description="We design systems that remove friction, sharpen workflows, and help your team operate with clarity and control." /><div className="mt-16 grid gap-6 md:grid-cols-3 pb-16">{[{ n: "1", t: "Understand Your Workflow", d: "We analyze your workflow, tools, and bottlenecks.", img: "/images/site/uzBphIDqI0PbwOqso2AzaFeAw884f21.png" }, { n: "2", t: "Design & Build the System", d: "We implement automation tailored to your business.", img: "/images/site/Ur5L7stgzjVpLuLg9LTa7PP3W7g4f21.png" }, { n: "3", t: "Optimize & Scale", d: "We refine, improve, and scale as your operations.", img: "/images/site/weOlvtCQtvQqEObp7dFtnwJImcY4f21.png" }].map((step, i) => <StepCard key={step.n} step={step} index={i} />)}</div></Container></Section>
 
     <IntegrationSection />
 

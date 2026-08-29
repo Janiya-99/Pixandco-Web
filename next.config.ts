@@ -1,7 +1,8 @@
 import type { NextConfig } from "next"
 
 const nextConfig: NextConfig = {
-  images: { formats: ["image/avif", "image/webp"] },
+  output: "export",
+  images: { unoptimized: true },
   experimental: { useTypeScriptCli: false },
 }
 
