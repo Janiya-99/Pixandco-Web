@@ -96,12 +96,12 @@ function ComparisonRow({ row, rowIndex }: { row: string[], rowIndex: number }) {
   )
 }
 
-function MobileComparisonCard({ row }: { row: string[] }) {
+function MobileComparisonCard({ row, isLast }: { row: string[], isLast: boolean }) {
   if (!row[0]) return null // Skip header
 
   return (
     <motion.div 
-      className="md:hidden mb-12 last:mb-0"
+      className="md:hidden"
       variants={{
         hidden: { opacity: 0, y: 20 },
         visible: { opacity: 1, y: 0, transition: { type: "spring", bounce: 0, duration: 1 } }
@@ -110,7 +110,7 @@ function MobileComparisonCard({ row }: { row: string[] }) {
       <div className="bg-[rgba(1,1,1,0.25)] py-3 px-4 border-t border-x border-white/10">
         <h3 className="text-base font-medium text-white/90">{row[0]}</h3>
       </div>
-      <div className="grid grid-cols-3 border-y border-l border-white/10">
+      <div className={`grid grid-cols-3 border-l border-white/10 ${isLast ? "border-y" : "border-t"}`}>
         {row.slice(1).map((cell, idx) => {
           const { icon, text } = parseCell(cell)
           const isPixandco = idx === 0
@@ -186,7 +186,11 @@ export function WhyUsSection() {
             ))}
             
             {comparisonData.map((row, rowIndex) => (
-              <MobileComparisonCard key={`mobile-${rowIndex}`} row={row} />
+              <MobileComparisonCard 
+                key={`mobile-${rowIndex}`} 
+                row={row} 
+                isLast={rowIndex === comparisonData.length - 1} 
+              />
             ))}
           </motion.div>
         </div>
