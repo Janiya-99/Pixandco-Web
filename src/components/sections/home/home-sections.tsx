@@ -63,7 +63,7 @@ export function HeroSection() {
         <div className="grid items-end gap-8 md:grid-cols-[1fr_auto] w-full">
           <div className="flex flex-col items-start">
             <motion.span initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ type: "spring", bounce: 0, duration: 1, delay: 0.5 }} className="eyebrow inline-flex bg-[#1a1a1d] border border-white/5 px-3 py-1.5 text-white/75">
-              <HyperText text="WE AUTOMATE 100+ BUSINESSES" className="font-mono text-[10px] tracking-widest text-white/50" />
+              <HyperText text="WE AUTOMATE 100+ BUSINESSES" animateOnLoad={true} delay={0.5} className="font-mono text-[10px] tracking-widest text-white/50" />
             </motion.span>
             
             {/* Desktop Heading */}
@@ -111,26 +111,22 @@ const trustedCompanies = [
 ] as const
 
 function TrustCard({ company }: { company: typeof trustedCompanies[number] }) {
-  const container = useRef<HTMLDivElement>(null)
-
-  useGSAP(() => {
-    if (!container.current) return
-    container.current.addEventListener("mouseenter", () => {
-      gsap.to(container.current, { backgroundColor: "#1a1a1d", color: "#ffffff", duration: 0.8, ease: "power2.out" })
-    })
-    container.current.addEventListener("mouseleave", () => {
-      gsap.to(container.current, { backgroundColor: "transparent", color: "rgba(255, 255, 255, 0.4)", duration: 0.8, ease: "power2.out" })
-    })
-  }, { scope: container })
-
   return (
     <motion.div
-      ref={container}
-      variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { type: "spring", bounce: 0, duration: 1 } } }}
-      className="group relative flex min-h-[110px] items-center justify-center border-b border-r border-[#212121] px-4 text-white/40"
+      variants={{
+        hidden: { opacity: 0, y: 20 },
+        visible: { opacity: 1, y: 0, transition: { type: "spring", bounce: 0, duration: 1 } },
+      }}
+      className="group relative h-[110px] min-h-[110px] border-b border-r border-[#212121] cursor-pointer hover:z-30"
     >
-      <div className="flex items-center gap-3 pointer-events-none transition-transform duration-300 ease-out group-hover:-translate-y-2 group-hover:translate-x-2">
-        <span className="grid size-7 place-items-center border border-current text-[9px] font-semibold tracking-[-.04em] opacity-75" aria-hidden>{company.mark}</span>
+      {/* Ash color background underneath when hovered */}
+      <div className="absolute inset-0 bg-transparent transition-colors duration-300 group-hover:bg-[#141417]" />
+      
+      {/* Lifted foreground card */}
+      <div className="absolute inset-0 top-0 left-0 flex h-[110px] w-full items-center justify-center gap-3 bg-transparent border border-transparent px-4 text-white/40 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:-top-2 group-hover:left-2 group-hover:bg-[#1a1a1d] group-hover:border-[#323135] group-hover:text-white group-hover:shadow-[0_12px_32px_rgba(0,0,0,0.7)] group-hover:z-10">
+        <span className="grid size-7 place-items-center border border-current text-[9px] font-semibold tracking-[-.04em] opacity-75" aria-hidden>
+          {company.mark}
+        </span>
         <span className={`text-lg md:text-xl ${company.style}`}>{company.name}</span>
       </div>
     </motion.div>
@@ -163,7 +159,7 @@ function MiniCallCard() {
 
 function TrustSection() {
   return (
-    <section className="relative overflow-hidden bg-[#010004] pt-8 pb-16 lg:pt-[60px] lg:pb-[100px]">
+    <section className="relative overflow-hidden bg-[#010004] pt-8 pb-16 lg:pt-[60px] lg:pb-[100px] z-10">
       <Ripple mainCircleSize={400} numCircles={6} mainCircleOpacity={0.15} />
       <Container className="relative z-10">
         <p className="eyebrow mb-10 text-center text-white/45 tracking-[0.2em]">TRUSTED COMPANIES ACROSS INDUSTRIES</p>
@@ -173,7 +169,6 @@ function TrustSection() {
           viewport={{ once: true, margin: "-50px" }}
           variants={{ hidden: { opacity: 0 }, visible: { opacity: 1, transition: { staggerChildren: 0.05 } } }}
           className="grid grid-cols-2 border-l border-t border-[#212121] md:grid-cols-5"
-          style={{ maskImage: "linear-gradient(to right, transparent, black 15%, black 85%, transparent)", WebkitMaskImage: "linear-gradient(to right, transparent, black 15%, black 85%, transparent)" }}
         >
           {trustedCompanies.map((company) => (
             <TrustCard key={company.name} company={company} />

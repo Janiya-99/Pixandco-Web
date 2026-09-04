@@ -21,7 +21,7 @@ const comparisonData = [
   ["Cost efficiency", "✓  Fixed project clarity", "△  Scope creep common", "×  Salary + overhead"],
 ]
 
-function renderIcon(char: string) {
+function renderIcon(char?: string) {
   if (char === "✓") return <Check className="size-4 md:size-4" strokeWidth={1.5} />
   if (char === "△") return <TriangleAlert className="size-4 md:size-4" strokeWidth={1.5} />
   if (char === "×") return <X className="size-4 md:size-4" strokeWidth={1.5} />
@@ -30,8 +30,8 @@ function renderIcon(char: string) {
 
 function parseCell(cell: string) {
   const match = cell.match(/^(✓|△|×)\s+(.*)$/)
-  if (match) {
-    return { icon: renderIcon(match[1]), text: match[2] }
+  if (match && match[1]) {
+    return { icon: renderIcon(match[1]), text: match[2] ?? "" }
   }
   return { icon: null, text: cell }
 }
@@ -167,9 +167,9 @@ export function WhyUsSection() {
           }
           description="We build systems that reduce manual work, improve accuracy, and scale with your operations."
         />
-        <div className="mt-14 w-full">
+        <div className="mt-14 w-full overflow-x-auto no-scrollbar">
           <motion.div 
-            className="w-full md:border-l md:border-t md:border-white/10"
+            className="w-full min-w-full md:border-l md:border-t md:border-white/10 no-scrollbar"
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-50px" }}

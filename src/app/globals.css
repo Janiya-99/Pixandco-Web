@@ -103,6 +103,15 @@ button, input, textarea, select { font: inherit; }
   animation: caret-blink 1s steps(1, end) infinite;
 }
 
+/* Hide scrollbars across browsers */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
 @media (hover: hover) and (pointer: fine) {
   .image-hover:hover .cinematic-image { filter: grayscale(1) contrast(1.05) brightness(.95); transform: scale(1.025); }
 }

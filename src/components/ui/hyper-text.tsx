@@ -1,110 +1,142 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { AnimatePresence, motion, Variants } from "framer-motion";
-
+import { useEffect, useRef, useState, useCallback } from "react";
 import { cn } from "@/lib/utils";
 
 interface HyperTextProps {
   text: string;
   duration?: number;
-  framerProps?: Variants;
+  delay?: number;
   className?: string;
   animateOnLoad?: boolean;
+  triggerAnimation?: boolean;
   showCursor?: boolean;
   onComplete?: () => void;
 }
 
-const alphabets = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
-
-const getRandomInt = (max: number) => Math.floor(Math.random() * max);
+const alphabets = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".split("");
+const getRandomChar = () => alphabets[Math.floor(Math.random() * alphabets.length)] ?? "";
 
 export function HyperText({
   text,
-  duration = 400,
-  framerProps = {
-    initial: { opacity: 0, y: -10 },
-    animate: { opacity: 1, y: 0 },
-    exit: { opacity: 0, y: 3 },
-  },
+  duration = 800,
+  delay = 0,
   className,
-  animateOnLoad = true,
+  animateOnLoad = false,
   triggerAnimation = false,
-  showCursor = true,
+  showCursor = false,
   onComplete,
-}: HyperTextProps & { triggerAnimation?: boolean }) {
-  const [displayText, setDisplayText] = useState(text.split(""));
-  const [trigger, setTrigger] = useState(false);
+}: HyperTextProps) {
+  const [displayText, setDisplayText] = useState(text);
+  const [isAnimating, setIsAnimating] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
-  const interations = useRef(0);
-  const isFirstRender = useRef(true);
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
 
-  const startAnimation = () => {
-    interations.current = 0;
-    setTrigger(true);
-  };
+  const startAnimation = useCallback(() => {
+    if (typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setDisplayText(text);
+      setIsAnimating(false);
+      onComplete?.();
+      return;
+    }
 
+    if (intervalRef.current) clearInterval(intervalRef.current);
+    if (timerRef.current) clearTimeout(timerRef.current);
+
+    setIsAnimating(true);
+    let iterations = 0;
+
+    // Immediately scramble characters
+    setDisplayText(
+      text
+        .split("")
+        .map((char) => (char === " " ? " " : getRandomChar()))
+        .join("")
+    );
+
+    const stepTime = 25; // 40fps smooth ticker
+    const totalSteps = Math.max(15, Math.floor(duration / stepTime));
+    const stepIncrement = text.length / totalSteps;
+
+    intervalRef.current = setInterval(() => {
+      if (iterations < text.length) {
+        setDisplayText(
+          text
+            .split("")
+            .map((char, index) => {
+              if (char === " ") return " ";
+              if (index <= iterations) {
+                return text[index] ?? "";
+              }
+              return getRandomChar();
+            })
+            .join("")
+        );
+        iterations += stepIncrement;
+      } else {
+        if (intervalRef.current) clearInterval(intervalRef.current);
+        intervalRef.current = null;
+        setDisplayText(text);
+        setIsAnimating(false);
+        onComplete?.();
+      }
+    }, stepTime);
+  }, [text, duration, onComplete]);
+
+  // Trigger on initial mount / first visit if animateOnLoad is true
   useEffect(() => {
-    if (triggerAnimation) {
+    if (!animateOnLoad) return;
+
+    if (delay > 0) {
+      timerRef.current = setTimeout(() => {
+        startAnimation();
+      }, delay * 1000);
+    } else {
       startAnimation();
     }
-  }, [triggerAnimation]);
 
+    return () => {
+      if (timerRef.current) clearTimeout(timerRef.current);
+      if (intervalRef.current) clearInterval(intervalRef.current);
+    };
+  }, [animateOnLoad, delay, startAnimation]);
+
+  // Trigger when triggerAnimation prop becomes true (e.g., in view)
   useEffect(() => {
-    const interval = setInterval(
-      () => {
-        if (!animateOnLoad && isFirstRender.current) {
-          clearInterval(interval);
-          isFirstRender.current = false;
-          return;
-        }
-        if (interations.current < text.length) {
-          setDisplayText((t) =>
-            t.map((l, i) =>
-              l === " "
-                ? l
-                : i <= interations.current
-                  ? text[i] ?? ""
-                  : alphabets[getRandomInt(26)] ?? "",
-            ),
-          );
-          interations.current = interations.current + 0.25;
-        } else {
-          clearInterval(interval);
-          if (trigger) {
-            onComplete?.();
-          }
-          setTrigger(false);
-        }
-      },
-      duration / (text.length * 4),
-    );
-    // Clean up interval on unmount
-    return () => clearInterval(interval);
-  }, [text, duration, trigger, animateOnLoad]);
+    if (!triggerAnimation) return;
+
+    if (delay > 0) {
+      timerRef.current = setTimeout(() => {
+        startAnimation();
+      }, delay * 1000);
+    } else {
+      startAnimation();
+    }
+
+    return () => {
+      if (timerRef.current) clearTimeout(timerRef.current);
+      if (intervalRef.current) clearInterval(intervalRef.current);
+    };
+  }, [triggerAnimation, delay, startAnimation]);
 
   return (
     <span
-      className={cn("inline-flex items-center overflow-hidden transition-colors duration-300", className)}
-      style={{ color: trigger ? "#00ff51" : undefined }}
+      className={cn(
+        "inline-flex items-center whitespace-pre transition-colors duration-300 select-none",
+        className
+      )}
+      style={{
+        color: isAnimating ? "#00ff51" : undefined,
+      }}
       onMouseEnter={() => {
         setIsHovered(true);
         startAnimation();
       }}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <AnimatePresence mode="popLayout">
-        {displayText.map((letter, i) => (
-          <motion.span
-            key={i}
-            className={cn(letter === " " ? "w-3" : "")}
-            {...framerProps}
-          >
-            {letter}
-          </motion.span>
-        ))}
-      </AnimatePresence>
-      {showCursor && !trigger && isHovered && (
+      <span className="inline-block">{displayText}</span>
+      {showCursor && !isAnimating && isHovered && (
         <span className="nav-caret ml-[1ch]" aria-hidden />
       )}
     </span>
