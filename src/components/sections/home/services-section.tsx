@@ -2,7 +2,6 @@
 
 import Image from "next/image"
 import { useRef } from "react"
-import { motion } from "framer-motion"
 import gsap from "gsap"
 import ScrollTrigger from "gsap/ScrollTrigger"
 import { useGSAP } from "@gsap/react"
@@ -15,49 +14,77 @@ import { services } from "@/content/site"
 gsap.registerPlugin(useGSAP, ScrollTrigger)
 
 function ServiceCard({ service, index }: { service: (typeof services)[number], index: number }) {
-  const cardRef = useRef<HTMLDivElement>(null)
+  const cardRef = useRef<HTMLElement>(null)
 
   useGSAP(() => {
-    if (!cardRef.current) return
-    const imgs = cardRef.current.querySelectorAll('img')
-    
-    imgs.forEach((img) => {
-      const targetOpacity = img.classList.contains('opacity-65') ? 0.65 : 1;
-      gsap.fromTo(img, 
-        { opacity: 0, scale: 1.1 },
-        {
-          opacity: targetOpacity, 
-          scale: 1,
-          duration: 1.8,
-          ease: "power2.out",
-          scrollTrigger: {
-            trigger: cardRef.current,
-            start: "top bottom-=100",
-            toggleActions: "play none none none"
-          }
-        }
-      );
-    });
+    const card = cardRef.current
+    if (!card) return
 
-    cardRef.current.addEventListener('mouseenter', () => {
-      gsap.to(cardRef.current, { scale: 1.02, borderColor: "rgba(255,255,255,0.15)", backgroundColor: "#1a1a1d", duration: 0.4, ease: "power2.out" })
+    const imgs = card.querySelectorAll("img")
+    const media = gsap.matchMedia()
+
+    media.add("(prefers-reduced-motion: no-preference)", () => {
+      gsap.fromTo(card,
+        { x: () => window.innerWidth < 768 ? 56 : 150, opacity: 0.35, scale: 0.98 },
+        {
+          x: 0,
+          opacity: 1,
+          scale: 1,
+          ease: "none",
+          scrollTrigger: {
+            trigger: card,
+            start: "top bottom",
+            end: "top 55%",
+            scrub: 1,
+            invalidateOnRefresh: true,
+          },
+        }
+      )
+
+      imgs.forEach((img) => {
+        const targetOpacity = img.classList.contains("opacity-65") ? 0.65 : 1
+        gsap.fromTo(img,
+          { opacity: 0, scale: 1.1 },
+          {
+            opacity: targetOpacity,
+            scale: 1,
+            duration: 1.2,
+            ease: "power2.out",
+            scrollTrigger: {
+              trigger: card,
+              start: "top 82%",
+              toggleActions: "play none none none",
+            },
+          }
+        )
+      })
+    })
+
+    const enter = () => {
+      gsap.to(card, { borderColor: "rgba(255,255,255,0.15)", backgroundColor: "#1a1a1d", duration: 0.4, ease: "power2.out" })
       gsap.to(imgs, { scale: 1.05, duration: 1, ease: "power2.out" })
-    })
-    
-    cardRef.current.addEventListener('mouseleave', () => {
-      gsap.to(cardRef.current, { scale: 1, borderColor: "#2b2b2f", backgroundColor: "#17171a", duration: 0.4, ease: "power2.out" })
+    }
+    const leave = () => {
+      gsap.to(card, { borderColor: "#2b2b2f", backgroundColor: "#17171a", duration: 0.4, ease: "power2.out" })
       gsap.to(imgs, { scale: 1, duration: 1, ease: "power2.out" })
-    })
+    }
+
+    card.addEventListener("mouseenter", enter)
+    card.addEventListener("mouseleave", leave)
+
+    return () => {
+      card.removeEventListener("mouseenter", enter)
+      card.removeEventListener("mouseleave", leave)
+      media.revert()
+    }
   }, { scope: cardRef })
 
   return (
-    <motion.article 
+    <article
       ref={cardRef}
-      initial={{ opacity: 0, x: 50 }}
-      whileInView={{ opacity: 1, x: 0 }}
-      viewport={{ once: true, margin: "-50px" }}
-      transition={{ type: "spring", bounce: 0, duration: 1, delay: index * 0.1 }}
-      className="overflow-hidden rounded-[9px] border border-[#2b2b2f] bg-[#17171a]"
+      data-service-card
+      className="overflow-hidden rounded-[9px] border border-[#2b2b2f] bg-[#17171a] md:sticky md:top-20 md:will-change-transform"
+      style={{ zIndex: index + 1 }}
     >
       <div className="grid md:grid-cols-2">
         <div className="p-6">
@@ -83,7 +110,7 @@ function ServiceCard({ service, index }: { service: (typeof services)[number], i
           <div className="absolute inset-0 bg-gradient-to-t from-black/45 to-transparent pointer-events-none" />
         </div>
       </div>
-    </motion.article>
+    </article>
   )
 }
 

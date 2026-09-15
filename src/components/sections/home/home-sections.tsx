@@ -19,6 +19,7 @@ import { AmbientVideo } from "@/components/media/ambient-video"
 import { Testimonials, Pricing, Faq } from "./interactive-sections"
 import { AnimatedEyebrow } from "@/components/ui/animated-eyebrow"
 import { ConcentricScrollSection } from "./concentric-scroll-section"
+import { PinnedProjects } from "./pinned-projects"
 import { IntegrationSection } from "./integration-section"
 import { ServicesSection } from "./services-section"
 import { WhyUsSection } from "./why-us-section"
@@ -138,7 +139,7 @@ export function HomeSections() {
 
     <ConcentricScrollSection />
 
-    <Section><Container><SectionHeader align="center" eyebrow="SELECTED WORK" title={<>Solutions Built Around<br />Business Outcomes</>} description="Selected software, website, brand, and digital growth solutions developed for businesses of different sizes and sectors." /><p className="mt-12 text-center text-white/50">Case studies will be published here.</p><Reveal className="mt-16 mb-24 flex justify-center"><RollingButton href="/projects">View All Case Studies</RollingButton></Reveal></Container></Section>
+    <Section><Container><SectionHeader align="center" eyebrow="OUR WORKS" title={<>Solutions Built Around<br />Business Outcomes</>} description="Selected software, website, brand, and digital growth solutions developed for businesses of different sizes and sectors." /><PinnedProjects /><Reveal className="mt-16 flex justify-center"><RollingButton href="/projects">View All Case Studies</RollingButton></Reveal></Container></Section>
 
     <Section><Container><SectionHeader align="center" eyebrow="HOW WE WORK" title={<>A Clear Process From<br />Problem to Solution</>} description="We understand the requirement, build the right solution, and improve it as the business grows." /><div className="mt-16 grid gap-6 md:grid-cols-3 pb-16">{[{ n: "1", t: "Understand the Business", d: "We review your operations, customers, current systems, challenges, and business objectives.", img: "/images/site/uzBphIDqI0PbwOqso2AzaFeAw884f21.png" }, { n: "2", t: "Design and Develop", d: "We plan and build a practical solution around your actual processes and commercial requirements.", img: "/images/site/Ur5L7stgzjVpLuLg9LTa7PP3W7g4f21.png" }, { n: "3", t: "Launch and Improve", d: "We launch, monitor, support, and improve the solution based on performance and business growth.", img: "/images/site/weOlvtCQtvQqEObp7dFtnwJImcY4f21.png" }].map((step, i) => <StepCard key={step.n} step={step} index={i} />)}</div></Container></Section>
 
