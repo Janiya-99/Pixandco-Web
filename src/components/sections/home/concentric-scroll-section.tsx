@@ -97,7 +97,10 @@ export function ConcentricScrollSection() {
           </p>
           <h2 className="section-title max-w-lg">
             The Problems Slowing <br /> Business Growth
-          </h2><p className="mt-6 text-sm leading-7 text-white/50">Disconnected systems, manual work, and unclear digital strategies make it harder for businesses to operate efficiently and grow consistently.</p>
+          </h2>
+          <p className="mt-6 text-xs leading-6 text-white/50">
+            Disconnected systems, manual work, and unclear digital strategies make it harder for businesses to operate efficiently and grow consistently.
+          </p>
         </Reveal>
 
         <ConcentricRings scrollYProgress={scrollYProgress} />

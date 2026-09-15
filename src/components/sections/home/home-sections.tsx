@@ -68,12 +68,11 @@ export function HeroSection() {
           </div>
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ type: "spring", bounce: 0, duration: 1, delay: 1.0 }} className="rounded-[9px] border border-white/15 bg-[#111114]/90 p-2 backdrop-blur-md">
             <div className="flex items-center gap-3">
-
+              <video src="/videos/girl.mp4" autoPlay muted loop playsInline aria-hidden="true" className="h-24 w-20 shrink-0 rounded-[4px] bg-[#27272b] object-cover" />
               <div className="min-w-44"><p className="text-sm">Talk with Pix & Co</p><p className="eyebrow mt-2 text-white/40 tracking-[0.2em]">BUSINESS SOLUTIONS</p><Link href="/contact" style={{ color: '#000' }} className="group focus-ring mt-3 flex min-h-9 items-center justify-between rounded-[6px] bg-white px-3 text-xs font-medium transition-colors hover:bg-white/90"><span className="relative block overflow-hidden leading-none"><span className="block transition-transform duration-500 group-hover:-translate-y-full">Discuss Your Project</span><span aria-hidden className="absolute left-0 top-full block transition-transform duration-500 group-hover:-translate-y-full">Discuss Your Project</span></span><ArrowRight className="size-3.5 transition-transform duration-500 group-hover:translate-x-1" /></Link></div>
             </div>
           </motion.div>
         </div>
-        <div className="mt-8"><RollingButton href="/#solutions" variant="outline">View Our Business Solutions</RollingButton></div>
       </Container>
     </section>
   )
@@ -82,7 +81,7 @@ export function HeroSection() {
 function MiniCallCard() {
   return (
     <div className="inline-flex items-center gap-3 rounded-[9px] border border-white/15 bg-[#1a1a1d] p-2">
-
+      <video src="/videos/girl.mp4" autoPlay muted loop playsInline aria-hidden="true" className="h-24 w-20 shrink-0 rounded-[4px] bg-[#27272b] object-cover" />
       <div className="min-w-44">
         <p className="text-sm">Talk with Pix & Co</p>
         <p className="eyebrow mt-2 text-white/40">BUSINESS SOLUTIONS</p>

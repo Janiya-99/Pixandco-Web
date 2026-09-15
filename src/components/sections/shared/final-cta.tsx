@@ -23,7 +23,7 @@ export function FinalCta() {
         style={{ y }}
         className="absolute inset-0 -top-[20%] -bottom-[20%]"
       >
-        <Image src="/images/site/i7JDvEU4cYXg2aOX5cF0L3UIV82fe7.jpg" alt="" fill sizes="100vw" className="cinematic-image object-cover" />
+        <Image src="/images/site/KmimP8fJf3KTg25QrfWgNhSOI4e64.jpg" alt="" fill sizes="100vw" className="cinematic-image object-cover" />
       </motion.div>
       <div className="absolute inset-0 bg-[#010004]/30" />
       <div className="absolute inset-x-0 top-0 h-64 bg-gradient-to-b from-[#010004] via-[#010004]/80 to-transparent z-10" />
