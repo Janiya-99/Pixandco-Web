@@ -62,7 +62,7 @@ function ServiceCard({ service, index }: { service: (typeof services)[number], i
       <div className="grid md:grid-cols-2">
         <div className="p-6">
           <p className="eyebrow text-white/30 font-mono">/ {service.number}</p>
-          <h3 className="mt-5 text-2xl tracking-[-.04em] font-primary"><HyperText text={service.title} /></h3>
+          <h3 className="mt-5 text-2xl tracking-[-.04em] font-primary"><HyperText text={service.title} className="whitespace-normal" /></h3>
           <p className="mt-3 text-sm text-white/40 font-secondary">{service.description}</p>
         </div>
         <div className="relative min-h-52 overflow-hidden">
@@ -89,21 +89,21 @@ function ServiceCard({ service, index }: { service: (typeof services)[number], i
 
 export function ServicesSection() {
   return (
-    <Section>
+    <Section id="solutions" className="overflow-x-clip">
       <Container>
         <div className="grid gap-16 lg:grid-cols-[.7fr_1.3fr]">
           <div className="lg:sticky lg:top-28 lg:self-start">
-            <AnimatedEyebrow text="SERVICES" />
+            <AnimatedEyebrow text="OUR SOLUTIONS" />
             <h2 className="section-title mt-6 tracking-[-.04em] font-primary">
-              Built to Simplify
+              Solutions That Support
               <br />
-              Operations
+              the Whole Business
             </h2>
             <p className="mt-6 max-w-sm text-[15px] leading-[1.6] text-white/50 font-secondary">
-              We design intelligent systems that streamline workflows, strengthen revenue processes, and connect your tools into one cohesive ecosystem.
+              We solve operational and growth problems through software, digital platforms, brand systems, and measurable marketing.
             </p>
           </div>
-          <div className="space-y-7">
+          <div className="min-w-0 space-y-7">
             {services.map((service, index) => (
               <ServiceCard key={service.number} service={service} index={index} />
             ))}

@@ -73,11 +73,12 @@ export function FloatingBadge({ label, position, floatDuration, triggerRange, sc
 // --- COMBINED SECTION ---
 
 const BADGES: (Omit<FloatingBadgeProps, "scrollYProgress"> & { id: string })[] = [
-  { id: "wasted-resources", label: "Wasted Resources", position: "top-[32%] right-[18%]", floatDuration: 4.2, triggerRange: [0.1, 0.15] },
-  { id: "siloed-comm", label: "Siloed Communication", position: "bottom-[32%] left-[22%]", floatDuration: 3.5, triggerRange: [0.15, 0.2] },
-  { id: "lack-visibility", label: "Lack of Visibility", position: "top-[20%] left-[45%]", floatDuration: 4.8, triggerRange: [0.2, 0.25] },
-  { id: "tedious-onboarding", label: "Tedious Onboarding", position: "top-[42%] left-[12%]", floatDuration: 3.8, triggerRange: [0.25, 0.3] },
-  { id: "fragmented-workflows", label: "Fragmented Workflows", position: "bottom-[24%] right-[16%]", floatDuration: 4.5, triggerRange: [0.3, 0.35] },
+  { id: "lead-generation", label: "Low-Quality Lead Generation", position: "bottom-[12%] left-[10%]", floatDuration: 4, triggerRange: [0.35, 0.4] },
+  { id: "wasted-resources", label: "Manual Business Processes", position: "top-[32%] right-[18%]", floatDuration: 4.2, triggerRange: [0.1, 0.15] },
+  { id: "siloed-comm", label: "Disconnected Systems", position: "bottom-[32%] left-[22%]", floatDuration: 3.5, triggerRange: [0.15, 0.2] },
+  { id: "lack-visibility", label: "Limited Operational Visibility", position: "top-[20%] left-[45%]", floatDuration: 4.8, triggerRange: [0.2, 0.25] },
+  { id: "tedious-onboarding", label: "Weak Digital Presence", position: "top-[42%] left-[12%]", floatDuration: 3.8, triggerRange: [0.25, 0.3] },
+  { id: "fragmented-workflows", label: "Inconsistent Brand Communication", position: "bottom-[24%] right-[16%]", floatDuration: 4.5, triggerRange: [0.3, 0.35] },
 ];
 
 export function ConcentricScrollSection() {
@@ -92,11 +93,11 @@ export function ConcentricScrollSection() {
       <div className="sticky top-0 flex h-screen w-full items-center justify-center overflow-hidden">
         <Reveal className="z-10 max-w-xl text-center px-4 flex flex-col items-center">
           <p className="mb-4 text-[10px] font-mono text-neutral-500 uppercase tracking-[0.2em] eyebrow text-white/35">
-            / THE OPERATIONAL GAP
+            / BUSINESS CHALLENGES
           </p>
           <h2 className="section-title max-w-lg">
-            The Hidden Cost <br /> of Manual Work
-          </h2>
+            The Problems Slowing <br /> Business Growth
+          </h2><p className="mt-6 text-sm leading-7 text-white/50">Disconnected systems, manual work, and unclear digital strategies make it harder for businesses to operate efficiently and grow consistently.</p>
         </Reveal>
 
         <ConcentricRings scrollYProgress={scrollYProgress} />

@@ -9,6 +9,10 @@ out/
 build/
 dist/
 *.tsbuildinfo
+/next-env.d.ts
+
+# Local content reference document
+/Confirmed Copy Dinu.docx
 
 # Archives & Export zips
 *.zip

@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build --webpack",
+    "export:zip": "next build --webpack && cd out && zip -r ../pixandco-cpanel-deploy.zip . && cd ..",
     "start": "next start",
     "lint": "tsc --noEmit",
     "typecheck": "tsc --noEmit"

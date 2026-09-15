@@ -8,11 +8,11 @@ import { SiteHeader } from "@/components/layout/site-header"
 import { SiteFooter } from "@/components/layout/site-footer"
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://pixandco.studio"),
-  title: { default: "PIXANDCO Systems — Intelligent operations, built clearly", template: "%s — PIXANDCO Systems" },
-  description: "We design AI-powered operating systems that remove repetitive work and make complex businesses run clearly.",
-  openGraph: { type: "website", title: "PIXANDCO Systems", description: "Intelligent operations, built clearly.", images: ["/images/site/2l8Wl4e6GvRUtl6qrfXsaZKZassb2ef.jpg"] },
-  twitter: { card: "summary_large_image", title: "PIXANDCO Systems", description: "Intelligent operations, built clearly.", images: ["/images/site/2l8Wl4e6GvRUtl6qrfXsaZKZassb2ef.jpg"] },
+  metadataBase: new URL("https://pixandco.lk"),
+  title: { default: "Pix & Co — Business Software, Websites & Digital Growth", template: "%s — Pix & Co IT Solutions (Pvt) Ltd" },
+  description: "Business software and digital growth solutions built around real business needs. Based in Battaramulla, serving clients worldwide.",
+  openGraph: { type: "website", title: "Pix & Co IT Solutions (Pvt) Ltd", description: "Build Better. Operate Smarter. Grow Faster.", images: ["/images/site/2l8Wl4e6GvRUtl6qrfXsaZKZassb2ef.jpg"] },
+  twitter: { card: "summary_large_image", title: "Pix & Co IT Solutions (Pvt) Ltd", description: "Build Better. Operate Smarter. Grow Faster.", images: ["/images/site/2l8Wl4e6GvRUtl6qrfXsaZKZassb2ef.jpg"] },
 }
 export const viewport: Viewport = { themeColor: "#050505", colorScheme: "dark" }
 

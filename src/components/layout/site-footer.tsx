@@ -1,18 +1,18 @@
 import Link from "next/link"
-import { ArrowRight } from "lucide-react"
+import { services } from "@/content/site"
 import { Container } from "@/components/layout/container"
 import { RollingLink } from "@/components/ui/rolling-link"
 import { AmbientVideo } from "@/components/media/ambient-video"
 
 const footerLinks = [
   { label: "Home", href: "/" },
-  { label: "Projects", href: "/projects" },
-  { label: "Journal", href: "/blog" },
+  { label: "Solutions", href: "/#solutions" },
+  { label: "Case Studies", href: "/projects" },
+  { label: "Insights", href: "/blog" },
   { label: "About", href: "/about" },
   { label: "Contact", href: "/contact" },
   { label: "Privacy policy", href: "/privacy" },
   { label: "Terms and conditions", href: "/terms" },
-  { label: "404", href: "/404" },
 ] as const
 
 export function SiteFooter() {
@@ -22,10 +22,10 @@ export function SiteFooter() {
         <div className="grid gap-16 lg:grid-cols-[1.05fr_.55fr_.85fr] lg:gap-20">
           <div>
             <Link className="focus-ring inline-flex items-center gap-3" href="/">
-              <span className="grid size-8 place-items-center border border-white/60 text-[11px] font-semibold">N</span>
-              <span className="text-xl font-medium tracking-[-.03em]">pixandco</span>
+              <span className="grid size-8 place-items-center border border-white/60 text-[11px] font-semibold">P</span>
+              <span className="text-xl font-medium tracking-[-.03em]">Pix & Co</span>
             </Link>
-            <h2 className="mt-9 max-w-md text-[clamp(2.5rem,4vw,3.5rem)] leading-[.98] tracking-[-.06em]">Clear. Precise.<br />Automated.</h2>
+            <h2 className="mt-9 max-w-md text-[clamp(1.8rem,3vw,2.5rem)] leading-[.98] tracking-[-.06em]">Business software and digital growth solutions built around real business needs.</h2>
             <AmbientVideo
               src="/videos/footer-system.mp4"
               poster="/images/video-posters/footer-system.webp"
@@ -46,39 +46,26 @@ export function SiteFooter() {
           </nav>
 
           <div className="flex flex-col">
-            <div>
-              <p className="eyebrow mb-4 text-white/45">Socials</p>
-              <div className="flex gap-2">
-                <a href="https://www.facebook.com" target="_blank" rel="noreferrer" aria-label="Facebook" className="focus-ring grid size-10 place-items-center rounded-[8px] border border-white/15 bg-[#1a1a1d] text-lg font-semibold text-white/80 transition hover:border-white/30 hover:text-white">f</a>
-                <a href="https://x.com" target="_blank" rel="noreferrer" aria-label="X" className="focus-ring grid size-10 place-items-center rounded-[8px] border border-white/15 bg-[#1a1a1d] text-sm text-white/80 transition hover:border-white/30 hover:text-white">𝕏</a>
-                <a href="https://www.instagram.com" target="_blank" rel="noreferrer" aria-label="Instagram" className="focus-ring grid size-10 place-items-center rounded-[8px] border border-white/15 bg-[#1a1a1d] text-lg text-white/80 transition hover:border-white/30 hover:text-white">◎</a>
-              </div>
-            </div>
+            <div><p className="eyebrow mb-4 text-white/45">Solutions</p><div className="flex flex-col gap-3">{services.map(service => <Link key={service.number} href="/#solutions" className="text-sm text-white/70">{service.title}</Link>)}</div></div>
 
             <div className="mt-7">
               <p className="eyebrow text-white/45">Email</p>
-              <a className="focus-ring mt-3 inline-block text-2xl tracking-[-.04em] hover:text-white/70 md:text-3xl" href="mailto:hello@pixandco.studio">hello@pixandco.studio</a>
+              <a className="focus-ring mt-3 inline-block text-xl break-all tracking-[-.04em] hover:text-white/70 md:text-2xl" href="mailto:marketing@pixandco.lk">marketing@pixandco.lk</a>
             </div>
 
             <div className="mt-7">
               <p className="eyebrow text-white/45">Phone</p>
-              <a className="focus-ring mt-3 inline-block text-lg text-white/80 hover:text-white" href="tel:+94112345678">+94 11 234 5678</a>
+              <a className="focus-ring mt-3 inline-block text-lg text-white/80 hover:text-white" href="tel:+94719980916">071 998 0916</a>
             </div>
 
-            <form className="mt-16 lg:mt-auto">
-              <label className="eyebrow text-white/45" htmlFor="newsletter">Subscribe to our newsletter</label>
-              <div className="mt-4 flex overflow-hidden rounded-[8px] border border-white/15 bg-[#1a1a1d] focus-within:border-white/35">
-                <input id="newsletter" type="email" placeholder="Email address" className="min-h-14 min-w-0 flex-1 bg-transparent px-4 text-sm outline-none placeholder:text-white/40" />
-                <button className="focus-ring grid w-14 shrink-0 place-items-center border-l border-white/15" aria-label="Subscribe"><ArrowRight className="size-4" /></button>
-              </div>
-            </form>
+            <div className="mt-7"><p className="eyebrow text-white/45">Location</p><p className="mt-3 text-white/80">Battaramulla</p><p className="mt-6 text-sm text-white/50">Pix & Co IT Solutions (Pvt) Ltd</p></div>
           </div>
         </div>
 
         <div className="mt-16 flex flex-col gap-4 border-t border-[#212121] pt-6 font-mono text-[10px] uppercase tracking-[.1em] text-white/35 md:flex-row md:items-center md:justify-between">
-          <p>© 2026 PIXANDCO. All rights reserved.</p>
+          <p>© 2026 Pix & Co IT Solutions (Pvt) Ltd. All rights reserved.</p>
           <div className="flex gap-6"><Link href="/privacy">Privacy</Link><Link href="/terms">Terms</Link></div>
-          <p>Designed for useful progress</p>
+          <p>Built in Colombo. Working Worldwide.</p>
         </div>
       </Container>
     </footer>
