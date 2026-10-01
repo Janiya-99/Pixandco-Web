@@ -89,12 +89,12 @@ export function IntegrationSection() {
           </div>
           
           <h2 className="mt-8 text-4xl font-medium tracking-[-.04em] md:text-[48px] md:leading-[1.1]">
-            Connected Systems,
+            Connected Systems.
             <br />
-            Not More Tools
+            Clearer Operations.
           </h2>
           <p className="mx-auto mt-6 max-w-[600px] text-[15px] leading-7 text-white/50">
-            Your CRM, marketing, finance, and operations tools working as one unified workflow. We integrate with the platforms you already use.
+            Your sales, finance, inventory, customer, and marketing tools connected through practical software and reliable integrations.
           </p>
         </div>
       </Container>

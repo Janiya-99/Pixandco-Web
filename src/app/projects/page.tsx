@@ -6,7 +6,7 @@ import { FinalCta } from "@/components/sections/shared/final-cta"
 import Image from "next/image"
 import { projects } from "@/content/projects"
 
-export const metadata: Metadata = { title: "Projects", description: "Selected intelligent systems and workflow automation work by PIXANDCO Systems." }
+export const metadata: Metadata = { title: "Case Studies", description: "Selected software, website, brand, and digital growth solutions developed for businesses of different sizes and sectors." }
 
 export default function ProjectsPage() { 
   return (
@@ -19,19 +19,20 @@ export default function ProjectsPage() {
         </div>
         <Container className="relative z-10 flex flex-col items-center">
           <p className="mb-6 inline-flex rounded-[4px] bg-[#2a2a2a] px-3 py-1.5 text-[10px] font-medium text-white/80 uppercase tracking-widest">
-            PROJECTS
+            CASE STUDIES
           </p>
           <h1 className="mx-auto max-w-4xl text-5xl font-medium tracking-[-.02em] md:text-[56px] md:leading-[1.1]">
-            The Minds Behind the Automation
+            Solutions Built Around Business Outcomes
           </h1>
           <p className="mx-auto mt-6 max-w-2xl text-[16px] text-white/70">
-            Ideas, strategies, and practical guides to help businesses streamline operations and grow with AI.
+            Selected software, website, brand, and digital growth solutions developed for businesses of different sizes and sectors.
           </p>
         </Container>
       </section>
-      <Section className="relative z-20 -mt-32 pb-32">
+      <Section className="relative z-20 pb-32">
         <Container>
           <div className="mx-auto flex max-w-6xl flex-col gap-10">
+            {projects.length === 0 && <p className="rounded-lg border border-white/10 p-10 text-center text-white/50">Case studies will be published here.</p>}
             {projects.map((project, index) => (
               <ProjectCard key={project.slug} project={project} priority={index === 0} />
             ))}

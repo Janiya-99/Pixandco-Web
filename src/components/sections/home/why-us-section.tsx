@@ -13,15 +13,51 @@ import { SectionHeader } from "@/components/ui/section-header"
 gsap.registerPlugin(useGSAP)
 
 const comparisonData = [
-  ["", "PIXANDCO", "Other Agencies", "Hire In House"],
-  ["Approach", "✓  Process mapping first", "△  Tool-first approach", "△  Depends on hire"],
-  ["Workflow", "✓  Around your operations", "×  Mostly templated", "✓  If expertise exists"],
-  ["Speed", "✓  Weeks, not months", "△  Most often delayed", "×  Hiring & onboarding"],
-  ["Optimization", "✓  Continuous improvement", "△  Setup & disappear", "△  Limited by bandwidth"],
-  ["Cost efficiency", "✓  Fixed project clarity", "△  Scope creep common", "×  Salary + overhead"],
+  [
+    "",
+    "Pix & Co",
+    "Traditional agency",
+    "In-house team"
+  ],
+  [
+    "Approach",
+    "Business problem first",
+    "Campaign or deliverable first",
+    "Limited by available expertise"
+  ],
+  [
+    "Solutions",
+    "Connected across the business",
+    "Separate services and suppliers",
+    "Dependent on internal capacity"
+  ],
+  [
+    "Technology",
+    "Customised to business requirements",
+    "Standard tools and templates",
+    "Requires specialised technical hires"
+  ],
+  [
+    "Management",
+    "One accountable solution partner",
+    "Multiple teams and handovers",
+    "Managed internally"
+  ],
+  [
+    "Support",
+    "Ongoing technical and growth support",
+    "Often limited after delivery",
+    "Dependent on staff availability"
+  ],
+  [
+    "Scalability",
+    "Solutions designed to grow",
+    "New scope for every requirement",
+    "Additional hiring may be required"
+  ]
 ]
 
-function renderIcon(char: string) {
+function renderIcon(char?: string) {
   if (char === "✓") return <Check className="size-4 md:size-4" strokeWidth={1.5} />
   if (char === "△") return <TriangleAlert className="size-4 md:size-4" strokeWidth={1.5} />
   if (char === "×") return <X className="size-4 md:size-4" strokeWidth={1.5} />
@@ -30,8 +66,8 @@ function renderIcon(char: string) {
 
 function parseCell(cell: string) {
   const match = cell.match(/^(✓|△|×)\s+(.*)$/)
-  if (match) {
-    return { icon: renderIcon(match[1]), text: match[2] }
+  if (match && match[1]) {
+    return { icon: renderIcon(match[1]), text: match[2] ?? "" }
   }
   return { icon: null, text: cell }
 }
@@ -116,6 +152,7 @@ function MobileComparisonCard({ row, isLast }: { row: string[], isLast: boolean 
           const isPixandco = idx === 0
           return (
             <div key={idx} className={`border-r border-white/10 p-4 flex flex-col gap-3 ${isPixandco ? "bg-white/10 text-white" : "bg-[rgba(1,1,1,0.25)] text-white/50"}`}>
+              <span className="text-[10px] uppercase tracking-wide">{comparisonData[0]?.[idx + 1]}</span>
               {icon && <div className={isPixandco ? "text-white" : "text-white/40"}>{icon}</div>}
               <span className="text-xs font-secondary leading-snug">{text}</span>
             </div>
@@ -157,19 +194,19 @@ export function WhyUsSection() {
       <Container className="relative z-10">
         <SectionHeader
           align="center"
-          eyebrow="WHY US"
+          eyebrow="WHY PIX & CO"
           title={
             <>
-              Built for real business
+              One Partner for Business
               <br />
-              impact
+              and Digital Growth
             </>
           }
-          description="We build systems that reduce manual work, improve accuracy, and scale with your operations."
+          description="Traditional agencies focus on campaigns. Software companies focus on code. Pix & Co connects operations, technology, brand, and growth in one practical solution."
         />
-        <div className="mt-14 w-full">
+        <div className="mt-14 w-full overflow-x-auto no-scrollbar">
           <motion.div 
-            className="w-full md:border-l md:border-t md:border-white/10"
+            className="w-full min-w-full md:border-l md:border-t md:border-white/10 no-scrollbar"
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-50px" }}

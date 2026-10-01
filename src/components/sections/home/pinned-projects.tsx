@@ -1,159 +1,77 @@
-"use client";
+"use client"
 
-import { useRef } from "react";
-import Image from "next/image";
-import Link from "next/link";
-import { ArrowRight } from "lucide-react";
-import gsap from "gsap";
-import ScrollTrigger from "gsap/ScrollTrigger";
-import { useGSAP } from "@gsap/react";
-import { projects } from "@/content/projects";
+import Image from "next/image"
+import Link from "next/link"
+import { ArrowRight } from "lucide-react"
+import { motion, useReducedMotion } from "motion/react"
+import { services } from "@/content/site"
 
-gsap.registerPlugin(ScrollTrigger, useGSAP);
+const selectedWorks = [services[0], services[1], services[2], services[4]] as const
 
 export function PinnedProjects() {
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  useGSAP(() => {
-    const cards = gsap.utils.toArray<HTMLElement>(".project-card");
-    const mm = gsap.matchMedia();
-
-    // Desktop animations (min-width: 768px)
-    mm.add("(min-width: 768px)", () => {
-      cards.forEach((card, index) => {
-        const image = card.querySelector(".project-image");
-        const content = card.querySelector(".project-content");
-        
-        // Image fade-in and scale down (large to normal) as card enters
-        gsap.fromTo(image, 
-          { opacity: 0, scale: 1.1 },
-          {
-            opacity: 1, 
-            scale: 1,
-            duration: 1.8,
-            ease: "power2.out",
-            scrollTrigger: {
-              trigger: card,
-              start: "top bottom-=100",
-              toggleActions: "play none none none"
-            }
-          }
-        );
-
-        // When next card overlaps: current image fades to opacity 0.2, content to 0.4
-        if (index < cards.length - 1) {
-          const nextCard = cards[index + 1];
-          
-          gsap.to(image, {
-            opacity: 0.2,
-            ease: "none",
-            scrollTrigger: {
-              trigger: nextCard,
-              start: "top bottom-=100",
-              end: "top top+=120", // Roughly 12vh
-              scrub: true,
-            }
-          });
-          
-          gsap.to(content, {
-            opacity: 0.4,
-            ease: "none",
-            scrollTrigger: {
-              trigger: nextCard,
-              start: "top bottom-=100",
-              end: "top top+=120",
-              scrub: true,
-            }
-          });
-        }
-      });
-    });
-
-    // Mobile animations (max-width: 767px)
-    mm.add("(max-width: 767px)", () => {
-      cards.forEach((card) => {
-        const image = card.querySelector(".project-image");
-        
-        // Simple fade-in without scroll scrub and without overlapping logic
-        gsap.fromTo(image, 
-          { opacity: 0, scale: 0.95 },
-          {
-            opacity: 1, 
-            scale: 1,
-            duration: 1,
-            ease: "power2.out",
-            scrollTrigger: {
-              trigger: card,
-              start: "top bottom-=100",
-              toggleActions: "play none none none"
-            }
-          }
-        );
-      });
-    });
-
-    // Hover effects (apply generally)
-    cards.forEach((card) => {
-      const image = card.querySelector(".project-image");
-      
-      card.addEventListener("mouseenter", () => {
-        gsap.to(image, { scale: 1.05, duration: 0.8, ease: "power2.out", overwrite: "auto" })
-        gsap.to(card, { borderColor: "rgba(255,255,255,0.15)", duration: 0.3 })
-      });
-
-      card.addEventListener("mouseleave", () => {
-        gsap.to(image, { scale: 1, duration: 0.8, ease: "power2.out", overwrite: "auto" })
-        gsap.to(card, { borderColor: "#303034", duration: 0.3 })
-      });
-    });
-
-  }, { scope: containerRef });
+  const reduceMotion = useReducedMotion()
 
   return (
-    <div ref={containerRef} className="mt-16 relative">
-      <div className="space-y-12 md:space-y-20 lg:space-y-24 pb-24"> 
-        {projects.map((project, index) => (
-          <article 
-            key={project.slug} 
-            className="project-card relative md:sticky top-[12vh] grid overflow-hidden rounded-[9px] border border-[#303034] bg-[#1a1a1d] md:grid-cols-2"
-            style={{ 
-              zIndex: index + 10,
-              boxShadow: "0 -20px 40px rgba(0,0,0,0.5)"
+    <div className="relative mt-14 pb-24">
+      <div className="space-y-12 md:space-y-20">
+        {selectedWorks.map((work, index) => (
+          <motion.article
+            key={work.number}
+            initial={reduceMotion ? false : { opacity: 0, scale: 0.92, y: 48 }}
+            whileInView={{ opacity: 1, scale: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.15 }}
+            transition={reduceMotion ? { duration: 0 } : {
+              scale: { type: "spring", stiffness: 100, damping: 24, mass: 1 },
+              y: { type: "spring", stiffness: 100, damping: 26, mass: 1 },
+              opacity: { duration: 0.4, ease: [0.44, 0, 0.56, 1] },
             }}
+            className="group overflow-hidden rounded-[10px] border border-[#303034] bg-[#17171a] shadow-[0_-20px_45px_rgba(0,0,0,.55)] md:sticky md:top-20 md:grid md:min-h-[500px] md:grid-cols-[.95fr_1.05fr] md:will-change-transform"
+            style={{ zIndex: index + 10 }}
           >
-            <div className="relative min-h-72 md:min-h-[420px] overflow-hidden">
-              <Image 
-                src={project.coverImage} 
-                alt={`${project.title} project`} 
-                fill 
-                sizes="(max-width: 768px) 100vw, 50vw" 
-                className="project-image cinematic-image object-cover" 
+            <div className="relative min-h-72 overflow-hidden md:min-h-full">
+              <Image
+                src={work.image}
+                alt={`${work.title} solution showcase`}
+                fill
+                sizes="(max-width: 767px) 100vw, 48vw"
+                className="cinematic-image object-cover transition-transform duration-700 group-hover:scale-105"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/45 to-transparent pointer-events-none" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
             </div>
-            <div className="project-content flex flex-col p-6 md:p-8">
-              <div className="flex items-center gap-2 border-b border-white/10 pb-4">
-                <span className="eyebrow text-white/50 font-mono">{project.year}</span>
+
+            <div className="flex flex-col p-6 md:p-8 lg:p-10">
+              <div className="flex items-center gap-2 border-b border-white/10 pb-5 font-mono text-[12px] font-medium uppercase tracking-[.08em] text-white/45">
+                <span>/ {String(index + 1).padStart(2, "0")}</span>
                 <span className="text-white/20">•</span>
-                <span className="eyebrow text-white/50 font-mono">{project.industry}</span>
+                <span>Solution showcase</span>
               </div>
-              <p className="mt-5 text-xl text-white/50 font-secondary">{project.title}</p>
-              <h3 className="mt-7 text-3xl leading-[1.05] tracking-[-.05em] font-primary">{project.summary}</h3>
-              <Link href={`/projects/${project.slug}`} className="focus-ring mt-6 inline-flex min-h-10 w-fit items-center gap-5 rounded-[6px] bg-white/10 px-4 text-xs font-medium transition-colors hover:bg-white/20">
-                View case study <ArrowRight className="size-3.5" />
-              </Link>
-              <div className="mt-auto grid grid-cols-2 gap-5 border-t border-white/10 pt-6">
-                {project.metrics.slice(0,2).map(metric => (
-                  <div key={metric.label}>
-                    <p className="text-3xl tracking-[-.04em]">{metric.value}</p>
-                    <p className="eyebrow mt-3 text-white/35 font-mono">{metric.label}</p>
-                  </div>
+
+              <h3 className="mt-7 text-3xl leading-[1.05] tracking-[-.05em] md:text-4xl">
+                {work.title}
+              </h3>
+              <p className="mt-5 max-w-lg text-[15px] leading-7 text-white/50">
+                {work.description}
+              </p>
+
+              <ul className="mt-8 grid gap-x-6 border-t border-white/10 sm:grid-cols-2">
+                {work.items.slice(0, 4).map((item) => (
+                  <li key={item} className="border-b border-white/10 py-4 font-mono text-[10px] uppercase tracking-[.08em] text-white/45">
+                    {item}
+                  </li>
                 ))}
-              </div>
+              </ul>
+
+              <Link
+                href="/contact"
+                className="focus-ring mt-10 inline-flex min-h-11 w-fit items-center gap-6 rounded-[6px] bg-white/10 px-4 text-xs font-medium transition-colors hover:bg-white/20 md:mt-auto"
+              >
+                Discuss a similar project
+                <ArrowRight className="size-3.5 transition-transform duration-500 group-hover:translate-x-1" />
+              </Link>
             </div>
-          </article>
+          </motion.article>
         ))}
       </div>
     </div>
-  );
+  )
 }
