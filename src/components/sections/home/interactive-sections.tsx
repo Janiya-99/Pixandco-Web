@@ -18,7 +18,7 @@ const testimonials = [
     role: "FOUNDER OF PANDAWA",
     company: "Pandawa™",
     logo: "/images/site/nxa6pfbQtEYxdVeUqpkPW8Dsa4b929.webp",
-    image: "/images/site/jpIBn59XJaU6dp08UvhhxX984e2e.jpg",
+    image: "/images/site/cristin-tambun.jpg",
   },
   {
     quote: "Working with Sanjaya completely changed how we handle our operations. What used to feel chaotic is now organized, automated, and much easier to track.",
@@ -129,7 +129,34 @@ export function Testimonials() {
 }
 
 export function Pricing() {
-  return <div className="grid items-start gap-6 lg:grid-cols-3">{plans.map((plan, index) => <article key={plan.name} className="rounded-[9px] border border-[#303034] bg-[#1a1a1d] p-6"><p className="eyebrow">0{index + 1}</p><h3 className="mt-5 text-2xl">{plan.name}</h3><p className="mt-4 text-sm leading-6 text-white/50">{plan.text}</p><ul className="my-7 border-t border-white/10 pt-5">{plan.features.map(item => <li key={item} className="py-2 text-sm text-white/70">✓ {item}</li>)}</ul><Link href="/contact" className="focus-ring flex min-h-12 items-center justify-between gap-3 rounded-md bg-white px-4 text-sm text-black">{plan.button}<ArrowRight className="size-4" /></Link></article>)}</div>
+  return (
+    <div className="grid items-start gap-6 lg:grid-cols-3">
+      {plans.map((plan, index) => (
+        <article key={plan.name} className="flex flex-col justify-between rounded-[9px] border border-[#303034] bg-[#1a1a1d] p-6 h-full">
+          <div>
+            <p className="eyebrow font-mono text-[11px] text-white/40">0{index + 1}</p>
+            <h3 className="mt-5 text-2xl font-normal tracking-[-.03em] text-white">{plan.name}</h3>
+            <p className="mt-4 text-sm leading-6 text-white/50">{plan.text}</p>
+            <ul className="my-7 border-t border-white/10 pt-5 space-y-2">
+              {plan.features.map(item => (
+                <li key={item} className="flex items-center gap-2 text-sm text-white/70">
+                  <span className="text-white/40">✓</span> {item}
+                </li>
+              ))}
+            </ul>
+          </div>
+          <Link
+            href="/contact"
+            style={{ color: "#000000" }}
+            className="group focus-ring mt-4 flex min-h-12 w-full items-center justify-between rounded-[8px] bg-white px-5 text-sm font-medium !text-black transition-colors hover:bg-white/90"
+          >
+            <span style={{ color: "#000000" }} className="!text-black font-medium">{plan.button}</span>
+            <ArrowRight className="size-4 !text-black transition-transform duration-300 group-hover:translate-x-1" style={{ color: "#000000" }} />
+          </Link>
+        </article>
+      ))}
+    </div>
+  )
 }
 
 function FaqItem({ faq, isOpen, onToggle }: { faq: any; isOpen: boolean; onToggle: () => void }) {

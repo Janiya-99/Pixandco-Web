@@ -87,15 +87,21 @@ export function TrustedCompaniesSection() {
           {trustedCompanies.map((company) => (
             <div
               key={company.name}
-              className="group flex h-[100px] items-center justify-center border-b border-r border-[#212121] px-4 transition-colors duration-300 hover:bg-[#1a1a1d]/60 md:h-[110px] md:px-6"
+              className="group relative h-[100px] min-h-[100px] border-b border-r border-[#212121] cursor-pointer hover:z-30 md:h-[110px] md:min-h-[110px]"
             >
-              <Image
-                src={company.logo}
-                alt={company.name}
-                width={company.width}
-                height={company.height}
-                className={`w-auto max-w-[115px] object-contain opacity-60 transition-opacity duration-300 group-hover:opacity-100 md:max-w-[125px] ${company.logoHeight}`}
-              />
+              {/* Underlying slot in the grid cell (rgb(26, 26, 29) from Sanjaya Framer) */}
+              <div className="absolute inset-0 bg-transparent transition-colors duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:bg-[#1a1a1d]" />
+
+              {/* Lifted foreground grid card with black background */}
+              <div className="absolute inset-0 top-0 left-0 flex h-full w-full items-center justify-center border border-transparent bg-transparent px-4 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] will-change-transform group-hover:-top-2 group-hover:left-2 group-hover:bg-[#010004] group-hover:border-[#333333] group-hover:shadow-[0_16px_36px_rgba(0,0,0,0.85)] group-hover:z-10 md:px-6">
+                <Image
+                  src={company.logo}
+                  alt={company.name}
+                  width={company.width}
+                  height={company.height}
+                  className={`w-auto max-w-[115px] object-contain opacity-50 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:opacity-100 group-hover:brightness-125 md:max-w-[125px] ${company.logoHeight}`}
+                />
+              </div>
             </div>
           ))}
         </div>

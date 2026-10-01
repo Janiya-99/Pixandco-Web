@@ -1,21 +1,69 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
-import { useInView, useReducedMotion } from "motion/react"
+import gsap from "gsap"
+import ScrollTrigger from "gsap/ScrollTrigger"
 
-export function Counter({ value, suffix = "" }: { value: number; suffix?: string }) {
-  const ref = useRef<HTMLSpanElement>(null)
-  const inView = useInView(ref, { once: true, amount: .5 })
-  const reduce = useReducedMotion()
-  const [shown, setShown] = useState(0)
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(ScrollTrigger)
+}
+
+export function Counter({
+  value,
+  suffix = "",
+  duration = 1.6,
+}: {
+  value: number
+  suffix?: string
+  duration?: number
+}) {
+  const [display, setDisplay] = useState(0)
+  const elRef = useRef<HTMLSpanElement>(null)
+
   useEffect(() => {
-    if (!inView) return
-    if (reduce) { setShown(value); return }
-    const start = performance.now()
-    let frame = 0
-    const tick = (now: number) => { const progress = Math.min((now - start) / 1600, 1); setShown(Math.round(value * (1 - Math.pow(1 - progress, 3)))); if (progress < 1) frame = requestAnimationFrame(tick) }
-    frame = requestAnimationFrame(tick)
-    return () => cancelAnimationFrame(frame)
-  }, [inView, reduce, value])
-  return <span ref={ref}>{shown}{suffix}</span>
+    const el = elRef.current
+    if (!el) return
+
+    const obj = { val: 0 }
+    const tween = gsap.to(obj, {
+      val: value,
+      duration,
+      ease: "power2.out",
+      paused: true,
+      onUpdate: () => {
+        setDisplay(Math.round(obj.val))
+      },
+    })
+
+    const st = ScrollTrigger.create({
+      trigger: el,
+      start: "top 90%",
+      onEnter: () => {
+        obj.val = 0
+        setDisplay(0)
+        tween.restart()
+      },
+      onEnterBack: () => {
+        obj.val = 0
+        setDisplay(0)
+        tween.restart()
+      },
+      onLeaveBack: () => {
+        obj.val = 0
+        setDisplay(0)
+      },
+    })
+
+    return () => {
+      st.kill()
+      tween.kill()
+    }
+  }, [value, duration])
+
+  return (
+    <span ref={elRef} className="tabular-nums">
+      {display}
+      {suffix}
+    </span>
+  )
 }
