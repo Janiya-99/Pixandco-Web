@@ -24,8 +24,14 @@ function ServiceCard({ service, index }: { service: (typeof services)[number], i
     const media = gsap.matchMedia()
 
     media.add("(prefers-reduced-motion: no-preference)", () => {
-      gsap.fromTo(card,
-        { x: () => window.innerWidth < 768 ? 56 : 150, opacity: 0.35, scale: 0.98 },
+      // Card slides in from right to left as it enters viewport, and reverses smoothly on upward scroll
+      gsap.fromTo(
+        card,
+        {
+          x: () => (window.innerWidth < 768 ? 60 : 160),
+          opacity: 0.25,
+          scale: 0.98,
+        },
         {
           x: 0,
           opacity: 1,
@@ -34,7 +40,7 @@ function ServiceCard({ service, index }: { service: (typeof services)[number], i
           scrollTrigger: {
             trigger: card,
             start: "top bottom",
-            end: "top 55%",
+            end: "top 40%",
             scrub: 1,
             invalidateOnRefresh: true,
           },
@@ -43,17 +49,18 @@ function ServiceCard({ service, index }: { service: (typeof services)[number], i
 
       imgs.forEach((img) => {
         const targetOpacity = img.classList.contains("opacity-65") ? 0.65 : 1
-        gsap.fromTo(img,
-          { opacity: 0, scale: 1.1 },
+        gsap.fromTo(
+          img,
+          { opacity: 0.25, scale: 1.08 },
           {
             opacity: targetOpacity,
             scale: 1,
-            duration: 1.2,
-            ease: "power2.out",
+            ease: "none",
             scrollTrigger: {
               trigger: card,
-              start: "top 82%",
-              toggleActions: "play none none none",
+              start: "top bottom",
+              end: "top 40%",
+              scrub: 1,
             },
           }
         )
@@ -61,12 +68,23 @@ function ServiceCard({ service, index }: { service: (typeof services)[number], i
     })
 
     const enter = () => {
-      gsap.to(card, { borderColor: "rgba(255,255,255,0.15)", backgroundColor: "#1a1a1d", duration: 0.4, ease: "power2.out" })
-      gsap.to(imgs, { scale: 1.05, duration: 1, ease: "power2.out" })
+      gsap.to(card, {
+        borderColor: "rgba(255, 255, 255, 0.18)",
+        backgroundColor: "#1c1c20",
+        duration: 0.35,
+        ease: "power2.out",
+      })
+      gsap.to(imgs, { scale: 1.04, duration: 0.7, ease: "power2.out" })
     }
+
     const leave = () => {
-      gsap.to(card, { borderColor: "#2b2b2f", backgroundColor: "#17171a", duration: 0.4, ease: "power2.out" })
-      gsap.to(imgs, { scale: 1, duration: 1, ease: "power2.out" })
+      gsap.to(card, {
+        borderColor: "#2b2b2f",
+        backgroundColor: "#161619",
+        duration: 0.35,
+        ease: "power2.out",
+      })
+      gsap.to(imgs, { scale: 1, duration: 0.7, ease: "power2.out" })
     }
 
     card.addEventListener("mouseenter", enter)
@@ -83,31 +101,47 @@ function ServiceCard({ service, index }: { service: (typeof services)[number], i
     <article
       ref={cardRef}
       data-service-card
-      className="overflow-hidden rounded-[9px] border border-[#2b2b2f] bg-[#17171a] md:sticky md:top-20 md:will-change-transform"
+      className="relative overflow-hidden rounded-[10px] border border-[#2b2b2f] bg-[#161619] transition-colors will-change-transform"
       style={{ zIndex: index + 1 }}
     >
       <div className="grid md:grid-cols-2">
-        <div className="p-6">
-          <p className="eyebrow text-white/30 font-mono">/ {service.number}</p>
-          <h3 className="mt-5 text-2xl tracking-[-.04em] font-primary"><HyperText text={service.title} className="whitespace-normal" /></h3>
-          <p className="mt-3 text-sm text-white/40 font-secondary">{service.description}</p>
+        <div className="p-6 md:p-7">
+          <p className="eyebrow text-white/30 font-mono text-[11px] tracking-[0.2em]">/ {service.number}</p>
+          <h3 className="mt-4 text-2xl font-medium tracking-[-.04em] text-white font-primary">
+            <HyperText text={service.title} className="whitespace-normal" />
+          </h3>
+          <p className="mt-3 text-[14px] leading-[1.6] text-white/50 font-secondary">
+            {service.description}
+          </p>
         </div>
-        <div className="relative min-h-52 overflow-hidden">
-          <Image src={service.image} alt="" fill sizes="40vw" className="cinematic-image object-cover" />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/45 to-transparent pointer-events-none" />
+        <div className="relative min-h-52 overflow-hidden bg-[#111113]">
+          <Image
+            src={service.image}
+            alt={service.title}
+            fill
+            sizes="(min-width: 1024px) 35vw, 90vw"
+            className="cinematic-image object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none" />
         </div>
       </div>
-      <div className="grid md:grid-cols-2">
-        <ul className="p-6 font-mono text-[10px] uppercase tracking-[.08em] text-white/45">
+      <div className="grid md:grid-cols-2 border-t border-white/5">
+        <ul className="p-6 md:p-7 font-mono text-[10px] uppercase tracking-[.08em] text-white/45">
           {service.items.map((item) => (
             <li key={item} className="border-b border-white/10 py-3 last:border-0">
               {item}
             </li>
           ))}
         </ul>
-        <div className="relative hidden min-h-40 md:block overflow-hidden">
-          <Image src={service.image} alt="" fill sizes="40vw" className="cinematic-image object-cover opacity-65" />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/45 to-transparent pointer-events-none" />
+        <div className="relative hidden min-h-40 md:block overflow-hidden bg-[#111113]">
+          <Image
+            src={service.image}
+            alt=""
+            fill
+            sizes="35vw"
+            className="cinematic-image object-cover opacity-65"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none" />
         </div>
       </div>
     </article>
@@ -116,21 +150,27 @@ function ServiceCard({ service, index }: { service: (typeof services)[number], i
 
 export function ServicesSection() {
   return (
-    <Section id="solutions" className="overflow-x-clip">
-      <Container>
-        <div className="grid gap-16 lg:grid-cols-[.7fr_1.3fr]">
-          <div className="lg:sticky lg:top-28 lg:self-start">
-            <AnimatedEyebrow text="OUR SOLUTIONS" />
-            <h2 className="section-title mt-6 tracking-[-.04em] font-primary">
+    <Section id="solutions" className="overflow-x-clip py-20 lg:py-28">
+      <Container className="max-w-[1240px]">
+        {/* .framer-1kdw1pm: flex-direction row, gap 80px, width 1240px */}
+        <div className="flex flex-col gap-12 lg:flex-row lg:gap-[80px] w-full relative">
+          {/* .framer-11b8i51: sticky left sidebar, width 416px, gap 24px */}
+          <div className="w-full lg:w-[416px] lg:shrink-0 lg:sticky lg:top-28 self-start flex flex-col gap-6">
+            <div>
+              <AnimatedEyebrow text="OUR SOLUTIONS" />
+            </div>
+            <h2 className="section-title tracking-[-.04em] font-primary">
               Solutions That Support
               <br />
               the Whole Business
             </h2>
-            <p className="mt-6 max-w-sm text-[15px] leading-[1.6] text-white/50 font-secondary">
+            <p className="max-w-sm text-[15px] leading-[1.65] text-white/50 font-secondary">
               We solve operational and growth problems through software, digital platforms, brand systems, and measurable marketing.
             </p>
           </div>
-          <div className="min-w-0 space-y-7">
+
+          {/* .framer-7u50ce: cards container, width 60%, flex-col, row-gap 24px */}
+          <div className="w-full lg:w-[60%] flex flex-col gap-6 min-w-0">
             {services.map((service, index) => (
               <ServiceCard key={service.number} service={service} index={index} />
             ))}

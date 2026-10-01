@@ -137,7 +137,7 @@ export function HyperText({
     >
       <span className="inline-block">{displayText}</span>
       {showCursor && !isAnimating && isHovered && (
-        <span className="nav-caret ml-[1ch]" aria-hidden />
+        <span className="nav-caret ml-1.5" aria-hidden />
       )}
     </span>
   );

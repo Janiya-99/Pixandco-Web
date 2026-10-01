@@ -61,9 +61,9 @@ export function FloatingBadge({ label, position, floatDuration, triggerRange, sc
       <motion.div
         animate={{ y: [0, -8, 0] }}
         transition={{ duration: floatDuration, repeat: Infinity, ease: "easeInOut" }}
-        className="flex items-center gap-3 rounded-[8px] border border-white/10 bg-[#1a1a1d] px-4 py-2.5 text-[13px] font-medium text-white/90 shadow-xl"
+        className="flex items-center gap-3.5 rounded-[10px] border border-white/10 bg-[#161618]/90 px-5 py-3 text-[15px] font-normal text-white/90 shadow-2xl backdrop-blur-md md:text-base"
       >
-        <span className="size-1.5 rounded-[2px] bg-neutral-500" />
+        <span className="size-2 rounded-[2px] bg-neutral-600 shrink-0" />
         {label}
       </motion.div>
     </motion.div>
@@ -73,12 +73,11 @@ export function FloatingBadge({ label, position, floatDuration, triggerRange, sc
 // --- COMBINED SECTION ---
 
 const BADGES: (Omit<FloatingBadgeProps, "scrollYProgress"> & { id: string })[] = [
-  { id: "lead-generation", label: "Low-Quality Lead Generation", position: "bottom-[12%] left-[10%]", floatDuration: 4, triggerRange: [0.35, 0.4] },
-  { id: "wasted-resources", label: "Manual Business Processes", position: "top-[32%] right-[18%]", floatDuration: 4.2, triggerRange: [0.1, 0.15] },
-  { id: "siloed-comm", label: "Disconnected Systems", position: "bottom-[32%] left-[22%]", floatDuration: 3.5, triggerRange: [0.15, 0.2] },
-  { id: "lack-visibility", label: "Limited Operational Visibility", position: "top-[20%] left-[45%]", floatDuration: 4.8, triggerRange: [0.2, 0.25] },
-  { id: "tedious-onboarding", label: "Weak Digital Presence", position: "top-[42%] left-[12%]", floatDuration: 3.8, triggerRange: [0.25, 0.3] },
-  { id: "fragmented-workflows", label: "Inconsistent Brand Communication", position: "bottom-[24%] right-[16%]", floatDuration: 4.5, triggerRange: [0.3, 0.35] },
+  { id: "lead-generation", label: "Low-Quality Lead Generation", position: "top-[48%] left-[4%] md:left-[8%]", floatDuration: 3.8, triggerRange: [0.1, 0.15] },
+  { id: "wasted-resources", label: "Manual Business Processes", position: "top-[20%] left-[42%] md:left-[45%]", floatDuration: 4.8, triggerRange: [0.15, 0.2] },
+  { id: "siloed-comm", label: "Disconnected Systems", position: "top-[44%] right-[4%] md:right-[8%]", floatDuration: 4.2, triggerRange: [0.2, 0.25] },
+  { id: "lack-visibility", label: "Limited Operational Visibility", position: "bottom-[12%] left-[20%] md:left-[26%]", floatDuration: 3.5, triggerRange: [0.25, 0.3] },
+  { id: "tedious-onboarding", label: "Weak Digital Presence", position: "bottom-[16%] right-[6%] md:right-[12%]", floatDuration: 4.5, triggerRange: [0.3, 0.35] },
 ];
 
 export function ConcentricScrollSection() {
@@ -98,9 +97,6 @@ export function ConcentricScrollSection() {
           <h2 className="section-title max-w-lg">
             The Problems Slowing <br /> Business Growth
           </h2>
-          <p className="mt-6 text-xs leading-6 text-white/50">
-            Disconnected systems, manual work, and unclear digital strategies make it harder for businesses to operate efficiently and grow consistently.
-          </p>
         </Reveal>
 
         <ConcentricRings scrollYProgress={scrollYProgress} />

@@ -11,6 +11,7 @@ import { Container } from "@/components/layout/container"
 import { Section } from "@/components/layout/section"
 import { TextReveal } from "@/components/motion/text-reveal"
 import { Reveal } from "@/components/motion/reveal"
+import { Counter } from "@/components/motion/counter"
 import { companyOverview, insightTopics } from "@/content/site"
 import { RollingButton } from "@/components/ui/rolling-button"
 import { HyperText } from "@/components/ui/hyper-text"
@@ -18,6 +19,7 @@ import { SectionHeader } from "@/components/ui/section-header"
 import { AmbientVideo } from "@/components/media/ambient-video"
 import { Testimonials, Pricing, Faq } from "./interactive-sections"
 import { AnimatedEyebrow } from "@/components/ui/animated-eyebrow"
+import { TrustedCompaniesSection } from "./trusted-companies-section"
 import { ConcentricScrollSection } from "./concentric-scroll-section"
 import { PinnedProjects } from "./pinned-projects"
 import { IntegrationSection } from "./integration-section"
@@ -135,6 +137,8 @@ function StepCard({ step, index }: { step: { n: string, t: string, d: string, im
 
 export function HomeSections() {
   return <>
+    <TrustedCompaniesSection />
+
     <TrustSection />
 
     <ConcentricScrollSection />
@@ -149,8 +153,36 @@ export function HomeSections() {
 
     <WhyUsSection />
 
-    <Section><Container><Testimonials /></Container></Section>
-    <Section><Container><SectionHeader align="center" eyebrow="RESULTS" title="Measured by Business Results" /><div className="mt-10 grid grid-cols-2 lg:grid-cols-4">{["Solutions Delivered", "Operational Improvement", "Businesses Supported", "Client Retention"].map(label => <div key={label} className="border border-white/10 p-6"><p className="text-xl">{label}</p><p className="mt-3 text-sm text-white/50">Results to be published.</p></div>)}</div></Container></Section>
+    <Section>
+      <Container>
+        <Testimonials />
+        <div className="mt-14 grid grid-cols-2 border-l border-t border-[#212121] lg:grid-cols-4 md:mt-20">
+          {[
+            { value: 10, suffix: "+", label: "WORKFLOWS AUTOMATED" },
+            { value: 60, suffix: "%", label: "TIME SAVED" },
+            { value: 4, suffix: "x", label: "PROCESS EFFICIENCY" },
+            { value: 90, suffix: "%", label: "LESS HUMAN ERROR" },
+          ].map((stat) => (
+            <Reveal
+              key={stat.label}
+              className="flex items-baseline gap-3 border-b border-r border-[#212121] px-6 py-7 md:py-9 lg:px-8"
+            >
+              <p className="text-5xl font-normal leading-none tracking-[-.04em] text-white md:text-[3.5rem] lg:text-[4rem]">
+                <Counter value={stat.value} />
+              </p>
+              <div className="flex flex-col">
+                <span className="text-lg font-normal leading-none text-white/90 md:text-xl">
+                  {stat.suffix}
+                </span>
+                <span className="eyebrow mt-2 max-w-[110px] font-mono text-[9px] leading-[1.3] tracking-[0.2em] text-white/40 uppercase md:text-[10px]">
+                  {stat.label}
+                </span>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+      </Container>
+    </Section>
 
     <Section><Container><SectionHeader align="center" eyebrow="WORK WITH PIX & CO" title={<>Flexible Ways to<br />Build and Grow</>} /><Reveal className="mt-14"><Pricing /></Reveal></Container></Section>
 
