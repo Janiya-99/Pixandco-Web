@@ -1,0 +1,49 @@
+name: Deploy Staging
+
+on:
+  push:
+    branches:
+      - main
+
+concurrency:
+  group: pixandco-staging
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Type check
+        run: npm run typecheck
+
+      - name: Build
+        run: npm run build
+
+  deploy:
+    needs: validate
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy to Bluehost
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          port: ${{ secrets.VPS_PORT }}
+          script_stop: true
+          script: |
+            /srv/infrastructure/scripts/deploy-pixandco-staging.sh
