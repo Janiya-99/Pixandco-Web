@@ -1,6 +1,5 @@
 "use client"
 
-import * as AccordionPrimitive from "@radix-ui/react-accordion"
 import { AnimatePresence, motion } from "motion/react"
 import Link from "next/link"
 import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react"

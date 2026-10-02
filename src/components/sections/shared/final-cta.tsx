@@ -2,7 +2,7 @@
 
 import { useRef } from "react"
 import Image from "next/image"
-import { motion, useScroll, useTransform } from "framer-motion"
+import { motion, useScroll, useTransform } from "motion/react"
 import { Container } from "@/components/layout/container"
 import { Reveal } from "@/components/motion/reveal"
 import { RollingButton } from "@/components/ui/rolling-button"

@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import { motion, useScroll, useTransform, MotionValue, useMotionValue, useMotionValueEvent, useSpring } from "framer-motion";
+import { motion, useScroll, useTransform, useSpring, type MotionValue } from "motion/react"
 import { Reveal } from "@/components/motion/reveal";
 
 // --- REUSABLE COMPONENTS ---
@@ -56,12 +56,12 @@ export function FloatingBadge({ label, position, floatDuration, triggerRange, sc
   return (
     <motion.div
       style={{ opacity, scale }}
-      className={`absolute z-20 ${position}`}
+      className={`absolute z-10 ${position}`}
     >
       <motion.div
         animate={{ y: [0, -8, 0] }}
         transition={{ duration: floatDuration, repeat: Infinity, ease: "easeInOut" }}
-        className="flex items-center gap-3.5 rounded-[10px] border border-white/10 bg-[#161618]/90 px-5 py-3 text-[15px] font-normal text-white/90 shadow-2xl backdrop-blur-md md:text-base"
+        className="flex items-center gap-2.5 md:gap-3.5 rounded-[10px] border border-white/10 bg-[#161618]/90 px-3.5 py-2.5 md:px-5 md:py-3 text-[13px] md:text-base font-normal text-white/90 shadow-2xl backdrop-blur-md max-w-[210px] md:max-w-none"
       >
         <span className="size-2 rounded-[2px] bg-neutral-600 shrink-0" />
         {label}
@@ -73,11 +73,11 @@ export function FloatingBadge({ label, position, floatDuration, triggerRange, sc
 // --- COMBINED SECTION ---
 
 const BADGES: (Omit<FloatingBadgeProps, "scrollYProgress"> & { id: string })[] = [
-  { id: "lead-generation", label: "Low-Quality Lead Generation", position: "top-[48%] left-[4%] md:left-[8%]", floatDuration: 3.8, triggerRange: [0.1, 0.15] },
-  { id: "wasted-resources", label: "Manual Business Processes", position: "top-[20%] left-[42%] md:left-[45%]", floatDuration: 4.8, triggerRange: [0.15, 0.2] },
-  { id: "siloed-comm", label: "Disconnected Systems", position: "top-[44%] right-[4%] md:right-[8%]", floatDuration: 4.2, triggerRange: [0.2, 0.25] },
-  { id: "lack-visibility", label: "Limited Operational Visibility", position: "bottom-[12%] left-[20%] md:left-[26%]", floatDuration: 3.5, triggerRange: [0.25, 0.3] },
-  { id: "tedious-onboarding", label: "Weak Digital Presence", position: "bottom-[16%] right-[6%] md:right-[12%]", floatDuration: 4.5, triggerRange: [0.3, 0.35] },
+  { id: "lead-generation", label: "Low-Quality Lead Generation", position: "top-[68%] right-[5%] md:top-[48%] md:right-auto md:left-[8%]", floatDuration: 3.8, triggerRange: [0.1, 0.15] },
+  { id: "wasted-resources", label: "Manual Business Processes", position: "top-[6%] left-[12%] md:top-[20%] md:left-[45%]", floatDuration: 4.8, triggerRange: [0.15, 0.2] },
+  { id: "siloed-comm", label: "Disconnected Systems", position: "top-[14%] right-[5%] md:top-[44%] md:right-[8%]", floatDuration: 4.2, triggerRange: [0.2, 0.25] },
+  { id: "lack-visibility", label: "Limited Operational Visibility", position: "bottom-[14%] left-[5%] md:bottom-[12%] md:left-[26%]", floatDuration: 3.5, triggerRange: [0.25, 0.3] },
+  { id: "tedious-onboarding", label: "Weak Digital Presence", position: "bottom-[4%] left-[25%] md:left-auto md:bottom-[16%] md:right-[12%]", floatDuration: 4.5, triggerRange: [0.3, 0.35] },
 ];
 
 export function ConcentricScrollSection() {
@@ -90,7 +90,7 @@ export function ConcentricScrollSection() {
   return (
     <section ref={containerRef} id="problems" className="relative h-[300vh] w-full bg-[#010004] text-white">
       <div className="sticky top-0 flex h-screen w-full items-center justify-center overflow-hidden">
-        <Reveal className="z-10 max-w-xl text-center px-4 flex flex-col items-center">
+        <Reveal className="z-30 max-w-xl text-center px-4 flex flex-col items-center">
           <p className="mb-4 text-[10px] font-mono text-neutral-500 uppercase tracking-[0.2em] eyebrow text-white/35">
             / BUSINESS CHALLENGES
           </p>
