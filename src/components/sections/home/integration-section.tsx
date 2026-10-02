@@ -3,7 +3,7 @@
 import Image from "next/image"
 import { Container } from "@/components/layout/container"
 import { Section } from "@/components/layout/section"
-import { motion } from "framer-motion"
+import { motion } from "motion/react"
 
 const row1 = [
   "/images/integration-logos/logo-1.png",

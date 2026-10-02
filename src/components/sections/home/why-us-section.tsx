@@ -2,15 +2,11 @@
 
 import Image from "next/image"
 import { useRef } from "react"
-import { motion, useScroll, useTransform } from "framer-motion"
-import gsap from "gsap"
-import { useGSAP } from "@gsap/react"
+import { motion, useScroll, useTransform } from "motion/react"
 import { Check, TriangleAlert, X } from "lucide-react"
 import { Container } from "@/components/layout/container"
 import { Section } from "@/components/layout/section"
 import { SectionHeader } from "@/components/ui/section-header"
-
-gsap.registerPlugin(useGSAP)
 
 const comparisonData = [
   [
@@ -73,32 +69,11 @@ function parseCell(cell: string) {
 }
 
 function ComparisonRow({ row, rowIndex }: { row: string[], rowIndex: number }) {
-  const rowRef = useRef<HTMLDivElement>(null)
-
-  useGSAP(() => {
-    const el = rowRef.current
-    if (!el || rowIndex === 0) return
-    const children = el.children
-    
-    el.addEventListener('mouseenter', () => {
-      gsap.to(children, { backgroundColor: "rgba(255,255,255,0.05)", duration: 0.3 })
-      if (children.length > 1) {
-        gsap.to(children[1] as Element, { backgroundColor: "rgba(255,255,255,0.15)", duration: 0.3 })
-      }
-    })
-    
-    el.addEventListener('mouseleave', () => {
-      gsap.to(children, { backgroundColor: "rgba(1,1,1,0.25)", duration: 0.3 })
-      if (children.length > 1) {
-        gsap.to(children[1] as Element, { backgroundColor: "rgba(255,255,255,0.1)", duration: 0.3 })
-      }
-    })
-  }, { scope: rowRef })
+  const isDataRow = rowIndex !== 0
 
   return (
     <motion.div 
-      ref={rowRef}
-      className="hidden md:grid grid-cols-[.6fr_1fr_1fr_1fr] cursor-default"
+      className={`hidden md:grid grid-cols-[.6fr_1fr_1fr_1fr] cursor-default${isDataRow ? " group/row" : ""}`}
       variants={{
         hidden: { opacity: 0, y: 15 },
         visible: { opacity: 1, y: 0, transition: { type: "spring", bounce: 0, duration: 1 } }
@@ -110,8 +85,9 @@ function ComparisonRow({ row, rowIndex }: { row: string[], rowIndex: number }) {
         const isPixandco = index === 1
         const isRowLabel = index === 0
         
-        // Define base styles
-        const bgClass = isPixandco ? "bg-white/10" : "bg-[rgba(1,1,1,0.25)]"
+        const bgClass = isPixandco
+          ? `bg-white/10${isDataRow ? " transition-colors duration-300 group-hover/row:bg-white/15" : ""}`
+          : `bg-[rgba(1,1,1,0.25)]${isDataRow ? " transition-colors duration-300 group-hover/row:bg-white/5" : ""}`
         
         let textClass = "text-white/60"
         if (isRowLabel) textClass = "text-white/80"

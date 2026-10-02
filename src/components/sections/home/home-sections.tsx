@@ -1,22 +1,13 @@
-"use client"
-
 import Image from "next/image"
 import Link from "next/link"
-import { useRef } from "react"
-import { motion } from "framer-motion"
-import gsap from "gsap"
-import { useGSAP } from "@gsap/react"
 import { ArrowRight } from "lucide-react"
 import { Container } from "@/components/layout/container"
 import { Section } from "@/components/layout/section"
-import { TextReveal } from "@/components/motion/text-reveal"
 import { Reveal } from "@/components/motion/reveal"
 import { Counter } from "@/components/motion/counter"
 import { companyOverview, insightTopics } from "@/content/site"
 import { RollingButton } from "@/components/ui/rolling-button"
-import { HyperText } from "@/components/ui/hyper-text"
 import { SectionHeader } from "@/components/ui/section-header"
-import { AmbientVideo } from "@/components/media/ambient-video"
 import { Testimonials, Pricing, Faq } from "./interactive-sections"
 import { AnimatedEyebrow } from "@/components/ui/animated-eyebrow"
 import { TrustedCompaniesSection } from "./trusted-companies-section"
@@ -26,67 +17,12 @@ import { IntegrationSection } from "./integration-section"
 import { ServicesSection } from "./services-section"
 import { WhyUsSection } from "./why-us-section"
 
-gsap.registerPlugin(useGSAP)
-
-export function HeroSection() {
-  return (
-    <section className="relative min-h-[750px] overflow-hidden">
-      <AmbientVideo
-        src="/videos/ruNWMG1hPz7eOeYESQefyP03dc.mp4"
-        poster="/images/video-posters/hero-system.webp"
-        alt="Hero background video"
-        priority
-        sizes="100vw"
-        className="absolute inset-0"
-        mediaClassName="object-cover object-center brightness-[.85] contrast-[1.12] scale-[1.3] md:scale-100"
-      />
-
-      <Container className="relative z-10 flex min-h-[750px] flex-col pt-24 md:pt-28 pb-12 md:pb-16 lg:pb-20">
-
-        {/* Top Section: Solutions and Introduction */}
-        <div className="flex flex-col md:grid md:grid-cols-2 md:gap-8 w-full flex-1">
-          <div className="flex flex-col items-start gap-3">
-            <motion.span initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ type: "spring", bounce: 0, duration: 1, delay: 0.5 }} className="eyebrow text-white/70">/ Business Software</motion.span>
-            <motion.span initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ type: "spring", bounce: 0, duration: 1, delay: 0.6 }} className="eyebrow text-white/70">/ Web Platforms</motion.span>
-            <motion.span initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ type: "spring", bounce: 0, duration: 1, delay: 0.7 }} className="eyebrow text-white/70">/ Digital Growth</motion.span>
-          </div>
-
-          {/* Flexible space to push the paragraph down on mobile */}
-          <div className="flex-1 md:hidden" />
-
-          <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ type: "spring", bounce: 0, duration: 1, delay: 0.6 }} className="mb-8 md:mb-0 max-w-sm self-end text-right text-[15px] leading-relaxed text-white/90 md:justify-self-end md:text-base">Pix & Co develops business software, websites, brands, and digital growth systems that solve real operational and commercial problems.</motion.p>
-        </div>
-
-        {/* Bottom Section: Badge, Heading, and Card */}
-        <div className="grid items-end gap-8 md:grid-cols-[1fr_auto] w-full">
-          <div className="flex flex-col items-start">
-            <motion.span initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ type: "spring", bounce: 0, duration: 1, delay: 0.5 }} className="eyebrow inline-flex bg-[#1a1a1d] border border-white/5 px-3 py-1.5 text-white/75">
-              <HyperText text="BUILT FOR BUSINESSES AT EVERY SCALE" animateOnLoad={true} delay={0.5} className="font-mono text-[10px] tracking-widest text-white/50" />
-            </motion.span>
-
-            {/* Desktop Heading */}
-            <h1 className="mt-5 w-full">
-              <TextReveal animateOnMount className="display w-full tracking-[-.04em]" lines={["Build Better.", "Operate Smarter.", "Grow Faster."]} />
-            </h1>
-          </div>
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ type: "spring", bounce: 0, duration: 1, delay: 1.0 }} className="rounded-[9px] border border-white/15 bg-[#111114]/90 p-2 backdrop-blur-md">
-            <div className="flex items-center gap-3">
-              <video src="/videos/girl.mp4" autoPlay muted loop playsInline aria-hidden="true" className="h-24 w-20 shrink-0 rounded-[4px] bg-[#27272b] object-cover" />
-              <div className="min-w-44"><p className="text-sm">Talk with Pix & Co</p><p className="eyebrow mt-2 text-white/40 tracking-[0.2em]">BUSINESS SOLUTIONS</p><Link href="/contact" style={{ color: '#000' }} className="group focus-ring mt-3 flex min-h-9 items-center justify-between rounded-[6px] bg-white px-3 text-xs font-medium transition-colors hover:bg-white/90"><span className="relative block overflow-hidden leading-none"><span className="block transition-transform duration-500 group-hover:-translate-y-full">Discuss Your Project</span><span aria-hidden className="absolute left-0 top-full block transition-transform duration-500 group-hover:-translate-y-full">Discuss Your Project</span></span><ArrowRight className="size-3.5 transition-transform duration-500 group-hover:translate-x-1" /></Link></div>
-            </div>
-          </motion.div>
-        </div>
-      </Container>
-    </section>
-  )
-}
-
 function MiniCallCard() {
   return (
     <div className="inline-flex items-center gap-3 rounded-[9px] border border-white/15 bg-[#1a1a1d] p-2">
-      <video src="/videos/girl.mp4" autoPlay muted loop playsInline aria-hidden="true" className="h-24 w-20 shrink-0 rounded-[4px] bg-[#27272b] object-cover" />
+      <video src="/videos/girl.mp4" autoPlay muted loop playsInline preload="none" aria-hidden="true" className="h-24 w-20 shrink-0 rounded-[4px] bg-[#27272b] object-cover" />
       <div className="min-w-44">
-        <p className="text-sm">Talk with Pix & Co</p>
+        <p className="text-sm">Talk with Pix &amp; Co</p>
         <p className="eyebrow mt-2 text-white/40">BUSINESS SOLUTIONS</p>
         <Link href="/contact" style={{ color: '#000' }} className="group focus-ring mt-3 flex min-h-9 items-center justify-between rounded-[6px] bg-white px-3 text-xs font-medium transition-colors hover:bg-white/90">
           <span className="relative block overflow-hidden leading-none"><span className="block transition-transform duration-500 group-hover:-translate-y-full">Discuss Your Project</span><span aria-hidden className="absolute left-0 top-full block transition-transform duration-500 group-hover:-translate-y-full">Discuss Your Project</span></span> <ArrowRight className="size-3.5 transition-transform duration-500 group-hover:translate-x-1" />
@@ -101,31 +37,11 @@ function TrustSection() {
 }
 
 function StepCard({ step, index }: { step: { n: string, t: string, d: string, img: string }, index: number }) {
-  const cardRef = useRef<HTMLDivElement>(null)
-
-  useGSAP(() => {
-    if (!cardRef.current) return
-    const img = cardRef.current.querySelector('img')
-    const overlay = cardRef.current.querySelector('.overlay-bg')
-
-    cardRef.current.addEventListener('mouseenter', () => {
-      gsap.to(img, { scale: 1.05, duration: 1, ease: "power2.out" })
-      gsap.to(overlay, { opacity: 0.8, duration: 0.5 })
-      gsap.to(cardRef.current, { borderColor: "rgba(255,255,255,0.15)", duration: 0.3 })
-    })
-
-    cardRef.current.addEventListener('mouseleave', () => {
-      gsap.to(img, { scale: 1, duration: 1, ease: "power2.out" })
-      gsap.to(overlay, { opacity: 1, duration: 0.5 })
-      gsap.to(cardRef.current, { borderColor: "#2b2b2f", duration: 0.3 })
-    })
-  }, { scope: cardRef })
-
   return (
     <Reveal className={`${index === 1 ? 'md:mt-10' : index === 2 ? 'md:mt-20' : ''}`}>
-      <div ref={cardRef} className="relative aspect-[4/5] overflow-hidden rounded-[12px] border border-[#2b2b2f] bg-[#1a1a1d]">
-        <Image src={step.img} alt="" fill sizes="(min-width: 1200px) calc(max((min(100vw - 40px, 1240px) - 48px) / 3, 1px) + 0.5px), (min-width: 810px) and (max-width: 1199.98px) calc(max((min(100vw - 40px, 1240px) - 48px) / 3, 1px) + 0.5px), (max-width: 809.98px) calc(min(100vw - 40px, 1240px) + 0.5px)" className="object-cover" />
-        <div className="overlay-bg absolute inset-0 bg-gradient-to-t from-[#010004]/90 via-[#010004]/45 to-transparent opacity-100" />
+      <div className="group relative aspect-[4/5] overflow-hidden rounded-[12px] border border-[#2b2b2f] bg-[#1a1a1d] transition-[border-color] duration-300 hover:border-white/15">
+        <Image src={step.img} alt="" fill sizes="(min-width: 1200px) calc(max((min(100vw - 40px, 1240px) - 48px) / 3, 1px) + 0.5px), (min-width: 810px) and (max-width: 1199.98px) calc(max((min(100vw - 40px, 1240px) - 48px) / 3, 1px) + 0.5px), (max-width: 809.98px) calc(min(100vw - 40px, 1240px) + 0.5px)" className="object-cover transition-transform duration-1000 ease-[cubic-bezier(0.22,0.61,0.36,1)] group-hover:scale-105" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#010004]/90 via-[#010004]/45 to-transparent transition-opacity duration-500 group-hover:opacity-80" />
         <div className="absolute inset-x-0 bottom-0 flex flex-col justify-end p-6 md:p-8 pointer-events-none">
           <h4 className="text-xl font-medium tracking-[-.04em] text-white font-primary">{step.n}. {step.t}</h4>
           <p className="mt-3 text-[15px] leading-6 text-white/60 font-secondary">{step.d}</p>
