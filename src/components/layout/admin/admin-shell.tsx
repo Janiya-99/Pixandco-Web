@@ -42,7 +42,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
   // Auth pages like /admin/login
   if (pathname.includes("/login")) {
     return (
-      <div className="min-h-screen bg-black text-white font-[var(--font-poppins)]">
+      <div data-admin-root="true" className="admin-scope min-h-screen bg-black text-white font-[var(--font-poppins)]">
         <Toaster position="top-right" theme="dark" />
         {children}
       </div>
@@ -54,7 +54,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <div className="flex h-screen w-full overflow-hidden bg-black text-white font-[var(--font-poppins)] antialiased select-none">
+    <div data-admin-root="true" className="admin-scope flex h-screen w-full overflow-hidden bg-black text-white font-[var(--font-poppins)] antialiased select-none">
       <Toaster position="top-right" theme="dark" />
       <AdminSidebar mobileOpen={mobileMenuOpen} setMobileOpen={setMobileMenuOpen} />
       <div className="flex flex-1 flex-col overflow-hidden min-w-0 z-10 bg-[#050507]">

@@ -94,10 +94,10 @@ export default function SiteSettingsPage() {
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 rounded-2xl border border-white/10 bg-[#0d0d10] p-6 shadow-[0_10px_30px_rgba(0,0,0,0.8)]">
         <div>
-          <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-white font-mono">
+          <h1 className="text-base sm:text-lg font-semibold tracking-tight text-white">
             GLOBAL SITE SETTINGS
           </h1>
-          <p className="text-xs text-white/40 font-mono mt-1">
+          <p className="text-xs text-white/40 mt-1">
             Site identity, brand assets, navigation links, and SEO tracking defaults.
           </p>
         </div>
@@ -107,7 +107,7 @@ export default function SiteSettingsPage() {
             variant="outline"
             size="sm"
             onClick={handleResetDefaults}
-            className="gap-1.5 font-mono text-xs rounded-full border-white/10 text-white/70 hover:bg-white/10"
+            className="gap-1.5 text-xs rounded-md border-white/10 text-white/70 hover:bg-white/10"
           >
             <RotateCcw className="h-3.5 w-3.5" />
             <span>Reset Defaults</span>
@@ -116,7 +116,7 @@ export default function SiteSettingsPage() {
           <Button
             onClick={handleSave}
             size="sm"
-            className="gap-2 font-mono text-xs rounded-full bg-white text-black font-semibold hover:bg-white/90 px-5 shadow-lg"
+            className="gap-2 text-xs rounded-md bg-white text-black font-semibold hover:bg-white/90 px-3 shadow-sm"
           >
             <Save className="h-3.5 w-3.5" />
             <span>Save Settings</span>
@@ -124,7 +124,7 @@ export default function SiteSettingsPage() {
         </div>
       </div>
 
-      <Tabs defaultValue="identity" className="space-y-6 font-mono text-xs">
+      <Tabs defaultValue="identity" className="space-y-6 text-xs">
         <TabsList className="bg-[#0d0d10] border border-white/10 rounded-xl p-1">
           <TabsTrigger
             value="identity"
@@ -225,7 +225,7 @@ export default function SiteSettingsPage() {
 
             <Button
               onClick={handleSave}
-              className="rounded-full bg-white text-black font-semibold hover:bg-white/90 px-6"
+              className="rounded-md bg-white text-black font-semibold hover:bg-white/90 px-3 py-1"
             >
               Save Identity Settings
             </Button>
@@ -249,7 +249,7 @@ export default function SiteSettingsPage() {
                 variant="outline"
                 size="sm"
                 onClick={handleAddNavItem}
-                className="gap-1.5 text-xs rounded-full border-white/15 text-white hover:bg-white/10"
+                className="gap-1.5 text-xs rounded-md border-white/15 text-white hover:bg-white/10"
               >
                 <Plus className="h-3.5 w-3.5" />
                 <span>Add Link</span>
@@ -262,7 +262,7 @@ export default function SiteSettingsPage() {
                   key={item.id}
                   className="flex items-center gap-3 rounded-xl border border-white/10 bg-black/60 p-3"
                 >
-                  <span className="text-white/40 w-6 font-mono text-[11px]">#{idx + 1}</span>
+                  <span className="text-white/40 w-6 text-[11px]">#{idx + 1}</span>
                   <div className="flex-1 grid sm:grid-cols-2 gap-3">
                     <Input
                       value={item.label}
@@ -305,7 +305,7 @@ export default function SiteSettingsPage() {
 
             <Button
               onClick={handleSave}
-              className="rounded-full bg-white text-black font-semibold hover:bg-white/90 px-6"
+              className="rounded-md bg-white text-black font-semibold hover:bg-white/90 px-3 py-1"
             >
               Save Navigation Menu
             </Button>
@@ -349,7 +349,7 @@ export default function SiteSettingsPage() {
 
             <Button
               onClick={handleSave}
-              className="rounded-full bg-white text-black font-semibold hover:bg-white/90 px-6"
+              className="rounded-md bg-white text-black font-semibold hover:bg-white/90 px-3 py-1"
             >
               Save Analytics & SEO Defaults
             </Button>

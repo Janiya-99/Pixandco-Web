@@ -127,14 +127,14 @@ export default function MediaLibraryPage() {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 rounded-2xl border border-white/10 bg-[#0d0d10] p-6 shadow-[0_10px_30px_rgba(0,0,0,0.8)]">
         <div>
           <div className="flex items-center gap-2">
-            <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-white font-mono">
+            <h1 className="text-base sm:text-lg font-semibold tracking-tight text-white">
               MEDIA ASSET LIBRARY
             </h1>
-            <Badge className="bg-white/10 text-white/80 border-white/15 text-[10px] font-mono">
+            <Badge className="bg-red-500/10 text-red-400 border-red-500/20 text-[9px]">
               {mediaAssets.length} Assets
             </Badge>
           </div>
-          <p className="text-xs text-white/40 font-mono mt-1">
+          <p className="text-xs text-white/40 mt-1">
             Central repository for images, video loops, banners, and logos with instant upload.
           </p>
         </div>
@@ -143,7 +143,7 @@ export default function MediaLibraryPage() {
           <Button
             onClick={() => fileInputRef.current?.click()}
             disabled={isUploading}
-            className="gap-2 font-mono text-xs rounded-full bg-white text-black font-semibold hover:bg-white/90 px-5 shadow-lg"
+            className="gap-2 text-xs rounded-md bg-white text-black font-semibold hover:bg-white/90 px-3 shadow-sm"
           >
             {isUploading ? (
               <Loader2 className="h-4 w-4 animate-spin" />
@@ -191,10 +191,10 @@ export default function MediaLibraryPage() {
             )}
           </div>
           <div>
-            <p className="text-sm font-semibold font-mono text-white">
+            <p className="text-sm font-semibold text-white">
               Drop images or video loops here to upload
             </p>
-            <p className="text-xs text-white/40 font-mono mt-0.5">
+            <p className="text-xs text-white/40 mt-0.5">
               Supports PNG, JPG, WebP, SVG, and MP4 videos up to 100MB
             </p>
           </div>
@@ -209,7 +209,7 @@ export default function MediaLibraryPage() {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Search assets by filename or alt text..."
-            className="pl-9 h-9 rounded-xl border-white/10 bg-black/60 text-xs font-mono text-white placeholder:text-white/30 focus:border-white/30"
+            className="pl-9 h-9 rounded-xl border-white/10 bg-black/60 text-xs text-white placeholder:text-white/30 focus:border-white/30"
           />
         </div>
 
@@ -218,7 +218,7 @@ export default function MediaLibraryPage() {
           <div className="flex items-center rounded-xl border border-white/10 bg-black/60 p-1">
             <button
               onClick={() => setFilterType("all")}
-              className={`px-3 py-1 rounded-lg text-xs font-mono transition-all ${
+              className={`px-3 py-1 rounded-lg text-xs transition-all ${
                 filterType === "all"
                   ? "bg-white/15 text-white font-semibold"
                   : "text-white/40 hover:text-white"
@@ -228,7 +228,7 @@ export default function MediaLibraryPage() {
             </button>
             <button
               onClick={() => setFilterType("image")}
-              className={`px-3 py-1 rounded-lg text-xs font-mono transition-all ${
+              className={`px-3 py-1 rounded-lg text-xs transition-all ${
                 filterType === "image"
                   ? "bg-white/15 text-white font-semibold"
                   : "text-white/40 hover:text-white"
@@ -238,7 +238,7 @@ export default function MediaLibraryPage() {
             </button>
             <button
               onClick={() => setFilterType("video")}
-              className={`px-3 py-1 rounded-lg text-xs font-mono transition-all ${
+              className={`px-3 py-1 rounded-lg text-xs transition-all ${
                 filterType === "video"
                   ? "bg-white/15 text-white font-semibold"
                   : "text-white/40 hover:text-white"
@@ -276,7 +276,7 @@ export default function MediaLibraryPage() {
 
       {/* Asset Grid / List Display */}
       {filteredAssets.length === 0 ? (
-        <div className="rounded-2xl border-2 border-dashed border-white/10 bg-[#0d0d10] p-12 text-center space-y-3 font-mono">
+        <div className="rounded-2xl border-2 border-dashed border-white/10 bg-[#0d0d10] p-12 text-center space-y-3">
           <FolderOpen className="mx-auto h-8 w-8 text-white/30" />
           <h3 className="text-sm font-bold text-white">No media files found</h3>
           <p className="text-xs text-white/40">Try adjusting your search or upload a new asset above.</p>
@@ -314,7 +314,7 @@ export default function MediaLibraryPage() {
 
                   {/* Type Badge */}
                   <div className="absolute top-2 left-2">
-                    <span className="flex items-center gap-1 rounded-md bg-black/80 px-2 py-0.5 text-[10px] font-mono uppercase text-white/80 border border-white/10">
+                    <span className="flex items-center gap-1 rounded-md bg-black/80 px-2 py-0.5 text-[10px] uppercase text-white/80 border border-white/10">
                       {isVideo ? (
                         <Video className="h-2.5 w-2.5 text-white/70" />
                       ) : (
@@ -366,7 +366,7 @@ export default function MediaLibraryPage() {
                 </div>
 
                 {/* Metadata Details */}
-                <div className="p-3 space-y-1 font-mono">
+                <div className="p-3 space-y-1">
                   <div className="flex items-center justify-between text-xs">
                     <span className="font-semibold text-white truncate max-w-[140px]">
                       {asset.name}
@@ -393,7 +393,7 @@ export default function MediaLibraryPage() {
       ) : (
         /* List Mode */
         <div className="rounded-2xl border border-white/10 bg-[#0d0d10] overflow-hidden">
-          <table className="w-full text-left font-mono text-xs">
+          <table className="w-full text-left text-xs">
             <thead className="border-b border-white/10 bg-white/[0.02] text-white/40 text-[10px] uppercase">
               <tr>
                 <th className="p-3 pl-4">Asset</th>
@@ -460,7 +460,7 @@ export default function MediaLibraryPage() {
 
       {/* Edit Alt Text Dialog */}
       <Dialog open={!!editingAsset} onOpenChange={(open) => !open && setEditingAsset(null)}>
-        <DialogContent className="max-w-md bg-[#0e0e12] border-white/15 p-6 backdrop-blur-2xl rounded-2xl font-mono text-xs shadow-2xl">
+        <DialogContent className="max-w-md bg-[#0e0e12] border-white/15 p-6 backdrop-blur-2xl rounded-2xl text-xs shadow-2xl">
           <DialogHeader>
             <DialogTitle className="text-sm uppercase text-white">
               EDIT ASSET ACCESSIBILITY

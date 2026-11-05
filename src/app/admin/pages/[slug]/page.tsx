@@ -243,7 +243,7 @@ export default function PageEditorPage() {
                 {page.title}
               </h1>
               <Badge
-                className={`text-[9px] uppercase px-1.5 py-0 rounded-full font-normal ${
+                className={`text-[9px] uppercase px-1.5 py-0.5 rounded-md font-normal ${
                   page.status === "published"
                     ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-400"
                     : "border-white/15 bg-white/5 text-white/60"
@@ -273,7 +273,7 @@ export default function PageEditorPage() {
             <SheetTrigger asChild>
               <button
                 type="button"
-                className="h-7 inline-flex items-center gap-1.5 text-[11px] rounded-full border border-white/15 bg-white/5 text-white hover:bg-white/10 px-3 transition-colors"
+                className="h-7 inline-flex items-center gap-1.5 text-[11px] rounded-md border border-white/15 bg-white/5 text-white hover:bg-white/10 px-2.5 transition-colors"
               >
                 <Eye className="h-3 w-3 text-white/60" />
                 <span className="hidden sm:inline">Live Simulator</span>
@@ -293,7 +293,7 @@ export default function PageEditorPage() {
           <button
             type="button"
             onClick={handleSavePageMeta}
-            className="h-7 inline-flex items-center gap-1.5 text-[11px] rounded-full bg-white text-black font-semibold hover:bg-white/90 px-3.5 shadow-sm transition-all"
+            className="h-7 inline-flex items-center gap-1.5 text-[11px] rounded-md bg-white text-black font-semibold hover:bg-white/90 px-3 shadow-sm transition-all"
           >
             <Save className="h-3 w-3" />
             <span>Save Live</span>
@@ -336,7 +336,7 @@ export default function PageEditorPage() {
             <button
               type="button"
               onClick={() => setIsAddBlockOpen(true)}
-              className="inline-flex items-center gap-1 h-6.5 text-[10px] rounded-full border border-white/15 bg-white/5 text-white hover:bg-white/10 px-2.5 self-start sm:self-auto transition-colors"
+              className="inline-flex items-center gap-1 h-6 text-[10px] rounded-md border border-white/15 bg-white/5 text-white hover:bg-white/10 px-2 self-start sm:self-auto transition-colors"
             >
               <Plus className="h-2.5 w-2.5" />
               <span>Add New Section</span>
@@ -355,7 +355,7 @@ export default function PageEditorPage() {
                 <button
                   type="button"
                   onClick={() => setIsAddBlockOpen(true)}
-                  className="rounded-full bg-white text-black font-semibold text-[11px] px-3.5 py-1 hover:bg-white/90"
+                  className="rounded-md bg-white text-black font-semibold text-[11px] px-3 py-1 hover:bg-white/90"
                 >
                   <Plus className="mr-1 h-3 w-3 inline" /> Add Block
                 </button>
@@ -570,7 +570,7 @@ export default function PageEditorPage() {
                                   ]
                                   updateBlock(page.id, block.id, { features: updated })
                                 }}
-                                className="h-6 text-[10px] rounded-full border border-white/15 text-white/80 hover:bg-white/10 px-2.5 transition-colors"
+                                className="h-6 text-[10px] rounded-md border border-white/15 text-white/80 hover:bg-white/10 px-2 transition-colors"
                               >
                                 <Plus className="h-2.5 w-2.5 mr-1 inline" /> Add Feature
                               </button>
@@ -726,7 +726,7 @@ export default function PageEditorPage() {
                                 ]
                                 updateBlock(page.id, block.id, { stats: updated })
                               }}
-                              className="h-6 text-[10px] rounded-full border border-white/15 text-white/80 hover:bg-white/10 px-2.5"
+                              className="h-6 text-[10px] rounded-md border border-white/15 text-white/80 hover:bg-white/10 px-2"
                             >
                               <Plus className="h-2.5 w-2.5 mr-1 inline" /> Add Counter
                             </button>
@@ -815,7 +815,7 @@ export default function PageEditorPage() {
                                   ]
                                   updateBlock(page.id, block.id, { items: updated })
                                 }}
-                                className="h-6 text-[10px] rounded-full border border-white/15 text-white/80 hover:bg-white/10 px-2.5"
+                                className="h-6 text-[10px] rounded-md border border-white/15 text-white/80 hover:bg-white/10 px-2"
                               >
                                 <Plus className="h-2.5 w-2.5 mr-1 inline" /> Add FAQ
                               </button>
@@ -986,7 +986,7 @@ export default function PageEditorPage() {
             <button
               type="button"
               onClick={handleSavePageMeta}
-              className="rounded-full bg-white text-black font-semibold text-xs px-4 py-1.5 hover:bg-white/90"
+              className="rounded-md bg-white text-black font-semibold text-xs px-3 py-1 hover:bg-white/90"
             >
               Save SEO Settings
             </button>
@@ -1055,7 +1055,7 @@ export default function PageEditorPage() {
             <button
               type="button"
               onClick={handleSavePageMeta}
-              className="rounded-full bg-white text-black font-semibold text-xs px-4 py-1.5 hover:bg-white/90"
+              className="rounded-md bg-white text-black font-semibold text-xs px-3 py-1 hover:bg-white/90"
             >
               Save Configuration
             </button>

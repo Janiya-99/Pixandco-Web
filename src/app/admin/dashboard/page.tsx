@@ -51,7 +51,7 @@ export default function AdminDashboardPage() {
           <Link href="/admin/pages">
             <button
               type="button"
-              className="inline-flex items-center gap-1.5 h-8 bg-white text-black font-semibold rounded-full px-3.5 text-[11px] hover:bg-white/90 transition-all shadow-sm"
+              className="inline-flex items-center gap-1.5 h-7 bg-white text-black font-semibold rounded-md px-3 text-[11px] hover:bg-white/90 hover:shadow-[0_0_12px_rgba(255,255,255,0.25)] transition-all shadow-sm"
             >
               <Plus className="h-3 w-3" />
               <span>Create / Manage Pages</span>
@@ -60,7 +60,7 @@ export default function AdminDashboardPage() {
           <Link href="/" target="_blank">
             <button
               type="button"
-              className="inline-flex items-center gap-1.5 h-8 border border-white/15 bg-black/60 text-white hover:bg-white/10 rounded-full px-3 text-[11px] transition-colors"
+              className="inline-flex items-center gap-1.5 h-7 border border-white/15 bg-[#0c0c0f] text-white hover:bg-white/10 hover:border-red-500/40 rounded-md px-2.5 text-[11px] transition-colors"
             >
               <Globe className="h-3 w-3 text-white/60" />
               <span>Preview Live</span>
@@ -127,22 +127,22 @@ export default function AdminDashboardPage() {
           </div>
         </div>
 
-        {/* Card 4: Production Gate */}
-        <div className="rounded-xl border border-emerald-500/20 bg-gradient-to-b from-[#0a140f] to-[#0c0c0f] p-4 shadow-[0_4px_16px_rgba(0,0,0,0.6)] hover:border-emerald-500/30 transition-all space-y-2.5">
+        {/* Card 4: Production Gate with Red / Crimson Heartbeat Accent */}
+        <div className="rounded-xl border border-red-500/20 bg-gradient-to-b from-[#140a0c] to-[#0c0c0f] p-4 shadow-[0_4px_16px_rgba(0,0,0,0.6)] hover:border-red-500/40 transition-all space-y-2.5">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2.5">
-              <div className="h-7 w-7 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
+              <div className="h-7 w-7 rounded-lg bg-red-500/10 border border-red-500/20 flex items-center justify-center text-red-400">
                 <Activity className="h-3.5 w-3.5" />
               </div>
               <span className="text-[11px] text-white/60 font-medium">
                 Production Gate
               </span>
             </div>
-            <ShieldCheck className="h-4 w-4 text-emerald-400/80" />
+            <ShieldCheck className="h-4 w-4 text-red-400/80" />
           </div>
-          <div className="text-xl font-bold text-emerald-400 tracking-tight flex items-center gap-1.5">
+          <div className="text-xl font-bold text-red-400 tracking-tight flex items-center gap-1.5">
             ONLINE
-            <span className="h-2 w-2 rounded-full bg-emerald-400" />
+            <span className="h-2 w-2 rounded-full bg-red-500 shadow-[0_0_8px_#ef4444] animate-pulse" />
           </div>
           <div className="text-[10px] text-white/40">
             VPS Staging (SSL Secured)
@@ -199,7 +199,7 @@ export default function AdminDashboardPage() {
                       {page.title}
                     </span>
                     <Badge
-                      className={`text-[9px] rounded-full px-2 py-0 flex items-center gap-1 font-normal ${
+                      className={`text-[9px] rounded-md px-1.5 py-0.5 flex items-center gap-1 font-normal ${
                         page.status === "published"
                           ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-400"
                           : "border-white/15 bg-white/5 text-white/60"

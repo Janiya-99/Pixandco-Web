@@ -18,6 +18,13 @@
   --ease-ui: cubic-bezier(0.44, 0, 0.56, 1);
 }
 
+/* Force Poppins on the entire admin portal */
+[data-admin-root="true"],
+.admin-scope,
+.admin-scope * {
+  font-family: var(--font-poppins) !important;
+}
+
 * { box-sizing: border-box; }
 html { background: var(--background); }
 body {
