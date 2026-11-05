@@ -1,5 +1,7 @@
 "use client"
 
+import { confirmAction } from "@/lib/sweet-alert"
+
 import * as React from "react"
 import {
   Upload,
@@ -352,7 +354,12 @@ export default function MediaLibraryPage() {
                       size="icon"
                       variant="ghost"
                       onClick={async () => {
-                        if (confirm(`Delete "${asset.name}"?`)) {
+                        const ok = await confirmAction({
+                          title: `Delete "${asset.name}"?`,
+                          text: "This file will be permanently removed from your media library.",
+                          confirmText: "Yes, delete asset",
+                        })
+                        if (ok) {
                           await deleteMediaAsset(asset.id)
                           toast.success("Asset removed from library")
                         }
@@ -441,7 +448,12 @@ export default function MediaLibraryPage() {
                       size="icon"
                       variant="ghost"
                       onClick={async () => {
-                        if (confirm(`Delete "${asset.name}"?`)) {
+                        const ok = await confirmAction({
+                          title: `Delete "${asset.name}"?`,
+                          text: "This file will be permanently removed from your media library.",
+                          confirmText: "Yes, delete asset",
+                        })
+                        if (ok) {
                           await deleteMediaAsset(asset.id)
                           toast.success("Asset deleted")
                         }

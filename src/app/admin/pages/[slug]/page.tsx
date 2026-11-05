@@ -1,5 +1,7 @@
 "use client"
 
+import { confirmAction } from "@/lib/sweet-alert"
+
 import * as React from "react"
 import { useParams, useRouter } from "next/navigation"
 import Link from "next/link"
@@ -421,13 +423,18 @@ export default function PageEditorPage() {
 
                         <button
                           type="button"
-                          onClick={() => {
-                            if (confirm(`Remove block "${block.name}"?`)) {
+                          onClick={async () => {
+                            const ok = await confirmAction({
+                              title: `Remove block "${block.name}"?`,
+                              text: "This block will be removed from this page.",
+                              confirmText: "Yes, remove block",
+                            })
+                            if (ok) {
                               removeBlock(page.id, block.id)
                               toast.success("Block removed")
                             }
                           }}
-                          className="h-6 w-6 flex items-center justify-center text-white/40 hover:text-red-400 hover:bg-red-500/10 rounded"
+                          className="h-6 w-6 flex items-center justify-center text-white/40 hover:text-red-400 hover:bg-red-500/10 rounded transition-colors"
                         >
                           <Trash2 className="h-3 w-3" />
                         </button>
@@ -501,9 +508,9 @@ export default function PageEditorPage() {
                           </div>
 
                           {/* HERO MEDIA UPLOAD */}
-                          <div className="sm:col-span-2 pt-1 border-t border-white/[0.05]">
+                          <div className="sm:col-span-2 pt-2 border-t border-white/[0.08] space-y-3">
                             <MediaUploadField
-                              label="Hero Media (Video loop or Image)"
+                              label="Main Hero Background Media (Video loop or Image)"
                               value={block.mediaUrl}
                               onChange={(url) => {
                                 const isVid =
@@ -516,8 +523,61 @@ export default function PageEditorPage() {
                                 })
                               }}
                               mediaType="any"
-                              placeholder="/videos/hero-system.mp4 or /images/..."
+                              placeholder="/videos/ruNWMG1hPz7eOeYESQefyP03dc.mp4 or image URL..."
                             />
+
+                            <div className="p-3 rounded-lg border border-white/10 bg-white/[0.02] space-y-2.5">
+                              <span className="text-[10px] font-medium text-white/80 uppercase tracking-wider block">
+                                Top Bullet Categories (3 items)
+                              </span>
+                              <div className="grid sm:grid-cols-3 gap-2">
+                                <Input
+                                  value={block.eyebrow1 || ""}
+                                  onChange={(e) => updateBlock(page.id, block.id, { eyebrow1: e.target.value })}
+                                  placeholder="/ Business Software"
+                                  className="h-7 text-[11px] bg-black/60 border-white/10"
+                                />
+                                <Input
+                                  value={block.eyebrow2 || ""}
+                                  onChange={(e) => updateBlock(page.id, block.id, { eyebrow2: e.target.value })}
+                                  placeholder="/ Web Platforms"
+                                  className="h-7 text-[11px] bg-black/60 border-white/10"
+                                />
+                                <Input
+                                  value={block.eyebrow3 || ""}
+                                  onChange={(e) => updateBlock(page.id, block.id, { eyebrow3: e.target.value })}
+                                  placeholder="/ Digital Growth"
+                                  className="h-7 text-[11px] bg-black/60 border-white/10"
+                                />
+                              </div>
+                            </div>
+
+                            <div className="p-3 rounded-lg border border-white/10 bg-white/[0.02] space-y-2.5">
+                              <span className="text-[10px] font-medium text-white/80 uppercase tracking-wider block">
+                                Floating Contact Video Card
+                              </span>
+                              <div className="grid sm:grid-cols-2 gap-2">
+                                <Input
+                                  value={block.videoCardTitle || ""}
+                                  onChange={(e) => updateBlock(page.id, block.id, { videoCardTitle: e.target.value })}
+                                  placeholder="Talk with Pix & Co"
+                                  className="h-7 text-[11px] bg-black/60 border-white/10"
+                                />
+                                <Input
+                                  value={block.videoCardSubtitle || ""}
+                                  onChange={(e) => updateBlock(page.id, block.id, { videoCardSubtitle: e.target.value })}
+                                  placeholder="BUSINESS SOLUTIONS"
+                                  className="h-7 text-[11px] bg-black/60 border-white/10"
+                                />
+                              </div>
+                              <MediaUploadField
+                                label="Card Video Loop or Avatar"
+                                value={block.videoCardMediaUrl}
+                                onChange={(url) => updateBlock(page.id, block.id, { videoCardMediaUrl: url })}
+                                mediaType="any"
+                                placeholder="/videos/girl.mp4 or photo..."
+                              />
+                            </div>
                           </div>
                         </div>
                       )}

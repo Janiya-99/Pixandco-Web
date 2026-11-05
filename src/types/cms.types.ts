@@ -26,6 +26,14 @@ export interface HeroBlock extends BaseBlock {
   secondaryCtaLink?: string
   mediaUrl?: string
   mediaType?: "video" | "image"
+  // Mini video card controls
+  videoCardTitle?: string
+  videoCardSubtitle?: string
+  videoCardMediaUrl?: string
+  // Eyebrows on top
+  eyebrow1?: string
+  eyebrow2?: string
+  eyebrow3?: string
 }
 
 export interface FeatureItem {

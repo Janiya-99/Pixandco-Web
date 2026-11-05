@@ -1,5 +1,7 @@
 "use client"
 
+import { confirmAction } from "@/lib/sweet-alert"
+
 import * as React from "react"
 import Link from "next/link"
 import { useRouter, useSearchParams } from "next/navigation"
@@ -141,7 +143,12 @@ export default function PageManagerPage() {
   }
 
   const handleBatchDelete = async () => {
-    if (confirm(`Are you sure you want to delete ${selectedIds.length} pages?`)) {
+    const ok = await confirmAction({
+      title: 'Delete Selected Pages?',
+      text: `Are you sure you want to delete ${selectedIds.length} pages? This cannot be undone.`,
+      confirmText: 'Yes, delete all',
+    })
+    if (ok) {
       for (const id of selectedIds) {
         await deletePage(id)
       }
@@ -361,7 +368,12 @@ export default function PageManagerPage() {
                             <DropdownMenuSeparator className="bg-white/10" />
                             <DropdownMenuItem
                               onClick={async () => {
-                                if (confirm(`Delete "${page.title}"?`)) {
+                                const ok = await confirmAction({
+                                  title: `Delete "${page.title}"?`,
+                                  text: "This will permanently remove this page and all its content blocks.",
+                                  confirmText: "Yes, delete page",
+                                })
+                                if (ok) {
                                   await deletePage(page.id)
                                   toast.success("Page deleted")
                                 }

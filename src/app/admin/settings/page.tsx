@@ -1,5 +1,7 @@
 "use client"
 
+import { confirmAction } from "@/lib/sweet-alert"
+
 import * as React from "react"
 import {
   Save,
@@ -83,7 +85,12 @@ export default function SiteSettingsPage() {
   }
 
   const handleResetDefaults = async () => {
-    if (confirm("Reset all settings and pages back to default starter content?")) {
+    const ok = await confirmAction({
+      title: "Reset all settings to defaults?",
+      text: "This will restore site settings, links, and identity back to defaults.",
+      confirmText: "Yes, reset to defaults",
+    })
+    if (ok) {
       await resetToDefaults()
       toast.success("Settings restored to defaults")
     }

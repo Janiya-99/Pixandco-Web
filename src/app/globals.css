@@ -161,42 +161,108 @@ button, input, textarea, select { font: inherit; }
 }
 
 /* =========================================================================
-   CMS Admin Portal — Pure Black, Deep Charcoal & Crisp Monochrome 3D Glass
+   CMS Admin Portal — Obsidian Glassmorphism, Pure Black & Red Accents
    ========================================================================= */
 
 @layer utilities {
-  .admin-pure-black-bg {
-    background-color: #000000;
-    background-image: 
-      radial-gradient(at 10% 10%, rgba(255, 255, 255, 0.03) 0px, transparent 40%),
-      radial-gradient(at 90% 90%, rgba(255, 255, 255, 0.02) 0px, transparent 40%);
-  }
-  .admin-black-card {
-    background: linear-gradient(135deg, rgba(16, 16, 18, 0.85) 0%, rgba(8, 8, 10, 0.95) 100%);
+  .admin-glass-panel {
+    background: linear-gradient(135deg, rgba(18, 18, 22, 0.72) 0%, rgba(10, 10, 14, 0.82) 100%);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
     border: 1px solid rgba(255, 255, 255, 0.08);
-    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.9), 0 0 1px 1px rgba(255, 255, 255, 0.05) inset;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.55), inset 0 1px 0 0 rgba(255, 255, 255, 0.06);
   }
-  .admin-black-card-hover {
+
+  .admin-glass-card {
+    background: linear-gradient(145deg, rgba(22, 22, 28, 0.6) 0%, rgba(12, 12, 16, 0.8) 100%);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5), inset 0 1px 0 0 rgba(255, 255, 255, 0.04);
     transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   }
-  .admin-black-card-hover:hover {
-    border-color: rgba(255, 255, 255, 0.22);
-    box-shadow: 0 14px 40px -10px rgba(0, 0, 0, 0.95), 0 0 15px 1px rgba(255, 255, 255, 0.08);
-    transform: translateY(-2px);
+
+  .admin-glass-card:hover {
+    border-color: rgba(255, 255, 255, 0.16);
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.7), inset 0 1px 0 0 rgba(255, 255, 255, 0.08);
+    transform: translateY(-1px);
   }
-  .admin-black-pill {
-    background: #000000;
+
+  /* Ultra sleek glass button */
+  .admin-glass-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    height: 1.625rem;
+    padding: 0 0.625rem;
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    color: rgba(255, 255, 255, 0.85);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     border: 1px solid rgba(255, 255, 255, 0.12);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+    border-radius: 0.375rem;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4), inset 0 1px 0 0 rgba(255, 255, 255, 0.08);
+    transition: all 0.18s ease;
+    cursor: pointer;
   }
-  .admin-black-button {
+
+  .admin-glass-btn:hover {
+    color: #ffffff;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.14) 0%, rgba(255, 255, 255, 0.05) 100%);
+    border-color: rgba(255, 255, 255, 0.24);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6), inset 0 1px 0 0 rgba(255, 255, 255, 0.15);
+  }
+
+  /* Glass button with subtle red glow on hover or active */
+  .admin-glass-btn-accent {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    height: 1.625rem;
+    padding: 0 0.625rem;
+    font-size: 0.6875rem;
+    font-weight: 500;
+    color: #ffffff;
     background: #ffffff;
-    color: #000000;
-    font-weight: 600;
-    transition: all 0.2s ease;
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    border-radius: 0.375rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+    transition: all 0.18s ease;
+    cursor: pointer;
   }
-  .admin-black-button:hover {
-    background: #e4e4e7;
-    box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+
+  .admin-glass-btn-accent:hover {
+    background: rgba(255, 255, 255, 0.92);
+    box-shadow: 0 0 14px rgba(255, 255, 255, 0.35);
+  }
+
+  /* Glass pill/badge */
+  .admin-glass-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.125rem 0.375rem;
+    font-size: 0.5625rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    border-radius: 0.25rem;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+  }
+
+  .admin-glass-input {
+    background: rgba(10, 10, 14, 0.7);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.6);
+  }
+
+  .admin-glass-input:focus {
+    border-color: rgba(239, 68, 68, 0.5);
+    box-shadow: 0 0 0 1px rgba(239, 68, 68, 0.25), inset 0 1px 2px rgba(0, 0, 0, 0.6);
   }
 }
