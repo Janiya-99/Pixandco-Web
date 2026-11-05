@@ -2,11 +2,7 @@ import type { Metadata, Viewport } from "next"
 import { GeistSans } from "geist/font/sans"
 import { GeistMono } from "geist/font/mono"
 import "./globals.css"
-import { MotionProvider } from "@/components/motion/motion-provider"
-import { PageTransition } from "@/components/motion/page-transition"
-import { ScrollProgress } from "@/components/motion/scroll-progress"
-import { SiteHeader } from "@/components/layout/site-header"
-import { SiteFooter } from "@/components/layout/site-footer"
+import { PublicLayoutFrame } from "@/components/layout/public-layout-frame"
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://pixandco.lk"),
@@ -18,5 +14,11 @@ export const metadata: Metadata = {
 export const viewport: Viewport = { themeColor: "#050505", colorScheme: "dark" }
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return <html lang="en" className={`${GeistSans.variable} ${GeistMono.variable}`}><body suppressHydrationWarning className={GeistSans.className}><ScrollProgress /><MotionProvider><SiteHeader /><PageTransition>{children}</PageTransition><SiteFooter /></MotionProvider><div className="site-noise" aria-hidden /></body></html>
+  return (
+    <html lang="en" className={`${GeistSans.variable} ${GeistMono.variable}`}>
+      <body suppressHydrationWarning className={GeistSans.className}>
+        <PublicLayoutFrame>{children}</PublicLayoutFrame>
+      </body>
+    </html>
+  )
 }

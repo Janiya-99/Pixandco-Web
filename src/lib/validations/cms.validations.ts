@@ -25,3 +25,4 @@ export const pageDetailsSchema = z.object({
   status: z.enum(["published", "draft", "archived"]),
   description: z.string().optional(),
 })
+

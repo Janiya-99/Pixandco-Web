@@ -14,3 +14,4 @@ export default function AdminRootLayout({
 }) {
   return <AdminShell>{children}</AdminShell>
 }
+
