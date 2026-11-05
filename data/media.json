@@ -1,0 +1,90 @@
+[
+  {
+    "id": "media_hero_vid",
+    "name": "hero-system.mp4",
+    "url": "/videos/hero-system.mp4",
+    "type": "video",
+    "format": "MP4",
+    "size": 889038,
+    "dimensions": "1920x1080",
+    "altText": "Luminous operations background loop",
+    "uploadedAt": "2026-10-01T10:00:00Z"
+  },
+  {
+    "id": "media_footer_vid",
+    "name": "footer-system.mp4",
+    "url": "/videos/footer-system.mp4",
+    "type": "video",
+    "format": "MP4",
+    "size": 905832,
+    "dimensions": "1920x1080",
+    "altText": "Footer ambient tech loop",
+    "uploadedAt": "2026-10-01T10:00:00Z"
+  },
+  {
+    "id": "media_girl_vid",
+    "name": "girl.mp4",
+    "url": "/videos/girl.mp4",
+    "type": "video",
+    "format": "MP4",
+    "size": 806222,
+    "dimensions": "1920x1080",
+    "altText": "Creative digital portrait video",
+    "uploadedAt": "2026-10-01T10:00:00Z"
+  },
+  {
+    "id": "media_about_hero",
+    "name": "about-1.png",
+    "url": "/images/site/about-1.png",
+    "type": "image",
+    "format": "PNG",
+    "size": 1420000,
+    "dimensions": "1920x1080",
+    "altText": "Pix & Co Battaramulla team and company banner",
+    "uploadedAt": "2026-10-02T11:00:00Z"
+  },
+  {
+    "id": "media_hero_portal",
+    "name": "hero-portal.png",
+    "url": "/images/hero-portal.png",
+    "type": "image",
+    "format": "PNG",
+    "size": 1810437,
+    "dimensions": "1920x1080",
+    "altText": "Hero 3D portal graphic",
+    "uploadedAt": "2026-10-02T11:00:00Z"
+  },
+  {
+    "id": "media_robotic",
+    "name": "robotic-system.png",
+    "url": "/images/robotic-system.png",
+    "type": "image",
+    "format": "PNG",
+    "size": 1988163,
+    "dimensions": "1920x1080",
+    "altText": "Autonomous precision system rendering",
+    "uploadedAt": "2026-10-03T12:00:00Z"
+  },
+  {
+    "id": "media_terrain",
+    "name": "terrain-system.png",
+    "url": "/images/terrain-system.png",
+    "type": "image",
+    "format": "PNG",
+    "size": 2318615,
+    "dimensions": "1920x1080",
+    "altText": "Topological digital terrain surface",
+    "uploadedAt": "2026-10-03T12:00:00Z"
+  },
+  {
+    "id": "media_cta_bg",
+    "name": "final-cta-bg.webp",
+    "url": "/images/final-cta-bg.webp",
+    "type": "image",
+    "format": "WEBP",
+    "size": 258948,
+    "dimensions": "1920x1080",
+    "altText": "Luminous blue conversion backdrop",
+    "uploadedAt": "2026-10-04T09:00:00Z"
+  }
+]

@@ -73,15 +73,17 @@ export function HeroSection({ heroData }: HeroSectionProps) {
               <HyperText text={badgeText} animateOnLoad={true} delay={0.5} className="font-mono text-[10px] tracking-widest text-white/50" />
             </motion.span>
 
-            {/* Desktop Heading */}
+            {/* Desktop Heading with pristine multi-line TextReveal */}
             <h1 className="mt-5 w-full">
-              {heroData?.title ? (
-                <span className="display block w-full tracking-[-.04em]">
-                  {heroData.title}
-                </span>
-              ) : (
-                <TextReveal animateOnMount className="display w-full tracking-[-.04em]" lines={["Build Better.", "Operate Smarter.", "Grow Faster."]} />
-              )}
+              <TextReveal
+                animateOnMount
+                className="display w-full tracking-[-.04em]"
+                lines={
+                  heroData?.title && heroData.title !== "INTELLIGENCE. MADE USEFUL."
+                    ? heroData.title.split("\n")
+                    : ["Build Better.", "Operate Smarter.", "Grow Faster."]
+                }
+              />
             </h1>
           </div>
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ type: "spring", bounce: 0, duration: 1, delay: 1.0 }} className="rounded-[9px] border border-white/15 bg-[#111114]/90 p-2 backdrop-blur-md">

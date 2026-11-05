@@ -275,10 +275,10 @@ export default function PageEditorPage() {
             <SheetTrigger asChild>
               <button
                 type="button"
-                className="h-7 inline-flex items-center gap-1.5 text-[11px] rounded-md border border-white/15 bg-white/5 text-white hover:bg-white/10 px-2.5 transition-colors"
+                className="admin-glass-btn group hover:border-white/30"
               >
-                <Eye className="h-3 w-3 text-white/60" />
-                <span className="hidden sm:inline">Live Simulator</span>
+                <Eye className="h-2.5 w-2.5 text-white/50 group-hover:text-white transition-colors" />
+                <span className="text-[10px]">Live Simulator</span>
               </button>
             </SheetTrigger>
             <SheetContent side="right" className="w-full sm:max-w-xl bg-[#09090c] border-white/10 p-5 backdrop-blur-xl">
@@ -295,10 +295,10 @@ export default function PageEditorPage() {
           <button
             type="button"
             onClick={handleSavePageMeta}
-            className="h-7 inline-flex items-center gap-1.5 text-[11px] rounded-md bg-white text-black font-semibold hover:bg-white/90 px-3 shadow-sm transition-all"
+            className="admin-glass-btn group hover:border-red-500/50 hover:bg-red-500/10"
           >
-            <Save className="h-3 w-3" />
-            <span>Save Live</span>
+            <Save className="h-2.5 w-2.5 text-red-400 group-hover:text-red-300 transition-colors" />
+            <span className="text-[10px] text-white group-hover:text-red-200">Save Live</span>
           </button>
         </div>
       </div>

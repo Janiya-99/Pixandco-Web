@@ -1,0 +1,93 @@
+{
+  "siteName": "Pix & Co IT Solutions",
+  "logoUrl": "/images/site/2l8Wl4e6GvRUtl6qrfXsaZKZassb2ef.jpg",
+  "faviconUrl": "/favicon.ico",
+  "defaultOgImage": "/images/site/2l8Wl4e6GvRUtl6qrfXsaZKZassb2ef.jpg",
+  "contactEmail": "marketing@pixandco.lk",
+  "contactPhone": "+94 71 998 0916",
+  "address": "Battaramulla, Greater Colombo, Sri Lanka",
+  "headerCtaText": "DISCUSS YOUR PROJECT",
+  "headerCtaLink": "/contact",
+  "analyticsId": "G-PIXANDCO01",
+  "navItems": [
+    {
+      "id": "nav_1",
+      "label": "HOME",
+      "href": "/"
+    },
+    {
+      "id": "nav_2",
+      "label": "SOLUTIONS",
+      "href": "/#services"
+    },
+    {
+      "id": "nav_3",
+      "label": "CASE STUDIES",
+      "href": "/projects"
+    },
+    {
+      "id": "nav_4",
+      "label": "ABOUT",
+      "href": "/about"
+    },
+    {
+      "id": "nav_5",
+      "label": "INSIGHTS",
+      "href": "/blog"
+    },
+    {
+      "id": "nav_6",
+      "label": "CONTACT",
+      "href": "/contact"
+    }
+  ],
+  "footerColumns": [
+    {
+      "id": "fc_1",
+      "title": "Navigation",
+      "links": [
+        {
+          "id": "fcl_1",
+          "label": "Home",
+          "href": "/"
+        },
+        {
+          "id": "fcl_2",
+          "label": "Solutions",
+          "href": "/#services"
+        },
+        {
+          "id": "fcl_3",
+          "label": "Case Studies",
+          "href": "/projects"
+        },
+        {
+          "id": "fcl_4",
+          "label": "About",
+          "href": "/about"
+        }
+      ]
+    },
+    {
+      "id": "fc_2",
+      "title": "Legal & Inquiries",
+      "links": [
+        {
+          "id": "fcl_5",
+          "label": "Contact",
+          "href": "/contact"
+        },
+        {
+          "id": "fcl_6",
+          "label": "Privacy Policy",
+          "href": "/privacy"
+        },
+        {
+          "id": "fcl_7",
+          "label": "Terms of Service",
+          "href": "/terms"
+        }
+      ]
+    }
+  ]
+}
