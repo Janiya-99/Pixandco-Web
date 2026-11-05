@@ -1,3 +1,6 @@
+"use client"
+
+import * as React from "react"
 import Image from "next/image"
 import { Container } from "@/components/layout/container"
 
@@ -75,23 +78,73 @@ const trustedCompanies = [
 ] as const
 
 export function TrustedCompaniesSection() {
+  const containerRef = React.useRef<HTMLDivElement>(null)
+  const [coords, setCoords] = React.useState<{ x: number; y: number } | null>(null)
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!containerRef.current) return
+    const rect = containerRef.current.getBoundingClientRect()
+    setCoords({
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top,
+    })
+  }
+
+  const handleMouseLeave = () => {
+    setCoords(null)
+  }
+
   return (
     <section className="bg-[#010004] pt-8 pb-16 lg:pt-[60px] lg:pb-[100px]">
       <Container className="max-w-[1240px]">
         <p className="eyebrow mb-8 text-center text-white/45 tracking-[0.2em] md:mb-10">
           TRUSTED COMPANIES ACROSS INDUSTRIES
         </p>
-        <div className="grid grid-cols-2 border-l border-t border-[#212121] md:grid-cols-5">
+        
+        {/* Hairline Interactive Cursor Grid */}
+        <div
+          ref={containerRef}
+          onMouseMove={handleMouseMove}
+          onMouseLeave={handleMouseLeave}
+          className="relative grid grid-cols-2 border-l border-t border-[#212121] md:grid-cols-5 overflow-hidden"
+          style={{
+            ["--cursor-x" as any]: coords ? `${coords.x}px` : "-9999px",
+            ["--cursor-y" as any]: coords ? `${coords.y}px` : "-9999px",
+          }}
+        >
+          {/* Hairline cursor crosshairs & radial light glow */}
+          {coords && (
+            <div
+              className="pointer-events-none absolute inset-0 z-20 transition-opacity duration-300"
+              style={{
+                background: `
+                  radial-gradient(420px circle at ${coords.x}px ${coords.y}px, rgba(255, 255, 255, 0.075), transparent 70%),
+                  radial-gradient(120px circle at ${coords.x}px ${coords.y}px, rgba(239, 68, 68, 0.08), transparent 75%)
+                `,
+              }}
+            >
+              {/* Hairline 0.5px subtle crosshair following cursor */}
+              <div
+                className="absolute top-0 bottom-0 w-[1px] bg-gradient-to-b from-transparent via-white/20 to-transparent pointer-events-none"
+                style={{ left: `${coords.x}px` }}
+              />
+              <div
+                className="absolute left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-white/20 to-transparent pointer-events-none"
+                style={{ top: `${coords.y}px` }}
+              />
+            </div>
+          )}
+
           {trustedCompanies.map((company) => (
             <div
               key={company.name}
               className="group relative h-[100px] min-h-[100px] border-b border-r border-[#212121] cursor-pointer hover:z-30 md:h-[110px] md:min-h-[110px]"
             >
-              {/* Underlying slot in the grid cell (rgb(26, 26, 29) from Sanjaya Framer) */}
+              {/* Hairline grid cell reactive backdrop */}
               <div className="absolute inset-0 bg-transparent transition-colors duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:bg-[#1a1a1d]" />
 
-              {/* Lifted foreground grid card with black background */}
-              <div className="absolute inset-0 top-0 left-0 flex h-full w-full items-center justify-center border border-transparent bg-transparent px-4 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] will-change-transform group-hover:-top-2 group-hover:left-2 group-hover:bg-[#010004] group-hover:border-[#333333] group-hover:shadow-[0_16px_36px_rgba(0,0,0,0.85)] group-hover:z-10 md:px-6">
+              {/* Lifted foreground grid card with black background & precision hairline edge */}
+              <div className="absolute inset-0 top-0 left-0 flex h-full w-full items-center justify-center border border-transparent bg-transparent px-4 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] will-change-transform group-hover:-top-2 group-hover:left-2 group-hover:bg-[#010004] group-hover:border-[#38383e] group-hover:shadow-[0_16px_36px_rgba(0,0,0,0.85),_0_0_1px_1px_rgba(255,255,255,0.1)_inset] group-hover:z-10 md:px-6">
                 <Image
                   src={company.logo}
                   alt={company.name}
