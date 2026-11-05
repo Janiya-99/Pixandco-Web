@@ -28,21 +28,21 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
 
   if (isLoading) {
     return (
-      <div className="flex h-screen w-full items-center justify-center bg-[#020617] text-white">
-        <div className="flex flex-col items-center gap-4">
-          <div className="h-10 w-10 animate-spin rounded-full border-2 border-sky-400 border-t-transparent shadow-[0_0_20px_#38bdf8]" />
-          <p className="font-mono text-xs text-sky-400 uppercase tracking-widest">
-            Initializing Pix&Co CMS...
+      <div className="flex h-screen w-full items-center justify-center bg-black text-white font-[var(--font-poppins)]">
+        <div className="flex flex-col items-center gap-3">
+          <div className="h-7 w-7 animate-spin rounded-full border-2 border-white border-t-transparent" />
+          <p className="text-[11px] text-white/50 tracking-wider">
+            Loading Admin Portal...
           </p>
         </div>
       </div>
     )
   }
 
-  // Auth pages like /admin/login shouldn't show the dashboard shell
+  // Auth pages like /admin/login
   if (pathname.includes("/login")) {
     return (
-      <div className="min-h-screen bg-[#020617] text-white">
+      <div className="min-h-screen bg-black text-white font-[var(--font-poppins)]">
         <Toaster position="top-right" theme="dark" />
         {children}
       </div>
@@ -54,17 +54,13 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <div className="flex h-screen w-full overflow-hidden bg-[#020617] text-slate-100 font-sans relative">
-      {/* Background Luminous Ambient Glows */}
-      <div className="pointer-events-none absolute -top-40 left-1/4 h-96 w-96 rounded-full bg-sky-500/10 blur-[140px]" />
-      <div className="pointer-events-none absolute bottom-0 right-1/4 h-96 w-96 rounded-full bg-blue-600/10 blur-[150px]" />
-
+    <div className="flex h-screen w-full overflow-hidden bg-black text-white font-[var(--font-poppins)] antialiased select-none">
       <Toaster position="top-right" theme="dark" />
       <AdminSidebar mobileOpen={mobileMenuOpen} setMobileOpen={setMobileMenuOpen} />
-      <div className="flex flex-1 flex-col overflow-hidden min-w-0 z-10">
+      <div className="flex flex-1 flex-col overflow-hidden min-w-0 z-10 bg-[#050507]">
         <AdminHeader onMobileMenuToggle={() => setMobileMenuOpen(true)} />
-        <main className="flex-1 overflow-y-auto p-4 sm:p-6 md:p-8 bg-gradient-to-b from-slate-950/40 to-[#020617]">
-          <div className="mx-auto max-w-7xl w-full">{children}</div>
+        <main className="flex-1 overflow-y-auto p-4 sm:p-5 md:p-6 bg-[#050507]">
+          <div className="mx-auto max-w-6xl w-full">{children}</div>
         </main>
       </div>
     </div>

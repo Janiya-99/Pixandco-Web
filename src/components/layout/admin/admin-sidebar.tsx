@@ -16,11 +16,17 @@ import {
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
 import { useAuthStore } from "@/hooks/use-auth-store"
 
 const navItems = [
   {
-    title: "OVERVIEW",
+    title: "Overview",
     items: [
       {
         label: "Dashboard",
@@ -30,7 +36,7 @@ const navItems = [
     ],
   },
   {
-    title: "CONTENT & PAGES",
+    title: "Content & Pages",
     items: [
       {
         label: "Page Manager",
@@ -45,7 +51,7 @@ const navItems = [
     ],
   },
   {
-    title: "CONFIGURATION",
+    title: "Configuration",
     items: [
       {
         label: "Site Settings",
@@ -72,8 +78,10 @@ export function AdminSidebar({ mobileOpen = false, setMobileOpen }: AdminSidebar
     }
   }
 
+  const isCollapsedDesktop = collapsed && !mobileOpen
+
   return (
-    <>
+    <TooltipProvider delayDuration={150}>
       {/* Mobile Backdrop overlay */}
       {mobileOpen && (
         <div
@@ -84,57 +92,81 @@ export function AdminSidebar({ mobileOpen = false, setMobileOpen }: AdminSidebar
 
       <aside
         className={cn(
-          "fixed inset-y-0 left-0 z-50 flex flex-col border-r border-white/10 bg-[#070709] backdrop-blur-2xl transition-all duration-300 select-none lg:static",
-          collapsed ? "lg:w-20" : "lg:w-64",
-          mobileOpen ? "translate-x-0 w-72 shadow-2xl" : "-translate-x-full lg:translate-x-0"
+          "fixed inset-y-0 left-0 z-50 flex flex-col border-r border-white/[0.08] bg-[#070709] transition-all duration-200 select-none lg:static",
+          isCollapsedDesktop ? "lg:w-16" : "lg:w-56",
+          mobileOpen ? "translate-x-0 w-64 shadow-2xl" : "-translate-x-full lg:translate-x-0"
         )}
       >
         {/* Brand Header */}
-        <div className="flex h-16 items-center justify-between px-4 border-b border-white/10 bg-[#0a0a0d]">
-          <Link href="/admin/dashboard" onClick={handleLinkClick} className="flex items-center gap-3">
-            <div className="h-9 w-9 rounded-xl border border-white/15 bg-black flex items-center justify-center font-mono font-bold text-white text-sm shadow-[0_2px_10px_rgba(0,0,0,0.8)]">
-              P
-            </div>
-            {(!collapsed || mobileOpen) && (
-              <div className="flex flex-col">
-                <span className="font-mono text-xs font-bold tracking-wider text-white uppercase">
-                  PIX&CO CMS
-                </span>
-                <span className="text-[10px] text-white/40 font-mono tracking-tight">
-                  Premium CMS
-                </span>
-              </div>
-            )}
-          </Link>
+        <div
+          className={cn(
+            "flex h-13 items-center border-b border-white/[0.08] bg-[#070709]",
+            isCollapsedDesktop ? "justify-center px-0" : "justify-between px-3.5"
+          )}
+        >
+          {isCollapsedDesktop ? (
+            /* Perfectly centered collapsed toggle pill */
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button
+                  type="button"
+                  onClick={() => setCollapsed(false)}
+                  className="inline-flex items-center justify-center gap-1 h-8 px-2 rounded-xl border border-white/15 bg-black hover:border-white/30 hover:bg-white/[0.05] transition-all cursor-pointer"
+                >
+                  <span className="font-bold text-white text-xs">P</span>
+                  <ChevronRight className="h-3 w-3 text-white/50" />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent side="right">Expand sidebar</TooltipContent>
+            </Tooltip>
+          ) : (
+            <>
+              <Link href="/admin/dashboard" onClick={handleLinkClick} className="flex items-center gap-2.5 min-w-0">
+                <div className="h-7 w-7 rounded-lg border border-white/20 bg-black flex items-center justify-center font-bold text-white text-xs shrink-0">
+                  P
+                </div>
+                <div className="flex flex-col min-w-0">
+                  <span className="text-[11px] font-semibold tracking-wider text-white uppercase truncate">
+                    Pix&Co CMS
+                  </span>
+                  <span className="text-[9px] text-white/40 leading-none">
+                    Admin Panel
+                  </span>
+                </div>
+              </Link>
 
-          {/* Desktop collapse toggle */}
-          <Button
-            variant="ghost"
-            size="icon"
-            className="h-7 w-7 text-white/50 hover:text-white hover:bg-white/10 hidden lg:flex rounded-lg"
-            onClick={() => setCollapsed(!collapsed)}
-            title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
-          >
-            {collapsed ? <ChevronRight className="h-4 w-4" /> : <ChevronLeft className="h-4 w-4" />}
-          </Button>
+              {/* Desktop collapse toggle */}
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button
+                    type="button"
+                    className="h-6 w-6 text-white/40 hover:text-white hover:bg-white/10 hidden lg:flex items-center justify-center rounded-md p-0 transition-colors"
+                    onClick={() => setCollapsed(true)}
+                  >
+                    <ChevronLeft className="h-3.5 w-3.5" />
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent side="right">Collapse sidebar</TooltipContent>
+              </Tooltip>
 
-          {/* Mobile close toggle */}
-          <Button
-            variant="ghost"
-            size="icon"
-            className="h-8 w-8 text-white/50 hover:text-white lg:hidden rounded-lg"
-            onClick={() => setMobileOpen?.(false)}
-          >
-            <X className="h-4 w-4" />
-          </Button>
+              {/* Mobile close toggle */}
+              <button
+                type="button"
+                className="h-7 w-7 text-white/50 hover:text-white lg:hidden flex items-center justify-center rounded-md"
+                onClick={() => setMobileOpen?.(false)}
+              >
+                <X className="h-3.5 w-3.5" />
+              </button>
+            </>
+          )}
         </div>
 
         {/* Navigation Sections */}
-        <div className="flex-1 overflow-y-auto py-5 px-3 space-y-6">
+        <div className={cn("flex-1 overflow-y-auto py-3 space-y-4", isCollapsedDesktop ? "px-2" : "px-2")}>
           {navItems.map((group) => (
-            <div key={group.title} className="space-y-1.5">
-              {(!collapsed || mobileOpen) && (
-                <h4 className="px-3 text-[10px] font-mono uppercase tracking-widest text-white/40 mb-2 font-semibold">
+            <div key={group.title} className="space-y-1">
+              {!isCollapsedDesktop && (
+                <h4 className="px-2.5 text-[9px] uppercase tracking-wider text-white/35 font-medium mb-1">
                   {group.title}
                 </h4>
               )}
@@ -145,18 +177,19 @@ export function AdminSidebar({ mobileOpen = false, setMobileOpen }: AdminSidebar
                     ? pathname === "/admin/dashboard"
                     : pathname.startsWith(item.href)
 
-                return (
+                const linkContent = (
                   <Link
-                    key={item.href}
                     href={item.href}
                     onClick={handleLinkClick}
                     className={cn(
-                      "flex items-center gap-3 rounded-xl px-3 py-2.5 text-xs font-medium transition-all group relative font-mono",
+                      "flex items-center rounded-lg text-[11px] font-medium transition-colors group",
+                      isCollapsedDesktop
+                        ? "h-10 w-10 mx-auto justify-center"
+                        : "gap-2.5 px-2.5 py-1.5",
                       isActive
-                        ? "bg-[#141418] text-white font-semibold border border-white/20 shadow-[0_2px_12px_rgba(0,0,0,0.8)]"
-                        : "text-white/60 hover:bg-white/5 hover:text-white"
+                        ? "bg-white/[0.08] text-white font-semibold border border-white/15"
+                        : "text-white/60 hover:bg-white/[0.04] hover:text-white"
                     )}
-                    title={collapsed && !mobileOpen ? item.label : undefined}
                   >
                     <Icon
                       className={cn(
@@ -164,59 +197,110 @@ export function AdminSidebar({ mobileOpen = false, setMobileOpen }: AdminSidebar
                         isActive ? "text-white" : "text-white/40 group-hover:text-white"
                       )}
                     />
-                    {(!collapsed || mobileOpen) && <span className="truncate">{item.label}</span>}
+                    {!isCollapsedDesktop && <span className="truncate">{item.label}</span>}
                   </Link>
                 )
+
+                if (isCollapsedDesktop) {
+                  return (
+                    <Tooltip key={item.href}>
+                      <TooltipTrigger asChild>{linkContent}</TooltipTrigger>
+                      <TooltipContent side="right">{item.label}</TooltipContent>
+                    </Tooltip>
+                  )
+                }
+
+                return <React.Fragment key={item.href}>{linkContent}</React.Fragment>
               })}
             </div>
           ))}
         </div>
 
         {/* User & Quick Actions Footer */}
-        <div className="p-3 border-t border-white/10 space-y-2 bg-[#0a0a0d]">
-          <Link
-            href="/"
-            target="_blank"
-            className={cn(
-              "flex items-center gap-2 rounded-xl px-3 py-2 text-xs text-white/60 hover:text-white hover:bg-white/5 transition-all font-mono border border-transparent hover:border-white/10",
-              collapsed && !mobileOpen && "justify-center px-0"
-            )}
-          >
-            <span className="h-2 w-2 rounded-full bg-emerald-400 shrink-0" />
-            {(!collapsed || mobileOpen) && <span>Live Public Site</span>}
-            {(!collapsed || mobileOpen) && <ExternalLink className="h-3 w-3 ml-auto text-white/30" />}
-          </Link>
+        <div className={cn("p-2 border-t border-white/[0.08] space-y-2 bg-[#070709]", isCollapsedDesktop && "px-1.5")}>
+          {isCollapsedDesktop ? (
+            <>
+              {/* Public site pill with tooltip */}
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Link
+                    href="/"
+                    target="_blank"
+                    className="h-8 w-8 mx-auto flex items-center justify-center rounded-lg hover:bg-white/[0.05] transition-colors"
+                  >
+                    <span className="h-2 w-2 rounded-full bg-emerald-400" />
+                  </Link>
+                </TooltipTrigger>
+                <TooltipContent side="right">Public Website</TooltipContent>
+              </Tooltip>
 
-          <div
-            className={cn(
-              "flex items-center justify-between rounded-xl border border-white/10 bg-black/60 p-2.5",
-              collapsed && !mobileOpen && "flex-col gap-2"
-            )}
-          >
-            <div className="flex items-center gap-2.5 overflow-hidden">
-              <div className="h-8 w-8 shrink-0 rounded-lg bg-white/10 border border-white/15 flex items-center justify-center font-mono text-xs font-bold text-white">
-                {user?.email?.charAt(0).toUpperCase() || "A"}
+              {/* Symmetrical User Avatar & Logout Box */}
+              <div className="flex flex-col items-center justify-center gap-2 rounded-xl border border-white/10 bg-black/60 p-2 mx-auto w-10">
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <div className="h-7 w-7 rounded-lg bg-white/10 border border-white/15 flex items-center justify-center text-[10px] font-bold text-white cursor-default">
+                      {user?.email?.charAt(0).toUpperCase() || "A"}
+                    </div>
+                  </TooltipTrigger>
+                  <TooltipContent side="right">
+                    {user?.email || "admin@pixandco.lk"}
+                  </TooltipContent>
+                </Tooltip>
+
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <button
+                      type="button"
+                      onClick={logout}
+                      className="h-6 w-6 flex items-center justify-center text-white/40 hover:text-red-400 hover:bg-red-500/10 rounded-md transition-colors"
+                    >
+                      <LogOut className="h-3 w-3" />
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipContent side="right">Log out</TooltipContent>
+                </Tooltip>
               </div>
-              {(!collapsed || mobileOpen) && (
-                <div className="overflow-hidden">
-                  <p className="truncate text-xs font-medium text-white">{user?.email || "admin@pixandco.lk"}</p>
-                  <p className="text-[10px] text-white/40 capitalize font-mono">Superadmin</p>
-                </div>
-              )}
-            </div>
+            </>
+          ) : (
+            <>
+              <Link
+                href="/"
+                target="_blank"
+                className="flex items-center gap-2 rounded-lg px-2.5 py-1.5 text-[10px] text-white/50 hover:text-white hover:bg-white/[0.04] transition-colors border border-transparent hover:border-white/10"
+              >
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 shrink-0" />
+                <span>Public Website</span>
+                <ExternalLink className="h-2.5 w-2.5 ml-auto text-white/30" />
+              </Link>
 
-            <Button
-              variant="ghost"
-              size="icon"
-              className="h-7 w-7 text-white/40 hover:text-red-400 hover:bg-red-500/10 rounded-lg"
-              onClick={logout}
-              title="Log out"
-            >
-              <LogOut className="h-3.5 w-3.5" />
-            </Button>
-          </div>
+              <div className="flex items-center justify-between rounded-lg border border-white/10 bg-black/60 p-2">
+                <div className="flex items-center gap-2 overflow-hidden">
+                  <div className="h-6 w-6 shrink-0 rounded-md bg-white/10 border border-white/15 flex items-center justify-center text-[10px] font-bold text-white">
+                    {user?.email?.charAt(0).toUpperCase() || "A"}
+                  </div>
+                  <div className="overflow-hidden">
+                    <p className="truncate text-[10px] font-medium text-white">{user?.email || "admin@pixandco.lk"}</p>
+                    <p className="text-[9px] text-white/40 leading-none">Superadmin</p>
+                  </div>
+                </div>
+
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <button
+                      type="button"
+                      className="h-6 w-6 flex items-center justify-center text-white/40 hover:text-red-400 hover:bg-red-500/10 rounded-md transition-colors"
+                      onClick={logout}
+                    >
+                      <LogOut className="h-3 w-3" />
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipContent side="top">Log out</TooltipContent>
+                </Tooltip>
+              </div>
+            </>
+          )}
         </div>
       </aside>
-    </>
+    </TooltipProvider>
   )
 }
