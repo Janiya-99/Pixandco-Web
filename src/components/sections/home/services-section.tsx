@@ -10,10 +10,11 @@ import { Section } from "@/components/layout/section"
 import { HyperText } from "@/components/ui/hyper-text"
 import { AnimatedEyebrow } from "@/components/ui/animated-eyebrow"
 import { services } from "@/content/site"
+import { FeaturesBlock } from "@/types/cms.types"
 
 gsap.registerPlugin(useGSAP, ScrollTrigger)
 
-function ServiceCard({ service, index }: { service: (typeof services)[number], index: number }) {
+function ServiceCard({ service, index }: { service: { number: string; title: string; description: string; items: readonly string[]; image: string }, index: number }) {
   const cardRef = useRef<HTMLElement>(null)
 
   useGSAP(() => {
@@ -148,7 +149,21 @@ function ServiceCard({ service, index }: { service: (typeof services)[number], i
   )
 }
 
-export function ServicesSection() {
+interface ServicesSectionProps {
+  featuresData?: FeaturesBlock
+}
+
+export function ServicesSection({ featuresData }: ServicesSectionProps) {
+  const serviceList = services.map((service, index) => {
+    const cmsFeat = featuresData?.features?.[index]
+    return {
+      ...service,
+      title: cmsFeat?.title || service.title,
+      description: cmsFeat?.description || service.description,
+      image: cmsFeat?.image || service.image,
+    }
+  })
+
   return (
     <Section id="solutions" className="overflow-x-clip py-20 lg:py-28">
       <Container className="max-w-[1240px]">
@@ -157,21 +172,25 @@ export function ServicesSection() {
           {/* .framer-11b8i51: sticky left sidebar, width 416px, gap 24px */}
           <div className="w-full lg:w-[416px] lg:shrink-0 lg:sticky lg:top-28 self-start flex flex-col gap-6">
             <div>
-              <AnimatedEyebrow text="OUR SOLUTIONS" />
+              <AnimatedEyebrow text={featuresData?.eyebrow || "OUR SOLUTIONS"} />
             </div>
             <h2 className="section-title tracking-[-.04em] font-primary">
-              Solutions That Support
-              <br />
-              the Whole Business
+              {featuresData?.heading ? featuresData.heading : (
+                <>
+                  Solutions That Support
+                  <br />
+                  the Whole Business
+                </>
+              )}
             </h2>
             <p className="max-w-sm text-[15px] leading-[1.65] text-white/50 font-secondary">
-              We solve operational and growth problems through software, digital platforms, brand systems, and measurable marketing.
+              {featuresData?.subheading || "We solve operational and growth problems through software, digital platforms, brand systems, and measurable marketing."}
             </p>
           </div>
 
           {/* .framer-7u50ce: cards container, width 60%, flex-col, row-gap 24px */}
           <div className="w-full lg:w-[60%] flex flex-col gap-6 min-w-0">
-            {services.map((service, index) => (
+            {serviceList.map((service, index) => (
               <ServiceCard key={service.number} service={service} index={index} />
             ))}
           </div>

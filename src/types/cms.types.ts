@@ -7,6 +7,8 @@ export type BlockType =
   | "faq"
   | "stats"
   | "cta"
+  | "showcase"
+  | "process"
 
 export interface BaseBlock {
   id: string
@@ -41,6 +43,7 @@ export interface FeatureItem {
   icon: string
   title: string
   description: string
+  image?: string
 }
 
 export interface FeaturesBlock extends BaseBlock {
@@ -112,6 +115,41 @@ export interface CtaBlock extends BaseBlock {
   buttonLink: string
 }
 
+export interface ShowcaseItem {
+  id: string
+  number?: string
+  category?: string
+  title: string
+  description: string
+  image: string
+  tags?: string[]
+  link?: string
+}
+
+export interface ShowcaseBlock extends BaseBlock {
+  type: "showcase"
+  eyebrow?: string
+  heading?: string
+  subheading?: string
+  items: ShowcaseItem[]
+}
+
+export interface ProcessItem {
+  id: string
+  number: string
+  title: string
+  description: string
+  image: string
+}
+
+export interface ProcessBlock extends BaseBlock {
+  type: "process"
+  eyebrow?: string
+  heading?: string
+  subheading?: string
+  steps: ProcessItem[]
+}
+
 export type PageBlock =
   | HeroBlock
   | FeaturesBlock
@@ -121,6 +159,8 @@ export type PageBlock =
   | FaqBlock
   | StatsBlock
   | CtaBlock
+  | ShowcaseBlock
+  | ProcessBlock
 
 export type PageStatus = "published" | "draft" | "archived"
 

@@ -193,6 +193,58 @@ export default function PageEditorPage() {
           { id: `s_${timestamp}_4`, value: "90%", label: "LESS HUMAN ERROR" },
         ],
       }
+    } else if (selectedBlockType === "showcase") {
+      newBlockData = {
+        ...newBlockData,
+        eyebrow: "OUR WORKS",
+        heading: "Solutions Built Around Business Outcomes",
+        subheading: "Selected software, website, brand, and digital growth solutions developed for businesses of different sizes and sectors.",
+        items: [
+          {
+            id: `sc_${timestamp}_1`,
+            number: "01",
+            category: "Solution showcase",
+            title: "Custom Business Software",
+            description: "Software developed around the way your business operates.",
+            image: "/images/site/2l8Wl4e6GvRUtl6qrfXsaZKZassb2ef.jpg",
+            tags: ["ERP and Management Systems", "CRM and Sales Pipeline Software"],
+            link: "/contact",
+          },
+          {
+            id: `sc_${timestamp}_2`,
+            number: "02",
+            category: "Solution showcase",
+            title: "Website Design and Development",
+            description: "Corporate websites, e-commerce, and custom web applications.",
+            image: "/images/site/Ur5L7stgzjVpLuLg9LTa7PP3W7g4f21.png",
+            tags: ["Corporate and B2B websites", "E-commerce platforms"],
+            link: "/contact",
+          },
+        ],
+      }
+    } else if (selectedBlockType === "process") {
+      newBlockData = {
+        ...newBlockData,
+        eyebrow: "HOW WE WORK",
+        heading: "A Clear Process From Problem to Solution",
+        subheading: "We understand the requirement, build the right solution, and improve it as the business grows.",
+        steps: [
+          {
+            id: `pr_${timestamp}_1`,
+            number: "1",
+            title: "Understand the Business",
+            description: "We review your operations, customers, current systems, challenges, and business objectives.",
+            image: "/images/site/uzBphIDqI0PbwOqso2AzaFeAw884f21.png",
+          },
+          {
+            id: `pr_${timestamp}_2`,
+            number: "2",
+            title: "Design and Develop",
+            description: "We plan and build a practical solution around your actual processes.",
+            image: "/images/site/Ur5L7stgzjVpLuLg9LTa7PP3W7g4f21.png",
+          },
+        ],
+      }
     } else if (selectedBlockType === "faq") {
       newBlockData = {
         ...newBlockData,
@@ -684,6 +736,22 @@ export default function PageEditorPage() {
                                     className="w-full rounded border border-white/10 bg-black/40 p-1.5 text-[10px] text-white/70 focus:border-white/20 focus:outline-none"
                                     placeholder="Feature description"
                                   />
+                                  <div className="pt-1">
+                                    <MediaUploadField
+                                      label="Card Visual / Image"
+                                      value={feat.image}
+                                      onChange={(url) => {
+                                        const updated = [...block.features]
+                                        const target = updated[fIdx]
+                                        if (target) {
+                                          target.image = url
+                                          updateBlock(page.id, block.id, { features: updated })
+                                        }
+                                      }}
+                                      mediaType="image"
+                                      placeholder="/images/site/... or upload"
+                                    />
+                                  </div>
                                 </div>
                               ))}
                             </div>
@@ -981,6 +1049,312 @@ export default function PageEditorPage() {
                           </div>
                         </div>
                       )}
+
+                      {/* SHOWCASE / PINNED PROJECTS BLOCK */}
+                      {block.type === "showcase" && (
+                        <div className="space-y-3">
+                          <div className="grid sm:grid-cols-2 gap-3">
+                            <div className="space-y-1">
+                              <label className="text-white/40 uppercase text-[9px] font-medium tracking-wider">Eyebrow Badge</label>
+                              <Input
+                                value={block.eyebrow || ""}
+                                onChange={(e) =>
+                                  updateBlock(page.id, block.id, { eyebrow: e.target.value })
+                                }
+                                placeholder="e.g. OUR WORKS"
+                                className="h-8 rounded-lg border-white/10 bg-black/60 text-white text-xs"
+                              />
+                            </div>
+                            <div className="space-y-1">
+                              <label className="text-white/40 uppercase text-[9px] font-medium tracking-wider">Section Heading</label>
+                              <Input
+                                value={block.heading || ""}
+                                onChange={(e) =>
+                                  updateBlock(page.id, block.id, { heading: e.target.value })
+                                }
+                                placeholder="e.g. Solutions Built Around Business Outcomes"
+                                className="h-8 rounded-lg border-white/10 bg-black/60 text-white text-xs"
+                              />
+                            </div>
+                            <div className="space-y-1 sm:col-span-2">
+                              <label className="text-white/40 uppercase text-[9px] font-medium tracking-wider">Subheading</label>
+                              <Input
+                                value={block.subheading || ""}
+                                onChange={(e) =>
+                                  updateBlock(page.id, block.id, { subheading: e.target.value })
+                                }
+                                placeholder="Description text..."
+                                className="h-8 rounded-lg border-white/10 bg-black/60 text-white text-xs"
+                              />
+                            </div>
+                          </div>
+
+                          <div className="space-y-2 pt-1">
+                            <div className="flex items-center justify-between">
+                              <label className="text-white/40 uppercase text-[9px] font-medium tracking-wider">
+                                Showcase Items ({block.items.length})
+                              </label>
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  const updated = [
+                                    ...block.items,
+                                    {
+                                      id: `sc_${Date.now()}`,
+                                      number: String(block.items.length + 1).padStart(2, "0"),
+                                      category: "Solution showcase",
+                                      title: "New Project Showcase",
+                                      description: "Detailed description of the delivered solution.",
+                                      image: "/images/site/2l8Wl4e6GvRUtl6qrfXsaZKZassb2ef.jpg",
+                                      tags: ["System Architecture", "Integration"],
+                                      link: "/contact",
+                                    },
+                                  ]
+                                  updateBlock(page.id, block.id, { items: updated })
+                                }}
+                                className="h-6 text-[10px] rounded-md border border-white/15 text-white/80 hover:bg-white/10 px-2 transition-colors"
+                              >
+                                <Plus className="h-2.5 w-2.5 mr-1 inline" /> Add Showcase Project
+                              </button>
+                            </div>
+
+                            <div className="space-y-3">
+                              {block.items.map((item, scIdx) => (
+                                <div
+                                  key={item.id}
+                                  className="rounded-lg border border-white/10 bg-black/60 p-3 space-y-2.5"
+                                >
+                                  <div className="flex items-center justify-between border-b border-white/[0.08] pb-1.5">
+                                    <span className="text-[10px] font-mono text-white/60">
+                                      Project #{item.number || scIdx + 1}
+                                    </span>
+                                    <button
+                                      type="button"
+                                      onClick={() => {
+                                        const updated = block.items.filter((_, i) => i !== scIdx)
+                                        updateBlock(page.id, block.id, { items: updated })
+                                      }}
+                                      className="h-6 w-6 flex items-center justify-center text-white/40 hover:text-red-400"
+                                    >
+                                      <Trash2 className="h-3 w-3" />
+                                    </button>
+                                  </div>
+
+                                  <div className="grid sm:grid-cols-2 gap-2">
+                                    <Input
+                                      value={item.title}
+                                      onChange={(e) => {
+                                        const updated = [...block.items]
+                                        const target = updated[scIdx]
+                                        if (target) {
+                                          target.title = e.target.value
+                                          updateBlock(page.id, block.id, { items: updated })
+                                        }
+                                      }}
+                                      className="h-7 text-[11px] font-medium text-white bg-black/40 border-white/10 rounded"
+                                      placeholder="Project Title"
+                                    />
+                                    <Input
+                                      value={item.category || ""}
+                                      onChange={(e) => {
+                                        const updated = [...block.items]
+                                        const target = updated[scIdx]
+                                        if (target) {
+                                          target.category = e.target.value
+                                          updateBlock(page.id, block.id, { items: updated })
+                                        }
+                                      }}
+                                      className="h-7 text-[10px] text-white/70 bg-black/40 border-white/10 rounded"
+                                      placeholder="Category (e.g. Solution showcase)"
+                                    />
+                                  </div>
+
+                                  <textarea
+                                    value={item.description}
+                                    onChange={(e) => {
+                                      const updated = [...block.items]
+                                      const target = updated[scIdx]
+                                      if (target) {
+                                        target.description = e.target.value
+                                        updateBlock(page.id, block.id, { items: updated })
+                                      }
+                                    }}
+                                    rows={2}
+                                    className="w-full rounded border border-white/10 bg-black/40 p-2 text-[10px] text-white/70 focus:border-white/20 focus:outline-none"
+                                    placeholder="Project description"
+                                  />
+
+                                  <Input
+                                    value={item.tags ? item.tags.join(", ") : ""}
+                                    onChange={(e) => {
+                                      const updated = [...block.items]
+                                      const target = updated[scIdx]
+                                      if (target) {
+                                        target.tags = e.target.value.split(",").map((t) => t.trim()).filter(Boolean)
+                                        updateBlock(page.id, block.id, { items: updated })
+                                      }
+                                    }}
+                                    className="h-7 text-[10px] text-white/70 bg-black/40 border-white/10 rounded"
+                                    placeholder="Key modules/tags (comma separated, e.g. ERP, CRM, Finance)"
+                                  />
+
+                                  <MediaUploadField
+                                    label="Project Showcase Image (Left Visual)"
+                                    value={item.image}
+                                    onChange={(url) => {
+                                      const updated = [...block.items]
+                                      const target = updated[scIdx]
+                                      if (target) {
+                                        target.image = url
+                                        updateBlock(page.id, block.id, { items: updated })
+                                      }
+                                    }}
+                                    mediaType="image"
+                                    placeholder="/images/site/... or upload photo"
+                                  />
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* PROCESS / HOW WE WORK BLOCK */}
+                      {block.type === "process" && (
+                        <div className="space-y-3">
+                          <div className="grid sm:grid-cols-2 gap-3">
+                            <div className="space-y-1">
+                              <label className="text-white/40 uppercase text-[9px] font-medium tracking-wider">Eyebrow Badge</label>
+                              <Input
+                                value={block.eyebrow || ""}
+                                onChange={(e) =>
+                                  updateBlock(page.id, block.id, { eyebrow: e.target.value })
+                                }
+                                placeholder="e.g. HOW WE WORK"
+                                className="h-8 rounded-lg border-white/10 bg-black/60 text-white text-xs"
+                              />
+                            </div>
+                            <div className="space-y-1">
+                              <label className="text-white/40 uppercase text-[9px] font-medium tracking-wider">Section Heading</label>
+                              <Input
+                                value={block.heading || ""}
+                                onChange={(e) =>
+                                  updateBlock(page.id, block.id, { heading: e.target.value })
+                                }
+                                placeholder="e.g. A Clear Process From Problem to Solution"
+                                className="h-8 rounded-lg border-white/10 bg-black/60 text-white text-xs"
+                              />
+                            </div>
+                            <div className="space-y-1 sm:col-span-2">
+                              <label className="text-white/40 uppercase text-[9px] font-medium tracking-wider">Subheading</label>
+                              <Input
+                                value={block.subheading || ""}
+                                onChange={(e) =>
+                                  updateBlock(page.id, block.id, { subheading: e.target.value })
+                                }
+                                placeholder="Process description..."
+                                className="h-8 rounded-lg border-white/10 bg-black/60 text-white text-xs"
+                              />
+                            </div>
+                          </div>
+
+                          <div className="space-y-2 pt-1">
+                            <div className="flex items-center justify-between">
+                              <label className="text-white/40 uppercase text-[9px] font-medium tracking-wider">
+                                Process Steps ({block.steps.length})
+                              </label>
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  const updated = [
+                                    ...block.steps,
+                                    {
+                                      id: `pr_${Date.now()}`,
+                                      number: String(block.steps.length + 1),
+                                      title: "New Process Step",
+                                      description: "Step details and workflow.",
+                                      image: "/images/site/uzBphIDqI0PbwOqso2AzaFeAw884f21.png",
+                                    },
+                                  ]
+                                  updateBlock(page.id, block.id, { steps: updated })
+                                }}
+                                className="h-6 text-[10px] rounded-md border border-white/15 text-white/80 hover:bg-white/10 px-2 transition-colors"
+                              >
+                                <Plus className="h-2.5 w-2.5 mr-1 inline" /> Add Step
+                              </button>
+                            </div>
+
+                            <div className="grid sm:grid-cols-3 gap-2.5">
+                              {block.steps.map((step, prIdx) => (
+                                <div
+                                  key={step.id}
+                                  className="rounded-lg border border-white/10 bg-black/60 p-2.5 space-y-2"
+                                >
+                                  <div className="flex items-center justify-between">
+                                    <span className="text-[10px] font-mono text-white/50">
+                                      Step #{step.number}
+                                    </span>
+                                    <button
+                                      type="button"
+                                      onClick={() => {
+                                        const updated = block.steps.filter((_, i) => i !== prIdx)
+                                        updateBlock(page.id, block.id, { steps: updated })
+                                      }}
+                                      className="h-5 w-5 flex items-center justify-center text-white/40 hover:text-red-400"
+                                    >
+                                      <Trash2 className="h-3 w-3" />
+                                    </button>
+                                  </div>
+
+                                  <Input
+                                    value={step.title}
+                                    onChange={(e) => {
+                                      const updated = [...block.steps]
+                                      const target = updated[prIdx]
+                                      if (target) {
+                                        target.title = e.target.value
+                                        updateBlock(page.id, block.id, { steps: updated })
+                                      }
+                                    }}
+                                    className="h-7 text-[11px] font-medium text-white bg-black/40 border-white/10 rounded"
+                                    placeholder="Step Title"
+                                  />
+
+                                  <textarea
+                                    value={step.description}
+                                    onChange={(e) => {
+                                      const updated = [...block.steps]
+                                      const target = updated[prIdx]
+                                      if (target) {
+                                        target.description = e.target.value
+                                        updateBlock(page.id, block.id, { steps: updated })
+                                      }
+                                    }}
+                                    rows={2}
+                                    className="w-full rounded border border-white/10 bg-black/40 p-1.5 text-[10px] text-white/70 focus:border-white/20 focus:outline-none"
+                                    placeholder="Step description"
+                                  />
+
+                                  <MediaUploadField
+                                    label="Step Image"
+                                    value={step.image}
+                                    onChange={(url) => {
+                                      const updated = [...block.steps]
+                                      const target = updated[prIdx]
+                                      if (target) {
+                                        target.image = url
+                                        updateBlock(page.id, block.id, { steps: updated })
+                                      }
+                                    }}
+                                    mediaType="image"
+                                    placeholder="/images/site/... or upload"
+                                  />
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </div>
                 )
@@ -1141,7 +1515,9 @@ export default function PageEditorPage() {
           <div className="grid grid-cols-2 gap-2.5 py-3">
             {[
               { type: "hero", label: "Hero Block", desc: "Badge, title, CTAs, media upload" },
-              { type: "features", label: "Feature Matrix", desc: "Multi-item capability grid" },
+              { type: "showcase", label: "Solutions Showcase", desc: "Pinned project cards with image uploads" },
+              { type: "process", label: "Process Steps", desc: "Step cards with image uploads" },
+              { type: "features", label: "Feature Matrix", desc: "Multi-item capability grid with images" },
               { type: "richtext", label: "Editorial Text", desc: "Multi-paragraph markdown" },
               { type: "media", label: "Media Showcase", desc: "Single image or video embed" },
               { type: "stats", label: "Metric Counters", desc: "Key numerical achievements" },

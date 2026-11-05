@@ -15,7 +15,7 @@ import { PinnedProjects } from "./pinned-projects"
 import { IntegrationSection } from "./integration-section"
 import { ServicesSection } from "./services-section"
 import { WhyUsSection } from "./why-us-section"
-import { FaqBlock, StatsBlock } from "@/types/cms.types"
+import { FaqBlock, StatsBlock, ShowcaseBlock, ProcessBlock, FeaturesBlock } from "@/types/cms.types"
 
 function TrustSection() {
   return <Section><Container><SectionHeader align="center" eyebrow="COMPANY OVERVIEW" title="Built in Colombo. Working Worldwide." description={companyOverview} /><p className="mx-auto mt-6 max-w-3xl text-center text-white/50">With more than ten years of experience and clients worldwide, we work with businesses at every stage and scale - from blue-chip organisations and established B2B companies to entrepreneurs and single-owner businesses ready to build, improve, or grow.</p></Container></Section>
@@ -60,9 +60,18 @@ function StepCard({ step, index }: { step: { n: string, t: string, d: string, im
 interface HomeSectionsProps {
   faqData?: FaqBlock
   statsData?: StatsBlock
+  showcaseData?: ShowcaseBlock
+  processData?: ProcessBlock
+  featuresData?: FeaturesBlock
 }
 
-export function HomeSections({ faqData, statsData }: HomeSectionsProps) {
+export function HomeSections({
+  faqData,
+  statsData,
+  showcaseData,
+  processData,
+  featuresData,
+}: HomeSectionsProps) {
   return (
     <>
       <TrustedCompaniesSection />
@@ -71,13 +80,67 @@ export function HomeSections({ faqData, statsData }: HomeSectionsProps) {
 
       <ConcentricScrollSection />
 
-      <Section><Container><SectionHeader align="center" eyebrow="OUR WORKS" title={<>Solutions Built Around<br />Business Outcomes</>} description="Selected software, website, brand, and digital growth solutions developed for businesses of different sizes and sectors." /><PinnedProjects /><Reveal className="mt-16 flex justify-center"><RollingButton href="/projects">View All Case Studies</RollingButton></Reveal></Container></Section>
+      <Section>
+        <Container>
+          <SectionHeader
+            align="center"
+            eyebrow={showcaseData?.eyebrow || "OUR WORKS"}
+            title={showcaseData?.heading ? showcaseData.heading : (<>Solutions Built Around<br />Business Outcomes</>)}
+            description={showcaseData?.subheading || "Selected software, website, brand, and digital growth solutions developed for businesses of different sizes and sectors."}
+          />
+          <PinnedProjects showcaseData={showcaseData} />
+          <Reveal className="mt-16 flex justify-center">
+            <RollingButton href="/projects">View All Case Studies</RollingButton>
+          </Reveal>
+        </Container>
+      </Section>
 
-      <Section><Container><SectionHeader align="center" eyebrow="HOW WE WORK" title={<>A Clear Process From<br />Problem to Solution</>} description="We understand the requirement, build the right solution, and improve it as the business grows." /><div className="mt-16 grid gap-6 md:grid-cols-3 pb-16">{[{ n: "1", t: "Understand the Business", d: "We review your operations, customers, current systems, challenges, and business objectives.", img: "/images/site/uzBphIDqI0PbwOqso2AzaFeAw884f21.png" }, { n: "2", t: "Design and Develop", d: "We plan and build a practical solution around your actual processes and commercial requirements.", img: "/images/site/Ur5L7stgzjVpLuLg9LTa7PP3W7g4f21.png" }, { n: "3", t: "Launch and Improve", d: "We launch, monitor, support, and improve the solution based on performance and business growth.", img: "/images/site/weOlvtCQtvQqEObp7dFtnwJImcY4f21.png" }].map((step, i) => <StepCard key={step.n} step={step} index={i} />)}</div></Container></Section>
+      <Section>
+        <Container>
+          <SectionHeader
+            align="center"
+            eyebrow={processData?.eyebrow || "HOW WE WORK"}
+            title={processData?.heading ? processData.heading : (<>A Clear Process From<br />Problem to Solution</>)}
+            description={processData?.subheading || "We understand the requirement, build the right solution, and improve it as the business grows."}
+          />
+          <div className="mt-16 grid gap-6 md:grid-cols-3 pb-16">
+            {(processData?.steps && processData.steps.length > 0
+              ? processData.steps.map((s) => ({
+                  n: s.number,
+                  t: s.title,
+                  d: s.description,
+                  img: s.image,
+                }))
+              : [
+                  {
+                    n: "1",
+                    t: "Understand the Business",
+                    d: "We review your operations, customers, current systems, challenges, and business objectives.",
+                    img: "/images/site/uzBphIDqI0PbwOqso2AzaFeAw884f21.png",
+                  },
+                  {
+                    n: "2",
+                    t: "Design and Develop",
+                    d: "We plan and build a practical solution around your actual processes and commercial requirements.",
+                    img: "/images/site/Ur5L7stgzjVpLuLg9LTa7PP3W7g4f21.png",
+                  },
+                  {
+                    n: "3",
+                    t: "Launch and Improve",
+                    d: "We launch, monitor, support, and improve the solution based on performance and business growth.",
+                    img: "/images/site/weOlvtCQtvQqEObp7dFtnwJImcY4f21.png",
+                  },
+                ]
+            ).map((step, i) => (
+              <StepCard key={step.n || i} step={step} index={i} />
+            ))}
+          </div>
+        </Container>
+      </Section>
 
       <IntegrationSection />
 
-      <ServicesSection />
+      <ServicesSection featuresData={featuresData} />
 
       <WhyUsSection />
 

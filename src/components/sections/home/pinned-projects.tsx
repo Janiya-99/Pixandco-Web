@@ -5,18 +5,43 @@ import Link from "next/link"
 import { ArrowRight } from "lucide-react"
 import { motion, useReducedMotion } from "motion/react"
 import { services } from "@/content/site"
+import { ShowcaseBlock } from "@/types/cms.types"
 
-const selectedWorks = [services[0], services[1], services[2], services[4]] as const
+const defaultWorks = [services[0], services[1], services[2], services[4]] as const
 
-export function PinnedProjects() {
+interface PinnedProjectsProps {
+  showcaseData?: ShowcaseBlock
+}
+
+export function PinnedProjects({ showcaseData }: PinnedProjectsProps) {
   const reduceMotion = useReducedMotion()
+
+  const works = showcaseData?.items && showcaseData.items.length > 0
+    ? showcaseData.items.map((item, idx) => ({
+        number: item.number || String(idx + 1).padStart(2, "0"),
+        category: item.category || "Solution showcase",
+        title: item.title,
+        description: item.description,
+        items: item.tags && item.tags.length > 0 ? item.tags : (defaultWorks[idx]?.items ? [...defaultWorks[idx].items] : []),
+        image: item.image || defaultWorks[idx]?.image || "/images/site/2l8Wl4e6GvRUtl6qrfXsaZKZassb2ef.jpg",
+        link: item.link || "/contact",
+      }))
+    : defaultWorks.map((work, idx) => ({
+        number: String(idx + 1).padStart(2, "0"),
+        category: "Solution showcase",
+        title: work.title,
+        description: work.description,
+        items: [...work.items],
+        image: work.image,
+        link: "/contact",
+      }))
 
   return (
     <div className="relative mt-14 pb-24">
       <div className="space-y-12 md:space-y-20">
-        {selectedWorks.map((work, index) => (
+        {works.map((work, index) => (
           <motion.article
-            key={work.number}
+            key={work.number || work.title || index}
             initial={reduceMotion ? false : { opacity: 0, scale: 0.92, y: 48 }}
             whileInView={{ opacity: 1, scale: 1, y: 0 }}
             viewport={{ once: true, amount: 0.15 }}
@@ -41,9 +66,9 @@ export function PinnedProjects() {
 
             <div className="flex flex-col p-6 md:p-8 lg:p-10">
               <div className="flex items-center gap-2 border-b border-white/10 pb-5 font-mono text-[12px] font-medium uppercase tracking-[.08em] text-white/45">
-                <span>/ {String(index + 1).padStart(2, "0")}</span>
+                <span>/ {work.number}</span>
                 <span className="text-white/20">•</span>
-                <span>Solution showcase</span>
+                <span>{work.category}</span>
               </div>
 
               <h3 className="mt-7 text-3xl leading-[1.05] tracking-[-.05em] md:text-4xl">
@@ -62,7 +87,7 @@ export function PinnedProjects() {
               </ul>
 
               <Link
-                href="/contact"
+                href={work.link}
                 className="focus-ring mt-10 inline-flex min-h-11 w-fit items-center gap-6 rounded-[6px] bg-white/10 px-4 text-xs font-medium transition-colors hover:bg-white/20 md:mt-auto"
               >
                 Discuss a similar project
