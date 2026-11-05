@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - chathuranga-dev
 
 concurrency:
   group: pixandco-staging
@@ -21,7 +22,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 24
+          node-version: 22
           cache: npm
 
       - name: Install dependencies
@@ -34,7 +35,7 @@ jobs:
         run: npm run build
 
   deploy:
-    name: Deploy to Bluehost VPS
+    name: Deploy to VPS
     needs: validate
     runs-on: ubuntu-latest
 
@@ -46,13 +47,10 @@ jobs:
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
           port: 22
-          timeout: 30s
-          command_timeout: 20m
+          timeout: 60s
+          command_timeout: 30m
           script: |
             set -e
 
-            echo "Connected to VPS"
-            echo "User: $(whoami)"
-            echo "Host: $(hostname)"
-
-            /srv/infrastructure/scripts/deploy-pixandco-staging.sh
+            echo "Connected to VPS: $(hostname) as $(whoami)"
+            /opt/ops/deployments/deploy-pixandco-staging.sh "${{ github.ref_name }}"
