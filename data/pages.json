@@ -79,17 +79,22 @@
           {
             "id": "s_1",
             "value": "10+",
-            "label": "Years Experience"
+            "label": "WORKFLOWS AUTOMATED"
           },
           {
             "id": "s_2",
-            "value": "100%",
-            "label": "Registered Sri Lankan Co."
+            "value": "60%",
+            "label": "TIME SAVED"
           },
           {
             "id": "s_3",
-            "value": "24/7",
-            "label": "Global Delivery"
+            "value": "4x",
+            "label": "PROCESS EFFICIENCY"
+          },
+          {
+            "id": "s_4",
+            "value": "90%",
+            "label": "LESS HUMAN ERROR"
           }
         ]
       },

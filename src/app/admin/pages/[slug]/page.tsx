@@ -187,8 +187,10 @@ export default function PageEditorPage() {
       newBlockData = {
         ...newBlockData,
         stats: [
-          { id: `s_${timestamp}_1`, value: "99.9%", label: "Uptime" },
-          { id: `s_${timestamp}_2`, value: "<15ms", label: "Latency" },
+          { id: `s_${timestamp}_1`, value: "10+", label: "WORKFLOWS AUTOMATED" },
+          { id: `s_${timestamp}_2`, value: "60%", label: "TIME SAVED" },
+          { id: `s_${timestamp}_3`, value: "4x", label: "PROCESS EFFICIENCY" },
+          { id: `s_${timestamp}_4`, value: "90%", label: "LESS HUMAN ERROR" },
         ],
       }
     } else if (selectedBlockType === "faq") {

@@ -79,9 +79,10 @@ export const initialPages: CMSPage[] = [
         name: "Key Milestones",
         visible: true,
         stats: [
-          { id: "s_1", value: "10+", label: "Years Experience" },
-          { id: "s_2", value: "100%", label: "Registered Sri Lankan Co." },
-          { id: "s_3", value: "24/7", label: "Global Delivery" },
+          { id: "s_1", value: "10+", label: "WORKFLOWS AUTOMATED" },
+          { id: "s_2", value: "60%", label: "TIME SAVED" },
+          { id: "s_3", value: "4x", label: "PROCESS EFFICIENCY" },
+          { id: "s_4", value: "90%", label: "LESS HUMAN ERROR" },
         ],
       },
       {

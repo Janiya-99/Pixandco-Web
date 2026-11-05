@@ -21,6 +21,27 @@ function TrustSection() {
   return <Section><Container><SectionHeader align="center" eyebrow="COMPANY OVERVIEW" title="Built in Colombo. Working Worldwide." description={companyOverview} /><p className="mx-auto mt-6 max-w-3xl text-center text-white/50">With more than ten years of experience and clients worldwide, we work with businesses at every stage and scale - from blue-chip organisations and established B2B companies to entrepreneurs and single-owner businesses ready to build, improve, or grow.</p></Container></Section>
 }
 
+function parseStat(item: { value: string | number; label: string; id?: string }) {
+  if (typeof item.value === "number") {
+    return { num: item.value, suffix: "", label: item.label }
+  }
+  const str = String(item.value || "").trim()
+  const match = str.match(/^(\d+)(.*)$/)
+  if (match && match[1]) {
+    return {
+      num: parseInt(match[1], 10),
+      suffix: match[2]?.trim() || "",
+      label: item.label,
+    }
+  }
+  return {
+    num: null,
+    raw: str,
+    suffix: "",
+    label: item.label,
+  }
+}
+
 function StepCard({ step, index }: { step: { n: string, t: string, d: string, img: string }, index: number }) {
   return (
     <Reveal className={`${index === 1 ? 'md:mt-10' : index === 2 ? 'md:mt-20' : ''}`}>
@@ -66,28 +87,37 @@ export function HomeSections({ faqData, statsData }: HomeSectionsProps) {
 
           {/* Stats Counters */}
           <div className="mt-14 grid grid-cols-2 border-l border-t border-[#212121] lg:grid-cols-4 md:mt-20">
-            {statsData?.stats && statsData.stats.length > 0 ? (
-              statsData.stats.map((s) => (
-                <div key={s.id} className="border-b border-r border-[#212121] p-6 text-center md:p-8">
-                  <p className="display text-white">{s.value}</p>
-                  <p className="eyebrow mt-3 text-white/40">{s.label}</p>
-                </div>
-              ))
-            ) : (
-              [
-                { value: 10, suffix: "+", label: "WORKFLOWS AUTOMATED" },
-                { value: 60, suffix: "%", label: "TIME SAVED" },
-                { value: 4, suffix: "x", label: "PROCESS EFFICIENCY" },
-                { value: 90, suffix: "%", label: "LESS HUMAN ERROR" },
-              ].map((item) => (
-                <div key={item.label} className="border-b border-r border-[#212121] p-6 text-center md:p-8">
-                  <p className="display text-white">
-                    <Counter value={item.value} suffix={item.suffix} />
+            {(statsData?.stats && statsData.stats.length > 0
+              ? statsData.stats
+              : [
+                  { id: "s_1", value: "10+", label: "WORKFLOWS AUTOMATED" },
+                  { id: "s_2", value: "60%", label: "TIME SAVED" },
+                  { id: "s_3", value: "4x", label: "PROCESS EFFICIENCY" },
+                  { id: "s_4", value: "90%", label: "LESS HUMAN ERROR" },
+                ]
+            ).map((item, idx) => {
+              const stat = parseStat(item)
+              return (
+                <Reveal
+                  key={item.id || item.label || idx}
+                  className="flex items-baseline gap-3 border-b border-r border-[#212121] px-6 py-7 md:py-9 lg:px-8"
+                >
+                  <p className="text-5xl font-normal leading-none tracking-[-.04em] text-white md:text-[3.5rem] lg:text-[4rem]">
+                    {stat.num !== null ? <Counter value={stat.num} /> : stat.raw}
                   </p>
-                  <p className="eyebrow mt-3 text-white/40">{item.label}</p>
-                </div>
-              ))
-            )}
+                  <div className="flex flex-col">
+                    {stat.suffix ? (
+                      <span className="text-lg font-normal leading-none text-white/90 md:text-xl">
+                        {stat.suffix}
+                      </span>
+                    ) : null}
+                    <span className="eyebrow mt-2 max-w-[110px] font-mono text-[9px] leading-[1.3] tracking-[0.2em] text-white/40 uppercase md:text-[10px]">
+                      {stat.label}
+                    </span>
+                  </div>
+                </Reveal>
+              )
+            })}
           </div>
         </Container>
       </Section>
