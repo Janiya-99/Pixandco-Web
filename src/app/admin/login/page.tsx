@@ -125,7 +125,7 @@ export default function AdminLoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full h-8 inline-flex items-center justify-center gap-1.5 text-xs rounded-lg bg-white text-black font-semibold hover:bg-white/90 transition-colors"
+            className="w-full h-8 inline-flex items-center justify-center gap-1.5 text-xs rounded-md bg-gradient-to-r from-red-600 to-red-700 text-white font-medium hover:from-red-500 hover:to-red-600 shadow-[0_2px_12px_rgba(239,68,68,0.35)] transition-all cursor-pointer disabled:opacity-50"
           >
             {loading ? "Authenticating..." : "Sign In to Portal"}
             <ArrowRight className="h-3 w-3" />

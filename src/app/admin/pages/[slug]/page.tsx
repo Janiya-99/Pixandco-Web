@@ -357,9 +357,10 @@ export default function PageEditorPage() {
                 <button
                   type="button"
                   onClick={() => setIsAddBlockOpen(true)}
-                  className="rounded-md bg-white text-black font-semibold text-[11px] px-3 py-1 hover:bg-white/90"
+                  className="admin-glass-btn-accent"
                 >
-                  <Plus className="mr-1 h-3 w-3 inline" /> Add Block
+                  <Plus className="mr-1 h-3 w-3 inline text-red-300" />
+                  <span className="text-[10.5px]">Add Block</span>
                 </button>
               </div>
             ) : (
@@ -1046,9 +1047,10 @@ export default function PageEditorPage() {
             <button
               type="button"
               onClick={handleSavePageMeta}
-              className="rounded-md bg-white text-black font-semibold text-xs px-3 py-1 hover:bg-white/90"
+              className="admin-glass-btn-accent"
             >
-              Save SEO Settings
+              <Save className="mr-1 h-3 w-3 inline text-red-300" />
+              <span className="text-[10.5px]">Save SEO Settings</span>
             </button>
           </div>
         </TabsContent>
@@ -1115,9 +1117,10 @@ export default function PageEditorPage() {
             <button
               type="button"
               onClick={handleSavePageMeta}
-              className="rounded-md bg-white text-black font-semibold text-xs px-3 py-1 hover:bg-white/90"
+              className="admin-glass-btn-accent"
             >
-              Save Configuration
+              <Save className="mr-1 h-3 w-3 inline text-red-300" />
+              <span className="text-[10.5px]">Save Configuration</span>
             </button>
           </div>
         </TabsContent>
@@ -1163,14 +1166,14 @@ export default function PageEditorPage() {
             <button
               type="button"
               onClick={() => setIsAddBlockOpen(false)}
-              className="rounded-lg border border-white/10 text-white/70 hover:bg-white/10 px-3 py-1.5 text-xs"
+              className="h-7 px-3 text-[11px] rounded-md border border-white/10 text-white/70 hover:bg-white/10 transition-colors"
             >
               Cancel
             </button>
             <button
               type="button"
               onClick={handleCreateBlock}
-              className="rounded-lg bg-white text-black font-semibold hover:bg-white/90 px-3.5 py-1.5 text-xs"
+              className="admin-glass-btn-accent"
             >
               Insert Block
             </button>

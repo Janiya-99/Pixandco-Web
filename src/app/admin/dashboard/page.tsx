@@ -51,10 +51,10 @@ export default function AdminDashboardPage() {
           <Link href="/admin/pages">
             <button
               type="button"
-              className="admin-glass-btn hover:border-red-500/40"
+              className="admin-glass-btn-accent"
             >
-              <Plus className="h-2.5 w-2.5 text-white/70" />
-              <span className="text-[10px]">Create / Manage Pages</span>
+              <Plus className="h-2.5 w-2.5 text-red-300" />
+              <span className="text-[10.5px]">Create / Manage Pages</span>
             </button>
           </Link>
           <Link href="/" target="_blank">
@@ -63,7 +63,7 @@ export default function AdminDashboardPage() {
               className="admin-glass-btn hover:border-white/30"
             >
               <Globe className="h-2.5 w-2.5 text-white/50" />
-              <span className="text-[10px]">Preview Live</span>
+              <span className="text-[10.5px]">Preview Live</span>
             </button>
           </Link>
         </div>

@@ -124,36 +124,36 @@ export default function MediaLibraryPage() {
   }
 
   return (
-    <div className="space-y-6 font-sans">
+    <div className="space-y-4 font-[var(--font-poppins)]">
       {/* Page Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 rounded-2xl border border-white/10 bg-[#0d0d10] p-6 shadow-[0_10px_30px_rgba(0,0,0,0.8)]">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 rounded-xl border border-white/10 bg-[#0c0c0f] p-4 shadow-md">
         <div>
           <div className="flex items-center gap-2">
             <h1 className="text-base sm:text-lg font-semibold tracking-tight text-white">
-              MEDIA ASSET LIBRARY
+              Media Asset Library
             </h1>
-            <Badge className="bg-red-500/10 text-red-400 border-red-500/20 text-[9px]">
+            <Badge className="bg-red-500/10 text-red-400 border-red-500/20 text-[9px] px-1.5 py-0.5 rounded-md">
               {mediaAssets.length} Assets
             </Badge>
           </div>
-          <p className="text-xs text-white/40 mt-1">
+          <p className="text-[11px] text-white/40 mt-0.5">
             Central repository for images, video loops, banners, and logos with instant upload.
           </p>
         </div>
 
         <div className="flex items-center gap-2">
-          <Button
+          <button
             onClick={() => fileInputRef.current?.click()}
             disabled={isUploading}
-            className="gap-2 text-xs rounded-md bg-white text-black font-semibold hover:bg-white/90 px-3 shadow-sm"
+            className="admin-glass-btn-accent"
           >
             {isUploading ? (
-              <Loader2 className="h-4 w-4 animate-spin" />
+              <Loader2 className="h-3 w-3 animate-spin text-red-300" />
             ) : (
-              <Upload className="h-4 w-4" />
+              <Upload className="h-3 w-3 text-red-300" />
             )}
-            <span>Upload Media</span>
-          </Button>
+            <span className="text-[10.5px]">Upload Media</span>
+          </button>
           <input
             ref={fileInputRef}
             type="file"
@@ -178,25 +178,25 @@ export default function MediaLibraryPage() {
         onDragLeave={() => setDragActive(false)}
         onDrop={handleDrop}
         onClick={() => fileInputRef.current?.click()}
-        className={`relative cursor-pointer rounded-2xl border-2 border-dashed p-8 text-center transition-all ${
+        className={`relative cursor-pointer rounded-xl border border-dashed p-4 text-center transition-all ${
           dragActive
-            ? "border-white/40 bg-white/10 shadow-2xl"
-            : "border-white/10 bg-[#0d0d10] hover:border-white/25 hover:bg-white/5"
+            ? "border-red-500/50 bg-red-500/[0.04] shadow-lg"
+            : "border-white/15 bg-[#0c0c0f] hover:border-red-500/40 hover:bg-white/[0.02]"
         }`}
       >
-        <div className="flex flex-col items-center justify-center space-y-3">
-          <div className="h-12 w-12 rounded-2xl border border-white/15 bg-white/5 flex items-center justify-center text-white">
+        <div className="flex flex-col items-center justify-center space-y-2">
+          <div className="h-9 w-9 rounded-lg border border-white/10 bg-white/5 flex items-center justify-center text-white/70">
             {isUploading ? (
-              <Loader2 className="h-6 w-6 animate-spin" />
+              <Loader2 className="h-4 w-4 animate-spin text-red-400" />
             ) : (
-              <Upload className="h-6 w-6" />
+              <Upload className="h-4 w-4 text-white/70" />
             )}
           </div>
           <div>
-            <p className="text-sm font-semibold text-white">
+            <p className="text-xs font-medium text-white">
               Drop images or video loops here to upload
             </p>
-            <p className="text-xs text-white/40 mt-0.5">
+            <p className="text-[10.5px] text-white/40 mt-0.5">
               Supports PNG, JPG, WebP, SVG, and MP4 videos up to 100MB
             </p>
           </div>
@@ -204,73 +204,60 @@ export default function MediaLibraryPage() {
       </div>
 
       {/* Filter and Search Bar */}
-      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 rounded-2xl border border-white/10 bg-[#0d0d10] p-3">
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5 rounded-xl border border-white/10 bg-[#0c0c0f] p-2.5">
         <div className="relative flex-1 max-w-md">
-          <Search className="absolute left-3 top-2.5 h-4 w-4 text-white/40" />
+          <Search className="absolute left-2.5 top-2 h-3.5 w-3.5 text-white/40" />
           <Input
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Search assets by filename or alt text..."
-            className="pl-9 h-9 rounded-xl border-white/10 bg-black/60 text-xs text-white placeholder:text-white/30 focus:border-white/30"
+            className="pl-8 h-7 rounded-md border-white/10 bg-black/60 text-[11px] text-white placeholder:text-white/30 focus:border-red-500/40"
           />
         </div>
 
         <div className="flex items-center gap-2">
           {/* Type Filters */}
-          <div className="flex items-center rounded-xl border border-white/10 bg-black/60 p-1">
-            <button
-              onClick={() => setFilterType("all")}
-              className={`px-3 py-1 rounded-lg text-xs transition-all ${
-                filterType === "all"
-                  ? "bg-white/15 text-white font-semibold"
-                  : "text-white/40 hover:text-white"
-              }`}
-            >
-              All
-            </button>
-            <button
-              onClick={() => setFilterType("image")}
-              className={`px-3 py-1 rounded-lg text-xs transition-all ${
-                filterType === "image"
-                  ? "bg-white/15 text-white font-semibold"
-                  : "text-white/40 hover:text-white"
-              }`}
-            >
-              Images
-            </button>
-            <button
-              onClick={() => setFilterType("video")}
-              className={`px-3 py-1 rounded-lg text-xs transition-all ${
-                filterType === "video"
-                  ? "bg-white/15 text-white font-semibold"
-                  : "text-white/40 hover:text-white"
-              }`}
-            >
-              Videos
-            </button>
+          <div className="flex items-center rounded-md border border-white/10 bg-black/60 p-0.5">
+            {[
+              { id: "all", label: "All" },
+              { id: "image", label: "Images" },
+              { id: "video", label: "Videos" },
+            ].map(({ id, label }) => (
+              <button
+                key={id}
+                onClick={() => setFilterType(id as any)}
+                className={`px-2.5 py-1 rounded text-[10.5px] font-medium transition-all ${
+                  filterType === id
+                    ? "bg-white/15 text-white shadow-sm"
+                    : "text-white/40 hover:text-white"
+                }`}
+              >
+                {label}
+              </button>
+            ))}
           </div>
 
           {/* View Mode Toggle */}
-          <div className="flex items-center rounded-xl border border-white/10 bg-black/60 p-1">
+          <div className="flex items-center rounded-md border border-white/10 bg-black/60 p-0.5">
             <button
               onClick={() => setViewMode("grid")}
-              className={`p-1.5 rounded-lg transition-all ${
+              className={`p-1 rounded transition-all ${
                 viewMode === "grid"
-                  ? "bg-white/15 text-white"
+                  ? "bg-white/15 text-white shadow-sm"
                   : "text-white/40 hover:text-white"
               }`}
             >
-              <Grid className="h-4 w-4" />
+              <Grid className="h-3.5 w-3.5" />
             </button>
             <button
               onClick={() => setViewMode("list")}
-              className={`p-1.5 rounded-lg transition-all ${
+              className={`p-1 rounded transition-all ${
                 viewMode === "list"
-                  ? "bg-white/15 text-white"
+                  ? "bg-white/15 text-white shadow-sm"
                   : "text-white/40 hover:text-white"
               }`}
             >
-              <List className="h-4 w-4" />
+              <List className="h-3.5 w-3.5" />
             </button>
           </div>
         </div>
@@ -278,20 +265,20 @@ export default function MediaLibraryPage() {
 
       {/* Asset Grid / List Display */}
       {filteredAssets.length === 0 ? (
-        <div className="rounded-2xl border-2 border-dashed border-white/10 bg-[#0d0d10] p-12 text-center space-y-3">
-          <FolderOpen className="mx-auto h-8 w-8 text-white/30" />
-          <h3 className="text-sm font-bold text-white">No media files found</h3>
-          <p className="text-xs text-white/40">Try adjusting your search or upload a new asset above.</p>
+        <div className="rounded-xl border border-dashed border-white/10 bg-[#0c0c0f] p-10 text-center space-y-2">
+          <FolderOpen className="mx-auto h-7 w-7 text-white/30" />
+          <h3 className="text-xs font-semibold text-white">No media files found</h3>
+          <p className="text-[11px] text-white/40">Try adjusting your search or upload a new asset above.</p>
         </div>
       ) : viewMode === "grid" ? (
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
           {filteredAssets.map((asset) => {
             const isVideo = asset.type === "video"
 
             return (
               <div
                 key={asset.id}
-                className="group relative rounded-2xl border border-white/10 bg-[#0d0d10] overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.8)] transition-all hover:border-white/25"
+                className="group relative rounded-xl border border-white/10 bg-[#0c0c0f] overflow-hidden shadow-md transition-all hover:border-white/20"
               >
                 {/* Media Preview Window */}
                 <div className="relative aspect-video w-full bg-black/80 overflow-hidden flex items-center justify-center">
@@ -472,44 +459,45 @@ export default function MediaLibraryPage() {
 
       {/* Edit Alt Text Dialog */}
       <Dialog open={!!editingAsset} onOpenChange={(open) => !open && setEditingAsset(null)}>
-        <DialogContent className="max-w-md bg-[#0e0e12] border-white/15 p-6 backdrop-blur-2xl rounded-2xl text-xs shadow-2xl">
+        <DialogContent className="max-w-md bg-[#0c0c0f] border-white/15 p-5 backdrop-blur-2xl rounded-xl text-[11px] shadow-2xl">
           <DialogHeader>
-            <DialogTitle className="text-sm uppercase text-white">
-              EDIT ASSET ACCESSIBILITY
+            <DialogTitle className="text-sm font-semibold text-white">
+              Edit Asset Accessibility
             </DialogTitle>
           </DialogHeader>
 
           <div className="space-y-3 py-3">
             <div className="space-y-1">
-              <label className="text-white/50 uppercase text-[10px]">Asset File Name</label>
-              <div className="text-white font-semibold">{editingAsset?.name}</div>
+              <label className="text-white/50 text-[10px] uppercase font-medium">Asset File Name</label>
+              <div className="text-white font-medium text-[11.5px] truncate">{editingAsset?.name}</div>
             </div>
 
-            <div className="space-y-1.5">
-              <label className="text-white/50 uppercase text-[10px]">Alt Text / Description</label>
+            <div className="space-y-1">
+              <label className="text-white/50 text-[10px] uppercase font-medium">Alt Text / Description</label>
               <Input
                 value={editAltText}
                 onChange={(e) => setEditAltText(e.target.value)}
                 placeholder="Accessible description for screen readers and SEO"
-                className="rounded-xl border-white/10 bg-black/60 text-white"
+                className="h-8 rounded-md border-white/10 bg-black/60 text-white text-[11px]"
               />
             </div>
           </div>
 
-          <DialogFooter className="gap-2">
-            <Button
-              variant="outline"
+          <DialogFooter className="gap-2 mt-2">
+            <button
+              type="button"
               onClick={() => setEditingAsset(null)}
-              className="rounded-xl border-white/10 text-white/70 hover:bg-white/10"
+              className="h-7 px-3 text-[11px] rounded-md border border-white/10 text-white/70 hover:bg-white/10 transition-colors"
             >
               Cancel
-            </Button>
-            <Button
+            </button>
+            <button
+              type="button"
               onClick={handleSaveAltText}
-              className="rounded-xl bg-white text-black font-semibold hover:bg-white/90"
+              className="admin-glass-btn-accent"
             >
               Save Alt Text
-            </Button>
+            </button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

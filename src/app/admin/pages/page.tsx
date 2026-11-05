@@ -177,10 +177,10 @@ export default function PageManagerPage() {
 
         <button
           onClick={() => setIsCreateOpen(true)}
-          className="inline-flex items-center gap-1.5 h-7 text-[11px] rounded-md bg-white text-black font-semibold hover:bg-white/90 hover:shadow-[0_0_12px_rgba(255,255,255,0.25)] px-3 shadow-sm transition-all"
+          className="admin-glass-btn-accent"
         >
-          <Plus className="h-3.5 w-3.5" />
-          <span>New Page</span>
+          <Plus className="h-3 w-3 text-red-300" />
+          <span className="text-[10.5px]">New Page</span>
         </button>
       </div>
 
@@ -199,17 +199,22 @@ export default function PageManagerPage() {
         <div className="flex items-center gap-2">
           {/* Status Filter Buttons */}
           <div className="flex items-center rounded-md border border-white/10 bg-black/60 p-0.5">
-            {["all", "published", "draft", "archived"].map((st) => (
+            {[
+              { id: "all", label: "All" },
+              { id: "published", label: "Published" },
+              { id: "draft", label: "Draft" },
+              { id: "archived", label: "Archived" },
+            ].map(({ id, label }) => (
               <button
-                key={st}
-                onClick={() => setStatusFilter(st)}
-                className={`px-2.5 py-1 rounded text-[10px] uppercase transition-all ${
-                  statusFilter === st
-                    ? "bg-white/15 text-white font-medium"
-                    : "text-white/40 hover:text-white"
+                key={id}
+                onClick={() => setStatusFilter(id)}
+                className={`px-2.5 py-1 rounded text-[10.5px] font-medium transition-all ${
+                  statusFilter === id
+                    ? "bg-white/15 text-white shadow-sm"
+                    : "text-white/45 hover:text-white"
                 }`}
               >
-                {st}
+                {label}
               </button>
             ))}
           </div>
@@ -468,7 +473,7 @@ export default function PageManagerPage() {
               </button>
               <button
                 type="submit"
-                className="h-7 px-3 text-[11px] rounded-md bg-white text-black font-semibold hover:bg-white/90 transition-all shadow-sm"
+                className="admin-glass-btn-accent"
               >
                 Create Page
               </button>

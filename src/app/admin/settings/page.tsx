@@ -97,79 +97,83 @@ export default function SiteSettingsPage() {
   }
 
   return (
-    <div className="space-y-6 font-sans">
+    <div className="space-y-4 font-[var(--font-poppins)]">
       {/* Page Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 rounded-2xl border border-white/10 bg-[#0d0d10] p-6 shadow-[0_10px_30px_rgba(0,0,0,0.8)]">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 rounded-xl border border-white/10 bg-[#0c0c0f] p-4 shadow-md">
         <div>
           <h1 className="text-base sm:text-lg font-semibold tracking-tight text-white">
-            GLOBAL SITE SETTINGS
+            Site Settings
           </h1>
-          <p className="text-xs text-white/40 mt-1">
+          <p className="text-[11px] text-white/40 mt-0.5">
             Site identity, brand assets, navigation links, and SEO tracking defaults.
           </p>
         </div>
 
-        <div className="flex items-center gap-2.5">
-          <Button
-            variant="outline"
-            size="sm"
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
             onClick={handleResetDefaults}
-            className="gap-1.5 text-xs rounded-md border-white/10 text-white/70 hover:bg-white/10"
+            className="admin-glass-btn hover:border-white/30"
           >
-            <RotateCcw className="h-3.5 w-3.5" />
-            <span>Reset Defaults</span>
-          </Button>
+            <RotateCcw className="h-3 w-3 text-white/50" />
+            <span className="text-[10.5px]">Reset Defaults</span>
+          </button>
 
-          <Button
+          <button
+            type="button"
             onClick={handleSave}
-            size="sm"
-            className="gap-2 text-xs rounded-md bg-white text-black font-semibold hover:bg-white/90 px-3 shadow-sm"
+            className="admin-glass-btn-accent"
           >
-            <Save className="h-3.5 w-3.5" />
-            <span>Save Settings</span>
-          </Button>
+            <Save className="h-3 w-3 text-red-300" />
+            <span className="text-[10.5px]">Save Settings</span>
+          </button>
         </div>
       </div>
 
-      <Tabs defaultValue="identity" className="space-y-6 text-xs">
-        <TabsList className="bg-[#0d0d10] border border-white/10 rounded-xl p-1">
+      <Tabs defaultValue="identity" className="space-y-4 text-[11px]">
+        <TabsList className="bg-[#0c0c0f] border border-white/10 rounded-lg p-0.5 h-auto">
           <TabsTrigger
             value="identity"
-            className="gap-2 data-[state=active]:bg-white/15 data-[state=active]:text-white rounded-lg text-xs"
+            className="gap-1.5 data-[state=active]:bg-white/15 data-[state=active]:text-white rounded-md text-[10.5px] px-2.5 py-1.5"
           >
-            <Sliders className="h-3.5 w-3.5" />
+            <Sliders className="h-3 w-3" />
             <span>Site Identity & Branding</span>
           </TabsTrigger>
           <TabsTrigger
             value="navigation"
-            className="gap-2 data-[state=active]:bg-white/15 data-[state=active]:text-white rounded-lg text-xs"
+            className="gap-1.5 data-[state=active]:bg-white/15 data-[state=active]:text-white rounded-md text-[10.5px] px-2.5 py-1.5"
           >
-            <Layers className="h-3.5 w-3.5" />
+            <Layers className="h-3 w-3" />
             <span>Navigation Builder</span>
           </TabsTrigger>
           <TabsTrigger
             value="seo"
-            className="gap-2 data-[state=active]:bg-white/15 data-[state=active]:text-white rounded-lg text-xs"
+            className="gap-1.5 data-[state=active]:bg-white/15 data-[state=active]:text-white rounded-md text-[10.5px] px-2.5 py-1.5"
           >
-            <Globe className="h-3.5 w-3.5" />
+            <Globe className="h-3 w-3" />
             <span>SEO & Analytics</span>
           </TabsTrigger>
         </TabsList>
 
         {/* Tab 1: Identity */}
         <TabsContent value="identity">
-          <div className="rounded-2xl border border-white/10 bg-[#0d0d10] p-6 space-y-6 shadow-[0_10px_30px_rgba(0,0,0,0.8)]">
-            <h2 className="text-sm font-semibold uppercase text-white tracking-wider">
-              Branding & Global Contact Information
-            </h2>
+          <div className="rounded-xl border border-white/10 bg-[#0c0c0f] p-4 space-y-4 shadow-md">
+            <div>
+              <h2 className="text-xs font-semibold text-white tracking-wide">
+                Branding & Global Contact Information
+              </h2>
+              <p className="text-[10.5px] text-white/40 mt-0.5">
+                Configure basic corporate identity and contact metadata.
+              </p>
+            </div>
 
-            <div className="grid sm:grid-cols-2 gap-4">
-              <div className="space-y-1.5 sm:col-span-2">
-                <label className="text-white/50 uppercase text-[10px]">Site Name</label>
+            <div className="grid sm:grid-cols-2 gap-3 text-[11px]">
+              <div className="space-y-1 sm:col-span-2">
+                <label className="text-white/50 text-[10px] uppercase font-medium">Site Name</label>
                 <Input
                   value={siteName}
                   onChange={(e) => setSiteName(e.target.value)}
-                  className="rounded-xl border-white/10 bg-black/60 text-white"
+                  className="h-8 rounded-md border-white/10 bg-black/60 text-white text-[11px]"
                 />
               </div>
 
@@ -184,93 +188,96 @@ export default function SiteSettingsPage() {
                 />
               </div>
 
-              <div className="space-y-1.5">
-                <label className="text-white/50 uppercase text-[10px]">Contact Email</label>
+              <div className="space-y-1">
+                <label className="text-white/50 text-[10px] uppercase font-medium">Contact Email</label>
                 <Input
                   value={contactEmail}
                   onChange={(e) => setContactEmail(e.target.value)}
-                  className="rounded-xl border-white/10 bg-black/60 text-white"
+                  className="h-8 rounded-md border-white/10 bg-black/60 text-white text-[11px]"
                 />
               </div>
 
-              <div className="space-y-1.5">
-                <label className="text-white/50 uppercase text-[10px]">Contact Phone</label>
+              <div className="space-y-1">
+                <label className="text-white/50 text-[10px] uppercase font-medium">Contact Phone</label>
                 <Input
                   value={contactPhone}
                   onChange={(e) => setContactPhone(e.target.value)}
-                  className="rounded-xl border-white/10 bg-black/60 text-white"
+                  className="h-8 rounded-md border-white/10 bg-black/60 text-white text-[11px]"
                 />
               </div>
 
-              <div className="space-y-1.5 sm:col-span-2">
-                <label className="text-white/50 uppercase text-[10px]">HQ Office Address</label>
+              <div className="space-y-1 sm:col-span-2">
+                <label className="text-white/50 text-[10px] uppercase font-medium">HQ Office Address</label>
                 <Input
                   value={address}
                   onChange={(e) => setAddress(e.target.value)}
-                  className="rounded-xl border-white/10 bg-black/60 text-white"
+                  className="h-8 rounded-md border-white/10 bg-black/60 text-white text-[11px]"
                 />
               </div>
 
-              <div className="space-y-1.5">
-                <label className="text-white/50 uppercase text-[10px]">Header CTA Button Text</label>
+              <div className="space-y-1">
+                <label className="text-white/50 text-[10px] uppercase font-medium">Header CTA Button Text</label>
                 <Input
                   value={headerCtaText}
                   onChange={(e) => setHeaderCtaText(e.target.value)}
-                  className="rounded-xl border-white/10 bg-black/60 text-white"
+                  className="h-8 rounded-md border-white/10 bg-black/60 text-white text-[11px]"
                 />
               </div>
 
-              <div className="space-y-1.5">
-                <label className="text-white/50 uppercase text-[10px]">Header CTA Button Link</label>
+              <div className="space-y-1">
+                <label className="text-white/50 text-[10px] uppercase font-medium">Header CTA Button Link</label>
                 <Input
                   value={headerCtaLink}
                   onChange={(e) => setHeaderCtaLink(e.target.value)}
-                  className="rounded-xl border-white/10 bg-black/60 text-white"
+                  className="h-8 rounded-md border-white/10 bg-black/60 text-white text-[11px]"
                 />
               </div>
             </div>
 
-            <Button
-              onClick={handleSave}
-              className="rounded-md bg-white text-black font-semibold hover:bg-white/90 px-3 py-1"
-            >
-              Save Identity Settings
-            </Button>
+            <div className="pt-2">
+              <button
+                type="button"
+                onClick={handleSave}
+                className="admin-glass-btn-accent"
+              >
+                <Save className="h-3 w-3 text-red-300" />
+                <span className="text-[10.5px]">Save Identity Settings</span>
+              </button>
+            </div>
           </div>
         </TabsContent>
 
         {/* Tab 2: Navigation Builder */}
         <TabsContent value="navigation">
-          <div className="rounded-2xl border border-white/10 bg-[#0d0d10] p-6 space-y-6 shadow-[0_10px_30px_rgba(0,0,0,0.8)]">
+          <div className="rounded-xl border border-white/10 bg-[#0c0c0f] p-4 space-y-4 shadow-md">
             <div className="flex items-center justify-between">
               <div>
-                <h2 className="text-sm font-semibold uppercase text-white tracking-wider">
+                <h2 className="text-xs font-semibold text-white tracking-wide">
                   Primary Header Navigation Links
                 </h2>
-                <p className="text-xs text-white/50 mt-1">
+                <p className="text-[10.5px] text-white/40 mt-0.5">
                   Configure the menu items visible in the top navigation bar.
                 </p>
               </div>
 
-              <Button
-                variant="outline"
-                size="sm"
+              <button
+                type="button"
                 onClick={handleAddNavItem}
-                className="gap-1.5 text-xs rounded-md border-white/15 text-white hover:bg-white/10"
+                className="admin-glass-btn hover:border-red-500/40"
               >
-                <Plus className="h-3.5 w-3.5" />
-                <span>Add Link</span>
-              </Button>
+                <Plus className="h-3 w-3 text-white/70" />
+                <span className="text-[10.5px]">Add Link</span>
+              </button>
             </div>
 
-            <div className="space-y-3">
+            <div className="space-y-2.5">
               {navItems.map((item, idx) => (
                 <div
                   key={item.id}
-                  className="flex items-center gap-3 rounded-xl border border-white/10 bg-black/60 p-3"
+                  className="flex items-center gap-2.5 rounded-lg border border-white/10 bg-black/60 p-2.5"
                 >
-                  <span className="text-white/40 w-6 text-[11px]">#{idx + 1}</span>
-                  <div className="flex-1 grid sm:grid-cols-2 gap-3">
+                  <span className="text-white/40 w-5 text-[10.5px]">#{idx + 1}</span>
+                  <div className="flex-1 grid sm:grid-cols-2 gap-2">
                     <Input
                       value={item.label}
                       onChange={(e) => {
@@ -281,8 +288,8 @@ export default function SiteSettingsPage() {
                           setNavItems(updated)
                         }
                       }}
-                      placeholder="Label (e.g. PROJECTS)"
-                      className="rounded-lg border-white/10 bg-black/40 text-white"
+                      placeholder="Label (e.g. Projects)"
+                      className="h-7.5 rounded-md border-white/10 bg-black/40 text-white text-[11px]"
                     />
                     <Input
                       value={item.href}
@@ -295,14 +302,14 @@ export default function SiteSettingsPage() {
                         }
                       }}
                       placeholder="Link (e.g. /projects)"
-                      className="rounded-lg border-white/10 bg-black/40 text-white"
+                      className="h-7.5 rounded-md border-white/10 bg-black/40 text-white text-[11px]"
                     />
                   </div>
                   <Button
                     variant="ghost"
                     size="icon"
                     onClick={() => handleRemoveNavItem(item.id)}
-                    className="h-8 w-8 text-white/40 hover:text-red-400 hover:bg-red-500/10 rounded-lg"
+                    className="h-7 w-7 text-white/40 hover:text-red-400 hover:bg-red-500/10 rounded-md"
                   >
                     <Trash2 className="h-3.5 w-3.5" />
                   </Button>
@@ -310,37 +317,41 @@ export default function SiteSettingsPage() {
               ))}
             </div>
 
-            <Button
-              onClick={handleSave}
-              className="rounded-md bg-white text-black font-semibold hover:bg-white/90 px-3 py-1"
-            >
-              Save Navigation Menu
-            </Button>
+            <div className="pt-2">
+              <button
+                type="button"
+                onClick={handleSave}
+                className="admin-glass-btn-accent"
+              >
+                <Save className="h-3 w-3 text-red-300" />
+                <span className="text-[10.5px]">Save Navigation Menu</span>
+              </button>
+            </div>
           </div>
         </TabsContent>
 
         {/* Tab 3: SEO & Analytics */}
         <TabsContent value="seo">
-          <div className="rounded-2xl border border-white/10 bg-[#0d0d10] p-6 space-y-6 shadow-[0_10px_30px_rgba(0,0,0,0.8)]">
+          <div className="rounded-xl border border-white/10 bg-[#0c0c0f] p-4 space-y-4 shadow-md">
             <div>
-              <h2 className="text-sm font-semibold uppercase text-white tracking-wider">
+              <h2 className="text-xs font-semibold text-white tracking-wide">
                 Analytics & Global Fallback SEO
               </h2>
-              <p className="text-xs text-white/50 mt-1">
+              <p className="text-[10.5px] text-white/40 mt-0.5">
                 Configure measurement trackers and default social metadata across unconfigured pages.
               </p>
             </div>
 
-            <div className="space-y-4">
-              <div className="space-y-1.5">
-                <label className="text-white/50 uppercase text-[10px]">
+            <div className="space-y-3.5 text-[11px]">
+              <div className="space-y-1">
+                <label className="text-white/50 text-[10px] uppercase font-medium">
                   Google Analytics / Measurement ID
                 </label>
                 <Input
                   value={analyticsId}
                   onChange={(e) => setAnalyticsId(e.target.value)}
                   placeholder="G-XXXXXXXXXX"
-                  className="rounded-xl border-white/10 bg-black/60 text-white"
+                  className="h-8 rounded-md border-white/10 bg-black/60 text-white text-[11px]"
                 />
               </div>
 
@@ -354,12 +365,16 @@ export default function SiteSettingsPage() {
               />
             </div>
 
-            <Button
-              onClick={handleSave}
-              className="rounded-md bg-white text-black font-semibold hover:bg-white/90 px-3 py-1"
-            >
-              Save Analytics & SEO Defaults
-            </Button>
+            <div className="pt-2">
+              <button
+                type="button"
+                onClick={handleSave}
+                className="admin-glass-btn-accent"
+              >
+                <Save className="h-3 w-3 text-red-300" />
+                <span className="text-[10.5px]">Save Analytics & SEO Defaults</span>
+              </button>
+            </div>
           </div>
         </TabsContent>
       </Tabs>
