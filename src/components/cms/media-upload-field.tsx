@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { Upload, X, Loader2, Image as ImageIcon, Video, Check } from "lucide-react"
+import { Upload, X, Loader2, Image as ImageIcon, Video } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { toast } from "sonner"
 
@@ -27,7 +27,6 @@ export function MediaUploadField({
   const fileInputRef = React.useRef<HTMLInputElement>(null)
 
   const handleFile = async (file: File) => {
-    // Basic validation
     if (mediaType === "image" && !file.type.startsWith("image/")) {
       toast.error("Please upload an image file (PNG, JPG, WebP, SVG)")
       return
@@ -79,11 +78,11 @@ export function MediaUploadField({
     <div className="space-y-2">
       {label && (
         <div className="flex items-center justify-between">
-          <label className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground flex items-center gap-1.5">
+          <label className="text-[11px] font-mono uppercase tracking-wider text-white/50 flex items-center gap-1.5">
             {mediaType === "video" ? (
-              <Video className="h-3 w-3 text-cyan-400" />
+              <Video className="h-3 w-3 text-white/60" />
             ) : (
-              <ImageIcon className="h-3 w-3 text-sky-400" />
+              <ImageIcon className="h-3 w-3 text-white/60" />
             )}
             {label}
           </label>
@@ -97,7 +96,7 @@ export function MediaUploadField({
 
       {/* Preview if value exists */}
       {value ? (
-        <div className="relative group rounded-xl border border-sky-500/30 bg-black/60 p-2 overflow-hidden shadow-[0_0_20px_rgba(56,189,248,0.1)]">
+        <div className="relative group rounded-xl border border-white/10 bg-black/60 p-2 overflow-hidden shadow-2xl">
           <div className="relative rounded-lg overflow-hidden bg-zinc-950 flex items-center justify-center max-h-48">
             {isVideo ? (
               <video
@@ -135,7 +134,7 @@ export function MediaUploadField({
               size="sm"
               onClick={() => fileInputRef.current?.click()}
               disabled={isUploading}
-              className="h-6 px-2 text-[10px] font-mono border-sky-500/40 text-sky-300 hover:bg-sky-500/10"
+              className="h-6 px-2.5 text-[10px] font-mono border-white/15 text-white hover:bg-white/10"
             >
               {isUploading ? (
                 <Loader2 className="h-3 w-3 animate-spin mr-1" />
@@ -158,20 +157,20 @@ export function MediaUploadField({
           onClick={() => fileInputRef.current?.click()}
           className={`relative cursor-pointer rounded-xl border-2 border-dashed p-4 text-center transition-all ${
             dragActive
-              ? "border-sky-400 bg-sky-500/10 shadow-[0_0_25px_rgba(56,189,248,0.25)]"
-              : "border-sky-500/25 bg-black/40 hover:border-sky-400/60 hover:bg-sky-500/5 hover:shadow-[0_0_20px_rgba(56,189,248,0.15)]"
+              ? "border-white/40 bg-white/10 shadow-2xl"
+              : "border-white/10 bg-black/40 hover:border-white/20 hover:bg-white/5"
           }`}
         >
           <div className="flex flex-col items-center justify-center space-y-2 py-2">
-            <div className="h-10 w-10 rounded-full border border-sky-500/40 bg-sky-950/40 flex items-center justify-center text-sky-400 shadow-[0_0_15px_rgba(56,189,248,0.3)]">
+            <div className="h-10 w-10 rounded-full border border-white/15 bg-white/5 flex items-center justify-center text-white">
               {isUploading ? (
                 <Loader2 className="h-5 w-5 animate-spin" />
               ) : (
                 <Upload className="h-5 w-5" />
               )}
             </div>
-            <div className="text-xs font-mono">
-              <span className="font-semibold text-sky-400">Click to upload</span> or drag and drop
+            <div className="text-xs font-mono text-white">
+              <span className="font-semibold text-white">Click to upload</span> or drag and drop
             </div>
             <p className="text-[10px] font-mono text-white/40">
               {mediaType === "video"
@@ -191,7 +190,7 @@ export function MediaUploadField({
           value={value || ""}
           onChange={(e) => onChange(e.target.value)}
           placeholder={placeholder}
-          className="flex-1 rounded-lg border border-sky-500/20 bg-black/50 px-3 py-1.5 text-xs font-mono text-white placeholder:text-white/30 focus:border-sky-400 focus:outline-none focus:ring-1 focus:ring-sky-400/50"
+          className="flex-1 rounded-xl border border-white/10 bg-black/60 px-3 py-1.5 text-xs font-mono text-white placeholder:text-white/30 focus:border-white/30 focus:outline-none"
         />
         <Button
           type="button"
@@ -199,7 +198,7 @@ export function MediaUploadField({
           size="sm"
           onClick={() => fileInputRef.current?.click()}
           disabled={isUploading}
-          className="h-8 px-2.5 font-mono text-xs border-sky-500/30 text-sky-300 hover:bg-sky-500/10 hover:border-sky-400"
+          className="h-8 px-2.5 font-mono text-xs border-white/15 text-white hover:bg-white/10"
         >
           {isUploading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Upload className="h-3.5 w-3.5" />}
         </Button>
@@ -225,4 +224,3 @@ export function MediaUploadField({
     </div>
   )
 }
-

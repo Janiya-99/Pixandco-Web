@@ -9,27 +9,27 @@ interface CMSStore {
   isHydrated: boolean
 
   // Page Actions
-  init: () => void
+  init: () => Promise<void>
   getPageBySlug: (slug: string) => CMSPage | undefined
-  createPage: (page: Omit<CMSPage, "id" | "createdAt" | "updatedAt">) => CMSPage
-  updatePage: (id: string, updates: Partial<CMSPage>) => void
-  deletePage: (id: string) => void
-  duplicatePage: (id: string) => CMSPage | undefined
+  createPage: (page: Omit<CMSPage, "id" | "createdAt" | "updatedAt">) => Promise<CMSPage>
+  updatePage: (id: string, updates: Partial<CMSPage>) => Promise<void>
+  deletePage: (id: string) => Promise<void>
+  duplicatePage: (id: string) => Promise<CMSPage | undefined>
 
   // Block Actions inside page
-  addBlock: (pageId: string, block: PageBlock) => void
-  updateBlock: (pageId: string, blockId: string, updates: Partial<PageBlock>) => void
-  removeBlock: (pageId: string, blockId: string) => void
-  reorderBlocks: (pageId: string, sourceIndex: number, destinationIndex: number) => void
+  addBlock: (pageId: string, block: PageBlock) => Promise<void>
+  updateBlock: (pageId: string, blockId: string, updates: Partial<PageBlock>) => Promise<void>
+  removeBlock: (pageId: string, blockId: string) => Promise<void>
+  reorderBlocks: (pageId: string, sourceIndex: number, destinationIndex: number) => Promise<void>
 
   // Media Actions
-  addMediaAsset: (asset: Omit<MediaAsset, "id" | "uploadedAt">) => MediaAsset
-  deleteMediaAsset: (id: string) => void
-  updateMediaAsset: (id: string, updates: Partial<MediaAsset>) => void
+  addMediaAsset: (asset: Omit<MediaAsset, "id" | "uploadedAt">) => Promise<MediaAsset>
+  deleteMediaAsset: (id: string) => Promise<void>
+  updateMediaAsset: (id: string, updates: Partial<MediaAsset>) => Promise<void>
 
   // Settings Actions
-  updateSettings: (updates: Partial<GlobalSiteSettings>) => void
-  resetToDefaults: () => void
+  updateSettings: (updates: Partial<GlobalSiteSettings>) => Promise<void>
+  resetToDefaults: () => Promise<void>
 }
 
 const STORAGE_KEYS = {
@@ -38,27 +38,95 @@ const STORAGE_KEYS = {
   SETTINGS: "pixandco_cms_settings_v1",
 }
 
+async function persistPagesToServer(pages: CMSPage[]) {
+  try {
+    await fetch("/api/cms/pages", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ pages }),
+    })
+  } catch (err) {
+    console.error("Persist pages failed:", err)
+  }
+}
+
+async function persistSettingsToServer(settings: GlobalSiteSettings) {
+  try {
+    await fetch("/api/cms/settings", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ settings }),
+    })
+  } catch (err) {
+    console.error("Persist settings failed:", err)
+  }
+}
+
+async function persistMediaToServer(media: MediaAsset[]) {
+  try {
+    await fetch("/api/cms/media", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ media }),
+    })
+  } catch (err) {
+    console.error("Persist media failed:", err)
+  }
+}
+
 export const useCMSStore = create<CMSStore>((set, get) => ({
   pages: initialPages,
   mediaAssets: initialMediaAssets,
   settings: initialSiteSettings,
   isHydrated: false,
 
-  init: () => {
+  init: async () => {
     if (typeof window === "undefined") return
     try {
-      const storedPages = localStorage.getItem(STORAGE_KEYS.PAGES)
-      const storedMedia = localStorage.getItem(STORAGE_KEYS.MEDIA)
-      const storedSettings = localStorage.getItem(STORAGE_KEYS.SETTINGS)
+      // First try fetching real data from server API
+      const [pagesRes, settingsRes, mediaRes] = await Promise.allSettled([
+        fetch("/api/cms/pages").then((r) => r.json()),
+        fetch("/api/cms/settings").then((r) => r.json()),
+        fetch("/api/cms/media").then((r) => r.json()),
+      ])
+
+      let loadedPages = initialPages
+      let loadedSettings = initialSiteSettings
+      let loadedMedia = initialMediaAssets
+
+      if (pagesRes.status === "fulfilled" && pagesRes.value?.success && Array.isArray(pagesRes.value.pages)) {
+        loadedPages = pagesRes.value.pages
+      } else {
+        const stored = localStorage.getItem(STORAGE_KEYS.PAGES)
+        if (stored) loadedPages = JSON.parse(stored)
+      }
+
+      if (settingsRes.status === "fulfilled" && settingsRes.value?.success && settingsRes.value.settings) {
+        loadedSettings = settingsRes.value.settings
+      } else {
+        const stored = localStorage.getItem(STORAGE_KEYS.SETTINGS)
+        if (stored) loadedSettings = JSON.parse(stored)
+      }
+
+      if (mediaRes.status === "fulfilled" && mediaRes.value?.success && Array.isArray(mediaRes.value.media)) {
+        loadedMedia = mediaRes.value.media
+      } else {
+        const stored = localStorage.getItem(STORAGE_KEYS.MEDIA)
+        if (stored) loadedMedia = JSON.parse(stored)
+      }
 
       set({
-        pages: storedPages ? JSON.parse(storedPages) : initialPages,
-        mediaAssets: storedMedia ? JSON.parse(storedMedia) : initialMediaAssets,
-        settings: storedSettings ? JSON.parse(storedSettings) : initialSiteSettings,
+        pages: loadedPages,
+        settings: loadedSettings,
+        mediaAssets: loadedMedia,
         isHydrated: true,
       })
+
+      localStorage.setItem(STORAGE_KEYS.PAGES, JSON.stringify(loadedPages))
+      localStorage.setItem(STORAGE_KEYS.SETTINGS, JSON.stringify(loadedSettings))
+      localStorage.setItem(STORAGE_KEYS.MEDIA, JSON.stringify(loadedMedia))
     } catch (e) {
-      console.error("Failed to load CMS from storage", e)
+      console.error("Failed to load CMS from server or storage", e)
       set({ isHydrated: true })
     }
   },
@@ -67,7 +135,7 @@ export const useCMSStore = create<CMSStore>((set, get) => ({
     return get().pages.find((p) => p.slug === slug || p.id === slug)
   },
 
-  createPage: (pageData) => {
+  createPage: async (pageData) => {
     const newPage: CMSPage = {
       ...pageData,
       id: `page_${Date.now()}`,
@@ -79,10 +147,11 @@ export const useCMSStore = create<CMSStore>((set, get) => ({
     if (typeof window !== "undefined") {
       localStorage.setItem(STORAGE_KEYS.PAGES, JSON.stringify(updated))
     }
+    await persistPagesToServer(updated)
     return newPage
   },
 
-  updatePage: (id, updates) => {
+  updatePage: async (id, updates) => {
     const updated = get().pages.map((p) =>
       p.id === id ? { ...p, ...updates, updatedAt: new Date().toISOString() } : p
     )
@@ -90,17 +159,19 @@ export const useCMSStore = create<CMSStore>((set, get) => ({
     if (typeof window !== "undefined") {
       localStorage.setItem(STORAGE_KEYS.PAGES, JSON.stringify(updated))
     }
+    await persistPagesToServer(updated)
   },
 
-  deletePage: (id) => {
+  deletePage: async (id) => {
     const updated = get().pages.filter((p) => p.id !== id)
     set({ pages: updated })
     if (typeof window !== "undefined") {
       localStorage.setItem(STORAGE_KEYS.PAGES, JSON.stringify(updated))
     }
+    await persistPagesToServer(updated)
   },
 
-  duplicatePage: (id) => {
+  duplicatePage: async (id) => {
     const original = get().pages.find((p) => p.id === id)
     if (!original) return undefined
 
@@ -123,10 +194,11 @@ export const useCMSStore = create<CMSStore>((set, get) => ({
     if (typeof window !== "undefined") {
       localStorage.setItem(STORAGE_KEYS.PAGES, JSON.stringify(updated))
     }
+    await persistPagesToServer(updated)
     return duplicated
   },
 
-  addBlock: (pageId, block) => {
+  addBlock: async (pageId, block) => {
     const updated = get().pages.map((p) => {
       if (p.id !== pageId) return p
       return {
@@ -139,9 +211,10 @@ export const useCMSStore = create<CMSStore>((set, get) => ({
     if (typeof window !== "undefined") {
       localStorage.setItem(STORAGE_KEYS.PAGES, JSON.stringify(updated))
     }
+    await persistPagesToServer(updated)
   },
 
-  updateBlock: (pageId, blockId, updates) => {
+  updateBlock: async (pageId, blockId, updates) => {
     const updated = get().pages.map((p) => {
       if (p.id !== pageId) return p
       return {
@@ -154,9 +227,10 @@ export const useCMSStore = create<CMSStore>((set, get) => ({
     if (typeof window !== "undefined") {
       localStorage.setItem(STORAGE_KEYS.PAGES, JSON.stringify(updated))
     }
+    await persistPagesToServer(updated)
   },
 
-  removeBlock: (pageId, blockId) => {
+  removeBlock: async (pageId, blockId) => {
     const updated = get().pages.map((p) => {
       if (p.id !== pageId) return p
       return {
@@ -169,9 +243,10 @@ export const useCMSStore = create<CMSStore>((set, get) => ({
     if (typeof window !== "undefined") {
       localStorage.setItem(STORAGE_KEYS.PAGES, JSON.stringify(updated))
     }
+    await persistPagesToServer(updated)
   },
 
-  reorderBlocks: (pageId, sourceIndex, destinationIndex) => {
+  reorderBlocks: async (pageId, sourceIndex, destinationIndex) => {
     const page = get().pages.find((p) => p.id === pageId)
     if (!page) return
 
@@ -187,9 +262,10 @@ export const useCMSStore = create<CMSStore>((set, get) => ({
     if (typeof window !== "undefined") {
       localStorage.setItem(STORAGE_KEYS.PAGES, JSON.stringify(updated))
     }
+    await persistPagesToServer(updated)
   },
 
-  addMediaAsset: (assetData) => {
+  addMediaAsset: async (assetData) => {
     const newAsset: MediaAsset = {
       ...assetData,
       id: `med_${Date.now()}`,
@@ -200,34 +276,38 @@ export const useCMSStore = create<CMSStore>((set, get) => ({
     if (typeof window !== "undefined") {
       localStorage.setItem(STORAGE_KEYS.MEDIA, JSON.stringify(updated))
     }
+    await persistMediaToServer(updated)
     return newAsset
   },
 
-  deleteMediaAsset: (id) => {
+  deleteMediaAsset: async (id) => {
     const updated = get().mediaAssets.filter((a) => a.id !== id)
     set({ mediaAssets: updated })
     if (typeof window !== "undefined") {
       localStorage.setItem(STORAGE_KEYS.MEDIA, JSON.stringify(updated))
     }
+    await persistMediaToServer(updated)
   },
 
-  updateMediaAsset: (id, updates) => {
+  updateMediaAsset: async (id, updates) => {
     const updated = get().mediaAssets.map((a) => (a.id === id ? { ...a, ...updates } : a))
     set({ mediaAssets: updated })
     if (typeof window !== "undefined") {
       localStorage.setItem(STORAGE_KEYS.MEDIA, JSON.stringify(updated))
     }
+    await persistMediaToServer(updated)
   },
 
-  updateSettings: (updates) => {
+  updateSettings: async (updates) => {
     const updated = { ...get().settings, ...updates }
     set({ settings: updated })
     if (typeof window !== "undefined") {
       localStorage.setItem(STORAGE_KEYS.SETTINGS, JSON.stringify(updated))
     }
+    await persistSettingsToServer(updated)
   },
 
-  resetToDefaults: () => {
+  resetToDefaults: async () => {
     if (typeof window !== "undefined") {
       localStorage.removeItem(STORAGE_KEYS.PAGES)
       localStorage.removeItem(STORAGE_KEYS.MEDIA)
@@ -238,5 +318,10 @@ export const useCMSStore = create<CMSStore>((set, get) => ({
       mediaAssets: initialMediaAssets,
       settings: initialSiteSettings,
     })
+    await Promise.allSettled([
+      persistPagesToServer(initialPages),
+      persistSettingsToServer(initialSiteSettings),
+      persistMediaToServer(initialMediaAssets),
+    ])
   },
 }))

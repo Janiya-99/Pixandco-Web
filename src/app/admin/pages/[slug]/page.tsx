@@ -12,18 +12,9 @@ import {
   ChevronUp,
   ChevronDown,
   Layers,
-  Sparkles,
   ExternalLink,
-  Check,
   Globe,
   Sliders,
-  Image as ImageIcon,
-  Video,
-  FileText,
-  HelpCircle,
-  BarChart3,
-  Flame,
-  Layout,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -63,7 +54,12 @@ export default function PageEditorPage() {
     updateBlock,
     removeBlock,
     reorderBlocks,
+    init,
   } = useCMSStore()
+
+  React.useEffect(() => {
+    init()
+  }, [init])
 
   const page = getPageBySlug(slug)
 
@@ -109,7 +105,7 @@ export default function PageEditorPage() {
         </p>
         <div className="pt-2">
           <Link href="/admin/pages">
-            <Button variant="outline" size="sm" className="font-mono text-xs border-sky-500/40 text-sky-400">
+            <Button variant="outline" size="sm" className="font-mono text-xs border-white/15 text-white">
               <ArrowLeft className="mr-2 h-4 w-4" /> Return to Page Manager
             </Button>
           </Link>
@@ -118,8 +114,8 @@ export default function PageEditorPage() {
     )
   }
 
-  const handleSavePageMeta = () => {
-    updatePage(page.id, {
+  const handleSavePageMeta = async () => {
+    await updatePage(page.id, {
       title,
       slug: pageSlug,
       status,
@@ -131,13 +127,13 @@ export default function PageEditorPage() {
         noIndex,
       },
     })
-    toast.success("Page settings & meta saved successfully")
+    toast.success("Page settings & meta saved live")
     if (pageSlug !== slug) {
       router.push(`/admin/pages/${pageSlug}`)
     }
   }
 
-  const handleCreateBlock = () => {
+  const handleCreateBlock = async () => {
     const timestamp = Date.now()
     let newBlockData: any = {
       id: `blk_${selectedBlockType}_${timestamp}`,
@@ -222,29 +218,29 @@ export default function PageEditorPage() {
       }
     }
 
-    addBlock(page.id, newBlockData)
+    await addBlock(page.id, newBlockData)
     toast.success(`Added ${selectedBlockType} block`)
     setIsAddBlockOpen(false)
   }
 
-  const handleMoveBlock = (index: number, direction: "up" | "down") => {
+  const handleMoveBlock = async (index: number, direction: "up" | "down") => {
     const newIndex = direction === "up" ? index - 1 : index + 1
     if (newIndex < 0 || newIndex >= page.blocks.length) return
 
-    reorderBlocks(page.id, index, newIndex)
+    await reorderBlocks(page.id, index, newIndex)
     toast.success("Block position updated")
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 font-sans">
       {/* Top Floating Control Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 rounded-2xl border border-sky-500/20 bg-slate-950/70 p-4 backdrop-blur-xl shadow-[0_4px_24px_rgba(0,0,0,0.5)]">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 rounded-2xl border border-white/10 bg-[#0d0d10] p-4 shadow-[0_4px_24px_rgba(0,0,0,0.8)]">
         <div className="flex items-center gap-3">
           <Link href="/admin/pages">
             <Button
               variant="outline"
               size="icon"
-              className="h-9 w-9 rounded-xl border-sky-500/30 bg-black/40 text-white/80 hover:bg-sky-500/10 hover:border-sky-400 hover:text-white"
+              className="h-9 w-9 rounded-xl border-white/15 bg-black/40 text-white/80 hover:bg-white/10 hover:text-white"
             >
               <ArrowLeft className="h-4 w-4" />
             </Button>
@@ -267,7 +263,7 @@ export default function PageEditorPage() {
                 {page.status}
               </Badge>
             </div>
-            <p className="text-xs font-mono text-sky-400/80 flex items-center gap-1.5 mt-0.5">
+            <p className="text-xs font-mono text-white/40 flex items-center gap-1.5 mt-0.5">
               <span>Path: /{page.slug === "home" ? "" : page.slug}</span>
               <a
                 href={page.slug === "home" ? "/" : `/${page.slug}`}
@@ -289,16 +285,16 @@ export default function PageEditorPage() {
               <Button
                 variant="outline"
                 size="sm"
-                className="h-9 gap-2 font-mono text-xs rounded-xl border-sky-500/30 bg-sky-950/20 text-sky-300 hover:bg-sky-500/20 hover:border-sky-400 shadow-[0_0_15px_rgba(56,189,248,0.15)]"
+                className="h-9 gap-2 font-mono text-xs rounded-full border-white/15 bg-white/5 text-white hover:bg-white/15 px-4"
               >
-                <Eye className="h-3.5 w-3.5 text-sky-400" />
+                <Eye className="h-3.5 w-3.5 text-white/70" />
                 <span className="hidden sm:inline">Live Simulator</span>
               </Button>
             </SheetTrigger>
-            <SheetContent side="right" className="w-full sm:max-w-2xl bg-slate-950/95 border-sky-500/30 p-6 backdrop-blur-2xl">
+            <SheetContent side="right" className="w-full sm:max-w-2xl bg-[#0a0a0d] border-white/15 p-6 backdrop-blur-2xl">
               <SheetHeader className="mb-4">
-                <SheetTitle className="font-mono text-sm tracking-widest text-sky-400 flex items-center gap-2">
-                  <Globe className="h-4 w-4" />
+                <SheetTitle className="font-mono text-sm tracking-widest text-white flex items-center gap-2">
+                  <Globe className="h-4 w-4 text-white/60" />
                   PAGE SIMULATOR : /{page.slug}
                 </SheetTitle>
               </SheetHeader>
@@ -309,34 +305,34 @@ export default function PageEditorPage() {
           <Button
             onClick={handleSavePageMeta}
             size="sm"
-            className="h-9 gap-2 font-mono text-xs rounded-xl bg-gradient-to-r from-sky-500 to-blue-600 text-white font-semibold hover:from-sky-400 hover:to-blue-500 shadow-[0_0_20px_rgba(56,189,248,0.35)]"
+            className="h-9 gap-2 font-mono text-xs rounded-full bg-white text-black font-semibold hover:bg-white/90 px-5 shadow-lg"
           >
             <Save className="h-3.5 w-3.5" />
-            <span>Save Changes</span>
+            <span>Save Live</span>
           </Button>
         </div>
       </div>
 
       {/* Main Tabbed Interface */}
       <Tabs defaultValue="blocks" className="space-y-6 font-mono text-xs">
-        <TabsList className="bg-slate-950/70 border border-sky-500/20 rounded-xl p-1">
+        <TabsList className="bg-[#0d0d10] border border-white/10 rounded-xl p-1">
           <TabsTrigger
             value="blocks"
-            className="gap-2 data-[state=active]:bg-sky-500/20 data-[state=active]:text-sky-300 data-[state=active]:border-sky-500/40 rounded-lg text-xs"
+            className="gap-2 data-[state=active]:bg-white/15 data-[state=active]:text-white rounded-lg text-xs"
           >
             <Layers className="h-3.5 w-3.5" />
             <span>Section Blocks ({page.blocks.length})</span>
           </TabsTrigger>
           <TabsTrigger
             value="seo"
-            className="gap-2 data-[state=active]:bg-sky-500/20 data-[state=active]:text-sky-300 data-[state=active]:border-sky-500/40 rounded-lg text-xs"
+            className="gap-2 data-[state=active]:bg-white/15 data-[state=active]:text-white rounded-lg text-xs"
           >
             <Globe className="h-3.5 w-3.5" />
             <span>SEO & OpenGraph</span>
           </TabsTrigger>
           <TabsTrigger
             value="settings"
-            className="gap-2 data-[state=active]:bg-sky-500/20 data-[state=active]:text-sky-300 data-[state=active]:border-sky-500/40 rounded-lg text-xs"
+            className="gap-2 data-[state=active]:bg-white/15 data-[state=active]:text-white rounded-lg text-xs"
           >
             <Sliders className="h-3.5 w-3.5" />
             <span>Page Config</span>
@@ -347,14 +343,14 @@ export default function PageEditorPage() {
         <TabsContent value="blocks" className="space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-1">
             <div>
-              <p className="text-xs text-white/60">
+              <p className="text-xs text-white/50">
                 Compose this page by rearranging, toggling, or editing modular section blocks.
               </p>
             </div>
             <Button
               onClick={() => setIsAddBlockOpen(true)}
               size="sm"
-              className="gap-2 font-mono text-xs rounded-xl border border-sky-500/40 bg-sky-950/30 text-sky-300 hover:bg-sky-500/20 hover:border-sky-400"
+              className="gap-2 font-mono text-xs rounded-full border border-white/15 bg-white/5 text-white hover:bg-white/15"
             >
               <Plus className="h-3.5 w-3.5" />
               <span>Add New Section</span>
@@ -364,8 +360,8 @@ export default function PageEditorPage() {
           {/* Block Cards List */}
           <div className="space-y-4">
             {page.blocks.length === 0 ? (
-              <div className="rounded-2xl border-2 border-dashed border-sky-500/20 bg-slate-950/50 p-12 text-center space-y-3">
-                <Layers className="mx-auto h-8 w-8 text-sky-400/50" />
+              <div className="rounded-2xl border-2 border-dashed border-white/10 bg-[#0d0d10] p-12 text-center space-y-3">
+                <Layers className="mx-auto h-8 w-8 text-white/30" />
                 <h3 className="text-sm font-bold text-white">No section blocks configured</h3>
                 <p className="text-xs text-white/40 max-w-sm mx-auto">
                   Click below to add your first Hero, Feature Matrix, or Media block.
@@ -373,7 +369,7 @@ export default function PageEditorPage() {
                 <Button
                   onClick={() => setIsAddBlockOpen(true)}
                   size="sm"
-                  className="rounded-xl border border-sky-500/30 bg-sky-500/10 text-sky-300 hover:bg-sky-500/20"
+                  className="rounded-full bg-white text-black font-semibold hover:bg-white/90"
                 >
                   <Plus className="mr-2 h-4 w-4" /> Add Section Block
                 </Button>
@@ -386,14 +382,14 @@ export default function PageEditorPage() {
                 return (
                   <div
                     key={block.id}
-                    className={`rounded-2xl border transition-all duration-300 bg-slate-950/80 backdrop-blur-xl ${
+                    className={`rounded-2xl border transition-all duration-200 bg-[#0d0d10] ${
                       block.visible
-                        ? "border-sky-500/25 shadow-[0_4px_24px_rgba(0,0,0,0.4)] hover:border-sky-400/50"
-                        : "border-white/10 opacity-60 bg-black/40"
+                        ? "border-white/10 shadow-[0_4px_24px_rgba(0,0,0,0.8)] hover:border-white/20"
+                        : "border-white/5 opacity-50 bg-black/40"
                     }`}
                   >
                     {/* Block Header */}
-                    <div className="flex items-center justify-between border-b border-white/5 p-4 bg-white/[0.02]">
+                    <div className="flex items-center justify-between border-b border-white/5 p-4 bg-white/[0.01]">
                       <div className="flex items-center gap-3">
                         <div className="flex items-center gap-1 text-white/40">
                           <Button
@@ -401,7 +397,7 @@ export default function PageEditorPage() {
                             size="icon"
                             disabled={isFirst}
                             onClick={() => handleMoveBlock(index, "up")}
-                            className="h-7 w-7 text-white/50 hover:text-sky-300 hover:bg-sky-500/10 rounded-lg disabled:opacity-20"
+                            className="h-7 w-7 text-white/50 hover:text-white hover:bg-white/10 rounded-lg disabled:opacity-20"
                           >
                             <ChevronUp className="h-4 w-4" />
                           </Button>
@@ -410,14 +406,14 @@ export default function PageEditorPage() {
                             size="icon"
                             disabled={isLast}
                             onClick={() => handleMoveBlock(index, "down")}
-                            className="h-7 w-7 text-white/50 hover:text-sky-300 hover:bg-sky-500/10 rounded-lg disabled:opacity-20"
+                            className="h-7 w-7 text-white/50 hover:text-white hover:bg-white/10 rounded-lg disabled:opacity-20"
                           >
                             <ChevronDown className="h-4 w-4" />
                           </Button>
                         </div>
 
                         <div className="flex items-center gap-2">
-                          <span className="rounded-lg border border-sky-500/30 bg-sky-950/40 px-2 py-0.5 text-[10px] font-mono uppercase text-sky-300">
+                          <span className="rounded-lg border border-white/15 bg-white/5 px-2 py-0.5 text-[10px] font-mono uppercase text-white/80">
                             {block.type}
                           </span>
                           <span className="font-semibold text-white text-xs">
@@ -468,7 +464,7 @@ export default function PageEditorPage() {
                                 updateBlock(page.id, block.id, { badge: e.target.value })
                               }
                               placeholder="e.g. AI AUTOMATION / OPERATIONS"
-                              className="rounded-xl border-sky-500/20 bg-black/50 text-white focus:border-sky-400"
+                              className="rounded-xl border-white/10 bg-black/60 text-white"
                             />
                           </div>
 
@@ -480,7 +476,7 @@ export default function PageEditorPage() {
                                 updateBlock(page.id, block.id, { title: e.target.value })
                               }
                               placeholder="Main Hero Title"
-                              className="rounded-xl border-sky-500/20 bg-black/50 text-white focus:border-sky-400"
+                              className="rounded-xl border-white/10 bg-black/60 text-white"
                             />
                           </div>
 
@@ -492,7 +488,7 @@ export default function PageEditorPage() {
                                 updateBlock(page.id, block.id, { subtitle: e.target.value })
                               }
                               rows={3}
-                              className="w-full rounded-xl border border-sky-500/20 bg-black/50 p-3 text-xs font-mono text-white focus:border-sky-400 focus:outline-none"
+                              className="w-full rounded-xl border border-white/10 bg-black/60 p-3 text-xs font-mono text-white focus:border-white/30 focus:outline-none"
                               placeholder="Hero description"
                             />
                           </div>
@@ -505,7 +501,7 @@ export default function PageEditorPage() {
                                 updateBlock(page.id, block.id, { primaryCtaText: e.target.value })
                               }
                               placeholder="e.g. Start a Project"
-                              className="rounded-xl border-sky-500/20 bg-black/50 text-white"
+                              className="rounded-xl border-white/10 bg-black/60 text-white"
                             />
                           </div>
 
@@ -517,11 +513,11 @@ export default function PageEditorPage() {
                                 updateBlock(page.id, block.id, { primaryCtaLink: e.target.value })
                               }
                               placeholder="e.g. /contact"
-                              className="rounded-xl border-sky-500/20 bg-black/50 text-white"
+                              className="rounded-xl border-white/10 bg-black/60 text-white"
                             />
                           </div>
 
-                          {/* HERO MEDIA UPLOAD (IMAGE OR VIDEO) */}
+                          {/* HERO MEDIA UPLOAD */}
                           <div className="sm:col-span-2 pt-2 border-t border-white/5">
                             <MediaUploadField
                               label="Hero Media Asset (Background Video or Image)"
@@ -552,10 +548,10 @@ export default function PageEditorPage() {
                               <Input
                                 value={block.eyebrow || ""}
                                 onChange={(e) =>
-                                updateBlock(page.id, block.id, { eyebrow: e.target.value })
+                                  updateBlock(page.id, block.id, { eyebrow: e.target.value })
                                 }
                                 placeholder="e.g. WHAT WE DELIVER"
-                                className="rounded-xl border-sky-500/20 bg-black/50 text-white"
+                                className="rounded-xl border-white/10 bg-black/60 text-white"
                               />
                             </div>
 
@@ -566,7 +562,7 @@ export default function PageEditorPage() {
                                 onChange={(e) =>
                                   updateBlock(page.id, block.id, { heading: e.target.value })
                                 }
-                                className="rounded-xl border-sky-500/20 bg-black/50 text-white"
+                                className="rounded-xl border-white/10 bg-black/60 text-white"
                               />
                             </div>
                           </div>
@@ -593,7 +589,7 @@ export default function PageEditorPage() {
                                   ]
                                   updateBlock(page.id, block.id, { features: updated })
                                 }}
-                                className="h-7 text-[10px] rounded-lg border-sky-500/30 text-sky-300 hover:bg-sky-500/10"
+                                className="h-7 text-[10px] rounded-lg border-white/15 text-white/80 hover:bg-white/10"
                               >
                                 <Plus className="h-3 w-3 mr-1" /> Add Feature
                               </Button>
@@ -603,7 +599,7 @@ export default function PageEditorPage() {
                               {block.features.map((feat, fIdx) => (
                                 <div
                                   key={feat.id}
-                                  className="rounded-xl border border-sky-500/20 bg-black/50 p-3 space-y-2"
+                                  className="rounded-xl border border-white/10 bg-black/60 p-3 space-y-2"
                                 >
                                   <div className="flex items-center justify-between">
                                     <Input
@@ -643,7 +639,7 @@ export default function PageEditorPage() {
                                       }
                                     }}
                                     rows={2}
-                                    className="w-full rounded-lg border border-white/10 bg-black/40 p-2 text-[11px] text-white/80 focus:border-sky-400 focus:outline-none"
+                                    className="w-full rounded-lg border border-white/10 bg-black/40 p-2 text-[11px] text-white/80 focus:border-white/30 focus:outline-none"
                                     placeholder="Feature description"
                                   />
                                 </div>
@@ -664,7 +660,7 @@ export default function PageEditorPage() {
                                 updateBlock(page.id, block.id, { headline: e.target.value })
                               }
                               placeholder="Section Heading"
-                              className="rounded-xl border-sky-500/20 bg-black/50 text-white"
+                              className="rounded-xl border-white/10 bg-black/60 text-white"
                             />
                           </div>
                           <div className="space-y-1.5">
@@ -675,7 +671,7 @@ export default function PageEditorPage() {
                                 updateBlock(page.id, block.id, { content: e.target.value })
                               }
                               rows={6}
-                              className="w-full rounded-xl border border-sky-500/20 bg-black/50 p-3 text-xs font-mono text-white focus:border-sky-400 focus:outline-none leading-relaxed"
+                              className="w-full rounded-xl border border-white/10 bg-black/60 p-3 text-xs font-mono text-white focus:border-white/30 focus:outline-none leading-relaxed"
                               placeholder="Write your editorial copy..."
                             />
                           </div>
@@ -711,7 +707,7 @@ export default function PageEditorPage() {
                                   updateBlock(page.id, block.id, { caption: e.target.value })
                                 }
                                 placeholder="Optional description or credit"
-                                className="rounded-xl border-sky-500/20 bg-black/50 text-white"
+                                className="rounded-xl border-white/10 bg-black/60 text-white"
                               />
                             </div>
                             <div className="space-y-1.5">
@@ -723,7 +719,7 @@ export default function PageEditorPage() {
                                     aspectRatio: e.target.value as any,
                                   })
                                 }
-                                className="w-full rounded-xl border border-sky-500/20 bg-black/50 p-2 text-xs font-mono text-white focus:border-sky-400 focus:outline-none"
+                                className="w-full rounded-xl border border-white/10 bg-black/60 p-2 text-xs font-mono text-white focus:border-white/30 focus:outline-none"
                               >
                                 <option value="16:9">16:9 Landscape</option>
                                 <option value="4:3">4:3 Standard</option>
@@ -753,7 +749,7 @@ export default function PageEditorPage() {
                                 ]
                                 updateBlock(page.id, block.id, { stats: updated })
                               }}
-                              className="h-7 text-[10px] rounded-lg border-sky-500/30 text-sky-300 hover:bg-sky-500/10"
+                              className="h-7 text-[10px] rounded-lg border-white/15 text-white/80 hover:bg-white/10"
                             >
                               <Plus className="h-3 w-3 mr-1" /> Add Counter
                             </Button>
@@ -763,7 +759,7 @@ export default function PageEditorPage() {
                             {block.stats.map((st, sIdx) => (
                               <div
                                 key={st.id}
-                                className="rounded-xl border border-sky-500/20 bg-black/50 p-3 space-y-2"
+                                className="rounded-xl border border-white/10 bg-black/60 p-3 space-y-2"
                               >
                                 <div className="flex items-center justify-between">
                                   <span className="text-[10px] text-white/40">#{sIdx + 1}</span>
@@ -822,7 +818,7 @@ export default function PageEditorPage() {
                               onChange={(e) =>
                                 updateBlock(page.id, block.id, { heading: e.target.value })
                               }
-                              className="rounded-xl border-sky-500/20 bg-black/50 text-white"
+                              className="rounded-xl border-white/10 bg-black/60 text-white"
                             />
                           </div>
 
@@ -846,7 +842,7 @@ export default function PageEditorPage() {
                                   ]
                                   updateBlock(page.id, block.id, { items: updated })
                                 }}
-                                className="h-7 text-[10px] rounded-lg border-sky-500/30 text-sky-300 hover:bg-sky-500/10"
+                                className="h-7 text-[10px] rounded-lg border-white/15 text-white/80 hover:bg-white/10"
                               >
                                 <Plus className="h-3 w-3 mr-1" /> Add FAQ
                               </Button>
@@ -856,7 +852,7 @@ export default function PageEditorPage() {
                               {block.items.map((item, qIdx) => (
                                 <div
                                   key={item.id}
-                                  className="rounded-xl border border-sky-500/20 bg-black/50 p-4 space-y-2"
+                                  className="rounded-xl border border-white/10 bg-black/60 p-4 space-y-2"
                                 >
                                   <div className="flex items-center justify-between">
                                     <Input
@@ -896,7 +892,7 @@ export default function PageEditorPage() {
                                       }
                                     }}
                                     rows={2}
-                                    className="w-full rounded-lg border border-white/10 bg-black/40 p-2.5 text-xs text-white/80 focus:border-sky-400 focus:outline-none"
+                                    className="w-full rounded-lg border border-white/10 bg-black/40 p-2.5 text-xs text-white/80 focus:border-white/30 focus:outline-none"
                                     placeholder="Answer explanation"
                                   />
                                 </div>
@@ -916,7 +912,7 @@ export default function PageEditorPage() {
                               onChange={(e) =>
                                 updateBlock(page.id, block.id, { title: e.target.value })
                               }
-                              className="rounded-xl border-sky-500/20 bg-black/50 text-white"
+                              className="rounded-xl border-white/10 bg-black/60 text-white"
                             />
                           </div>
                           <div className="space-y-1.5 sm:col-span-2">
@@ -926,7 +922,7 @@ export default function PageEditorPage() {
                               onChange={(e) =>
                                 updateBlock(page.id, block.id, { description: e.target.value })
                               }
-                              className="rounded-xl border-sky-500/20 bg-black/50 text-white"
+                              className="rounded-xl border-white/10 bg-black/60 text-white"
                             />
                           </div>
                           <div className="space-y-1.5">
@@ -936,7 +932,7 @@ export default function PageEditorPage() {
                               onChange={(e) =>
                                 updateBlock(page.id, block.id, { buttonText: e.target.value })
                               }
-                              className="rounded-xl border-sky-500/20 bg-black/50 text-white"
+                              className="rounded-xl border-white/10 bg-black/60 text-white"
                             />
                           </div>
                           <div className="space-y-1.5">
@@ -946,7 +942,7 @@ export default function PageEditorPage() {
                               onChange={(e) =>
                                 updateBlock(page.id, block.id, { buttonLink: e.target.value })
                               }
-                              className="rounded-xl border-sky-500/20 bg-black/50 text-white"
+                              className="rounded-xl border-white/10 bg-black/60 text-white"
                             />
                           </div>
                         </div>
@@ -961,10 +957,10 @@ export default function PageEditorPage() {
 
         {/* TAB 2: SEO & OPENGRAPH */}
         <TabsContent value="seo">
-          <div className="rounded-2xl border border-sky-500/20 bg-slate-950/80 p-6 space-y-6 backdrop-blur-xl shadow-[0_4px_24px_rgba(0,0,0,0.4)]">
+          <div className="rounded-2xl border border-white/10 bg-[#0d0d10] p-6 space-y-6 shadow-[0_10px_30px_rgba(0,0,0,0.8)]">
             <div>
               <h2 className="text-sm font-semibold uppercase text-white tracking-wider flex items-center gap-2">
-                <Globe className="h-4 w-4 text-sky-400" />
+                <Globe className="h-4 w-4 text-white/70" />
                 SEO Metadata & Social Previews
               </h2>
               <p className="text-xs text-white/50 mt-1">
@@ -979,7 +975,7 @@ export default function PageEditorPage() {
                   value={metaTitle}
                   onChange={(e) => setMetaTitle(e.target.value)}
                   placeholder="e.g. Pix & Co — Business Software"
-                  className="rounded-xl border-sky-500/20 bg-black/50 text-white"
+                  className="rounded-xl border-white/10 bg-black/60 text-white"
                 />
               </div>
 
@@ -989,7 +985,7 @@ export default function PageEditorPage() {
                   value={metaDescription}
                   onChange={(e) => setMetaDescription(e.target.value)}
                   rows={3}
-                  className="w-full rounded-xl border border-sky-500/20 bg-black/50 p-3 text-xs font-mono text-white focus:border-sky-400 focus:outline-none"
+                  className="w-full rounded-xl border border-white/10 bg-black/60 p-3 text-xs font-mono text-white focus:border-white/30 focus:outline-none"
                   placeholder="Appears in Google search snippets..."
                 />
               </div>
@@ -1005,7 +1001,7 @@ export default function PageEditorPage() {
                 />
               </div>
 
-              <div className="flex items-center justify-between rounded-xl border border-sky-500/20 bg-black/40 p-4">
+              <div className="flex items-center justify-between rounded-xl border border-white/10 bg-black/40 p-4">
                 <div className="space-y-0.5">
                   <div className="font-semibold text-white">Search Engine Indexing</div>
                   <div className="text-[11px] text-white/50">
@@ -1018,7 +1014,7 @@ export default function PageEditorPage() {
 
             <Button
               onClick={handleSavePageMeta}
-              className="rounded-xl bg-gradient-to-r from-sky-500 to-blue-600 text-white font-semibold hover:from-sky-400 hover:to-blue-500 shadow-[0_0_20px_rgba(56,189,248,0.3)]"
+              className="rounded-full bg-white text-black font-semibold hover:bg-white/90 px-6"
             >
               Save SEO Settings
             </Button>
@@ -1027,10 +1023,10 @@ export default function PageEditorPage() {
 
         {/* TAB 3: PAGE CONFIG */}
         <TabsContent value="settings">
-          <div className="rounded-2xl border border-sky-500/20 bg-slate-950/80 p-6 space-y-6 backdrop-blur-xl shadow-[0_4px_24px_rgba(0,0,0,0.4)]">
+          <div className="rounded-2xl border border-white/10 bg-[#0d0d10] p-6 space-y-6 shadow-[0_10px_30px_rgba(0,0,0,0.8)]">
             <div>
               <h2 className="text-sm font-semibold uppercase text-white tracking-wider flex items-center gap-2">
-                <Sliders className="h-4 w-4 text-sky-400" />
+                <Sliders className="h-4 w-4 text-white/70" />
                 Page Identity & Routing Configuration
               </h2>
               <p className="text-xs text-white/50 mt-1">
@@ -1044,7 +1040,7 @@ export default function PageEditorPage() {
                 <Input
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
-                  className="rounded-xl border-sky-500/20 bg-black/50 text-white"
+                  className="rounded-xl border-white/10 bg-black/60 text-white"
                 />
               </div>
 
@@ -1055,7 +1051,7 @@ export default function PageEditorPage() {
                   <Input
                     value={pageSlug}
                     onChange={(e) => setPageSlug(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ""))}
-                    className="pl-6 rounded-xl border-sky-500/20 bg-black/50 text-white"
+                    className="pl-6 rounded-xl border-white/10 bg-black/60 text-white"
                   />
                 </div>
               </div>
@@ -1065,7 +1061,7 @@ export default function PageEditorPage() {
                 <select
                   value={status}
                   onChange={(e) => setStatus(e.target.value as PageStatus)}
-                  className="w-full rounded-xl border border-sky-500/20 bg-black/50 px-3 py-2 text-xs font-mono text-white focus:border-sky-400 focus:outline-none"
+                  className="w-full rounded-xl border border-white/10 bg-black/60 px-3 py-2 text-xs font-mono text-white focus:border-white/30 focus:outline-none"
                 >
                   <option value="draft">Draft (Unpublished)</option>
                   <option value="published">Published (Live Online)</option>
@@ -1079,14 +1075,14 @@ export default function PageEditorPage() {
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   placeholder="Brief internal note regarding this page..."
-                  className="rounded-xl border-sky-500/20 bg-black/50 text-white"
+                  className="rounded-xl border-white/10 bg-black/60 text-white"
                 />
               </div>
             </div>
 
             <Button
               onClick={handleSavePageMeta}
-              className="rounded-xl bg-gradient-to-r from-sky-500 to-blue-600 text-white font-semibold hover:from-sky-400 hover:to-blue-500 shadow-[0_0_20px_rgba(56,189,248,0.3)]"
+              className="rounded-full bg-white text-black font-semibold hover:bg-white/90 px-6"
             >
               Save Configuration
             </Button>
@@ -1096,9 +1092,9 @@ export default function PageEditorPage() {
 
       {/* Add Block Modal */}
       <Dialog open={isAddBlockOpen} onOpenChange={setIsAddBlockOpen}>
-        <DialogContent className="max-w-lg bg-slate-950/95 border-sky-500/30 p-6 backdrop-blur-2xl rounded-2xl shadow-[0_0_40px_rgba(56,189,248,0.2)] font-mono text-xs">
+        <DialogContent className="max-w-lg bg-[#0e0e12] border-white/15 p-6 backdrop-blur-2xl rounded-2xl shadow-2xl font-mono text-xs">
           <DialogHeader>
-            <DialogTitle className="text-sm tracking-wider uppercase text-sky-400 flex items-center gap-2">
+            <DialogTitle className="text-sm tracking-wider uppercase text-white flex items-center gap-2">
               <Plus className="h-4 w-4" />
               INSERT SECTION BLOCK
             </DialogTitle>
@@ -1120,8 +1116,8 @@ export default function PageEditorPage() {
                 onClick={() => setSelectedBlockType(item.type as BlockType)}
                 className={`flex flex-col text-left p-3.5 rounded-xl border transition-all ${
                   selectedBlockType === item.type
-                    ? "border-sky-400 bg-sky-500/20 shadow-[0_0_15px_rgba(56,189,248,0.25)] font-semibold"
-                    : "border-sky-500/20 bg-black/40 hover:border-sky-500/40 hover:bg-sky-500/5 text-white/70"
+                    ? "border-white/40 bg-white/10 font-semibold text-white"
+                    : "border-white/10 bg-black/60 hover:border-white/25 hover:bg-white/5 text-white/60"
                 }`}
               >
                 <span className="text-white font-medium">{item.label}</span>
@@ -1140,7 +1136,7 @@ export default function PageEditorPage() {
             </Button>
             <Button
               onClick={handleCreateBlock}
-              className="rounded-xl bg-gradient-to-r from-sky-500 to-blue-600 text-white font-semibold hover:from-sky-400 shadow-[0_0_20px_rgba(56,189,248,0.3)]"
+              className="rounded-xl bg-white text-black font-semibold hover:bg-white/90"
             >
               Insert Block
             </Button>

@@ -43,7 +43,11 @@ import { toast } from "sonner"
 export default function PageManagerPage() {
   const router = useRouter()
   const searchParams = useSearchParams()
-  const { pages, createPage, deletePage, duplicatePage } = useCMSStore()
+  const { pages, createPage, deletePage, duplicatePage, init } = useCMSStore()
+
+  React.useEffect(() => {
+    init()
+  }, [init])
 
   const [searchTerm, setSearchTerm] = React.useState("")
   const [statusFilter, setStatusFilter] = React.useState<string>("all")
@@ -72,14 +76,14 @@ export default function PageManagerPage() {
     }
   }
 
-  const handleCreateSubmit = (e: React.FormEvent) => {
+  const handleCreateSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!newTitle || !newSlug) {
       toast.error("Title and slug are required")
       return
     }
 
-    const created = createPage({
+    const created = await createPage({
       title: newTitle,
       slug: newSlug,
       description: newDescription,
@@ -136,35 +140,37 @@ export default function PageManagerPage() {
     )
   }
 
-  const handleBatchDelete = () => {
+  const handleBatchDelete = async () => {
     if (confirm(`Are you sure you want to delete ${selectedIds.length} pages?`)) {
-      selectedIds.forEach((id) => deletePage(id))
+      for (const id of selectedIds) {
+        await deletePage(id)
+      }
       toast.success(`${selectedIds.length} pages deleted`)
       setSelectedIds([])
     }
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 font-sans">
       {/* Page Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 rounded-2xl border border-sky-500/20 bg-slate-950/70 p-6 backdrop-blur-xl shadow-[0_4px_24px_rgba(0,0,0,0.5)]">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 rounded-2xl border border-white/10 bg-[#0d0d10] p-6 shadow-[0_10px_30px_rgba(0,0,0,0.8)]">
         <div>
           <div className="flex items-center gap-2">
             <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-white font-mono">
               PAGE MANAGER
             </h1>
-            <Badge className="bg-sky-500/20 text-sky-300 border-sky-500/30 text-[10px] font-mono">
+            <Badge className="bg-white/10 text-white/80 border-white/15 text-[10px] font-mono">
               {pages.length} Pages
             </Badge>
           </div>
-          <p className="text-xs text-white/50 font-mono mt-1">
+          <p className="text-xs text-white/40 font-mono mt-1">
             Author, reorder, and configure blocks and multimedia across all website routes.
           </p>
         </div>
 
         <Button
           onClick={() => setIsCreateOpen(true)}
-          className="gap-2 font-mono text-xs rounded-xl bg-gradient-to-r from-sky-500 to-blue-600 text-white font-semibold hover:from-sky-400 hover:to-blue-500 shadow-[0_0_20px_rgba(56,189,248,0.35)]"
+          className="gap-2 font-mono text-xs rounded-full bg-white text-black font-semibold hover:bg-white/90 px-5 shadow-lg"
         >
           <Plus className="h-4 w-4" />
           <span>New Page</span>
@@ -172,28 +178,28 @@ export default function PageManagerPage() {
       </div>
 
       {/* Filter and Search Bar */}
-      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 rounded-2xl border border-sky-500/20 bg-slate-950/60 p-3 backdrop-blur-xl">
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 rounded-2xl border border-white/10 bg-[#0d0d10] p-3">
         <div className="relative flex-1 max-w-md">
           <Search className="absolute left-3 top-2.5 h-4 w-4 text-white/40" />
           <Input
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Search pages by title or slug..."
-            className="pl-9 h-9 rounded-xl border-sky-500/20 bg-black/50 text-xs font-mono text-white focus:border-sky-400"
+            className="pl-9 h-9 rounded-xl border-white/10 bg-black/60 text-xs font-mono text-white placeholder:text-white/30 focus:border-white/30"
           />
         </div>
 
         <div className="flex items-center gap-2">
           {/* Status Filter Buttons */}
-          <div className="flex items-center rounded-xl border border-sky-500/20 bg-black/50 p-1">
+          <div className="flex items-center rounded-xl border border-white/10 bg-black/60 p-1">
             {["all", "published", "draft", "archived"].map((st) => (
               <button
                 key={st}
                 onClick={() => setStatusFilter(st)}
                 className={`px-3 py-1 rounded-lg text-xs font-mono uppercase transition-all ${
                   statusFilter === st
-                    ? "bg-sky-500/20 text-sky-300 font-semibold"
-                    : "text-white/50 hover:text-white"
+                    ? "bg-white/15 text-white font-semibold"
+                    : "text-white/40 hover:text-white"
                 }`}
               >
                 {st}
@@ -216,15 +222,15 @@ export default function PageManagerPage() {
       </div>
 
       {/* Pages Table */}
-      <div className="rounded-2xl border border-sky-500/20 bg-slate-950/80 overflow-hidden backdrop-blur-xl shadow-[0_4px_24px_rgba(0,0,0,0.4)]">
+      <div className="rounded-2xl border border-white/10 bg-[#0d0d10] overflow-hidden shadow-[0_15px_35px_rgba(0,0,0,0.8)]">
         <div className="overflow-x-auto">
           <table className="w-full text-left font-mono text-xs">
-            <thead className="border-b border-white/5 bg-white/[0.02] text-white/40 text-[10px] uppercase">
+            <thead className="border-b border-white/10 bg-white/[0.02] text-white/40 text-[10px] uppercase">
               <tr>
                 <th className="p-3 pl-4 w-10">
                   <button onClick={toggleSelectAll} className="flex items-center">
                     {selectedIds.length === filteredPages.length && filteredPages.length > 0 ? (
-                      <CheckSquare className="h-4 w-4 text-sky-400" />
+                      <CheckSquare className="h-4 w-4 text-white" />
                     ) : (
                       <Square className="h-4 w-4 text-white/30" />
                     )}
@@ -252,8 +258,8 @@ export default function PageManagerPage() {
                   return (
                     <tr
                       key={page.id}
-                      className={`hover:bg-sky-500/5 transition-colors ${
-                        isSelected ? "bg-sky-500/10" : ""
+                      className={`hover:bg-white/[0.02] transition-colors ${
+                        isSelected ? "bg-white/[0.04]" : ""
                       }`}
                     >
                       <td className="p-3 pl-4">
@@ -262,7 +268,7 @@ export default function PageManagerPage() {
                           className="flex items-center"
                         >
                           {isSelected ? (
-                            <CheckSquare className="h-4 w-4 text-sky-400" />
+                            <CheckSquare className="h-4 w-4 text-white" />
                           ) : (
                             <Square className="h-4 w-4 text-white/30" />
                           )}
@@ -271,11 +277,11 @@ export default function PageManagerPage() {
                       <td className="p-3">
                         <Link
                           href={`/admin/pages/${page.slug}`}
-                          className="font-semibold text-white hover:text-sky-300 transition-colors flex items-center gap-2"
+                          className="font-semibold text-white hover:text-white/80 transition-colors flex items-center gap-2"
                         >
                           <span>{page.title}</span>
                           {page.slug === "home" && (
-                            <Badge className="bg-sky-950/60 text-sky-400 border border-sky-500/30 text-[9px] px-1.5 py-0">
+                            <Badge className="bg-white/10 text-white/80 border border-white/15 text-[9px] px-1.5 py-0">
                               Root
                             </Badge>
                           )}
@@ -286,7 +292,7 @@ export default function PageManagerPage() {
                           </div>
                         )}
                       </td>
-                      <td className="p-3 text-sky-400/80">/{page.slug}</td>
+                      <td className="p-3 text-white/60">/{page.slug}</td>
                       <td className="p-3">
                         <Badge
                           variant={
@@ -303,7 +309,7 @@ export default function PageManagerPage() {
                       </td>
                       <td className="p-3">
                         <span className="flex items-center gap-1.5 text-white/60">
-                          <Layers className="h-3.5 w-3.5 text-sky-400" />
+                          <Layers className="h-3.5 w-3.5 text-white/50" />
                           {page.blocks.length} blocks
                         </span>
                       </td>
@@ -327,21 +333,21 @@ export default function PageManagerPage() {
                           </DropdownMenuTrigger>
                           <DropdownMenuContent
                             align="end"
-                            className="bg-slate-950/95 border-sky-500/30 text-white font-mono text-xs backdrop-blur-xl shadow-[0_4px_24px_rgba(0,0,0,0.6)]"
+                            className="bg-[#0e0e12] border-white/15 text-white font-mono text-xs backdrop-blur-xl shadow-2xl"
                           >
                             <DropdownMenuItem
                               onClick={() => router.push(`/admin/pages/${page.slug}`)}
-                              className="gap-2 focus:bg-sky-500/20 focus:text-sky-300"
+                              className="gap-2 focus:bg-white/10"
                             >
                               <Edit2 className="h-3.5 w-3.5" />
                               <span>Edit Content Blocks</span>
                             </DropdownMenuItem>
                             <DropdownMenuItem
-                              onClick={() => {
-                                const dup = duplicatePage(page.id)
+                              onClick={async () => {
+                                const dup = await duplicatePage(page.id)
                                 if (dup) toast.success(`Duplicated as "${dup.title}"`)
                               }}
-                              className="gap-2 focus:bg-sky-500/20 focus:text-sky-300"
+                              className="gap-2 focus:bg-white/10"
                             >
                               <Copy className="h-3.5 w-3.5" />
                               <span>Duplicate Page</span>
@@ -350,16 +356,16 @@ export default function PageManagerPage() {
                               onClick={() =>
                                 window.open(page.slug === "home" ? "/" : `/${page.slug}`, "_blank")
                               }
-                              className="gap-2 focus:bg-sky-500/20 focus:text-sky-300"
+                              className="gap-2 focus:bg-white/10"
                             >
                               <ExternalLink className="h-3.5 w-3.5" />
                               <span>Open Live Public View</span>
                             </DropdownMenuItem>
                             <DropdownMenuSeparator className="bg-white/10" />
                             <DropdownMenuItem
-                              onClick={() => {
+                              onClick={async () => {
                                 if (confirm(`Delete "${page.title}"?`)) {
-                                  deletePage(page.id)
+                                  await deletePage(page.id)
                                   toast.success("Page deleted")
                                 }
                               }}
@@ -382,10 +388,10 @@ export default function PageManagerPage() {
 
       {/* Create Page Modal */}
       <Dialog open={isCreateOpen} onOpenChange={setIsCreateOpen}>
-        <DialogContent className="max-w-md bg-slate-950/95 border-sky-500/30 p-6 backdrop-blur-2xl rounded-2xl font-mono text-xs shadow-[0_0_40px_rgba(56,189,248,0.2)]">
+        <DialogContent className="max-w-md bg-[#0e0e12] border-white/15 p-6 backdrop-blur-2xl rounded-2xl font-mono text-xs shadow-2xl">
           <form onSubmit={handleCreateSubmit}>
             <DialogHeader>
-              <DialogTitle className="text-sm uppercase text-sky-400">
+              <DialogTitle className="text-sm uppercase text-white">
                 CREATE NEW CMS PAGE
               </DialogTitle>
               <DialogDescription className="text-white/50 text-xs">
@@ -400,7 +406,7 @@ export default function PageManagerPage() {
                   value={newTitle}
                   onChange={(e) => handleTitleChange(e.target.value)}
                   placeholder="e.g. AI Strategy Consulting"
-                  className="rounded-xl border-sky-500/20 bg-black/50 text-white"
+                  className="rounded-xl border-white/10 bg-black/60 text-white"
                   required
                 />
               </div>
@@ -413,7 +419,7 @@ export default function PageManagerPage() {
                     value={newSlug}
                     onChange={(e) => setNewSlug(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ""))}
                     placeholder="ai-strategy"
-                    className="pl-6 rounded-xl border-sky-500/20 bg-black/50 text-white"
+                    className="pl-6 rounded-xl border-white/10 bg-black/60 text-white"
                     required
                   />
                 </div>
@@ -425,7 +431,7 @@ export default function PageManagerPage() {
                   value={newDescription}
                   onChange={(e) => setNewDescription(e.target.value)}
                   placeholder="Internal summary or short intro..."
-                  className="rounded-xl border-sky-500/20 bg-black/50 text-white"
+                  className="rounded-xl border-white/10 bg-black/60 text-white"
                 />
               </div>
 
@@ -434,7 +440,7 @@ export default function PageManagerPage() {
                 <select
                   value={newStatus}
                   onChange={(e) => setNewStatus(e.target.value as PageStatus)}
-                  className="w-full rounded-xl border border-sky-500/20 bg-black/50 px-3 py-2 text-xs font-mono text-white focus:border-sky-400 focus:outline-none"
+                  className="w-full rounded-xl border border-white/10 bg-black/60 px-3 py-2 text-xs font-mono text-white focus:border-white/30 focus:outline-none"
                 >
                   <option value="draft">Draft (Private)</option>
                   <option value="published">Published (Live Online)</option>
@@ -454,7 +460,7 @@ export default function PageManagerPage() {
               </Button>
               <Button
                 type="submit"
-                className="rounded-xl bg-gradient-to-r from-sky-500 to-blue-600 text-white font-semibold hover:from-sky-400 shadow-[0_0_20px_rgba(56,189,248,0.3)]"
+                className="rounded-xl bg-white text-black font-semibold hover:bg-white/90"
               >
                 Create Page
               </Button>

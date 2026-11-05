@@ -8,10 +8,7 @@ import {
   Trash2,
   Globe,
   Sliders,
-  Shield,
   Layers,
-  Sparkles,
-  Upload,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -21,7 +18,11 @@ import { MediaUploadField } from "@/components/cms/media-upload-field"
 import { toast } from "sonner"
 
 export default function SiteSettingsPage() {
-  const { settings, updateSettings, resetToDefaults } = useCMSStore()
+  const { settings, updateSettings, resetToDefaults, init } = useCMSStore()
+
+  React.useEffect(() => {
+    init()
+  }, [init])
 
   const [siteName, setSiteName] = React.useState("")
   const [logoUrl, setLogoUrl] = React.useState("")
@@ -53,8 +54,8 @@ export default function SiteSettingsPage() {
     }
   }, [settings])
 
-  const handleSave = () => {
-    updateSettings({
+  const handleSave = async () => {
+    await updateSettings({
       siteName,
       logoUrl,
       faviconUrl,
@@ -67,7 +68,7 @@ export default function SiteSettingsPage() {
       analyticsId,
       navItems,
     })
-    toast.success("Global site settings updated successfully")
+    toast.success("Global site settings saved live")
   }
 
   const handleAddNavItem = () => {
@@ -81,22 +82,22 @@ export default function SiteSettingsPage() {
     setNavItems(navItems.filter((item) => item.id !== id))
   }
 
-  const handleResetDefaults = () => {
+  const handleResetDefaults = async () => {
     if (confirm("Reset all settings and pages back to default starter content?")) {
-      resetToDefaults()
+      await resetToDefaults()
       toast.success("Settings restored to defaults")
     }
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 font-sans">
       {/* Page Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 rounded-2xl border border-sky-500/20 bg-slate-950/70 p-6 backdrop-blur-xl shadow-[0_4px_24px_rgba(0,0,0,0.5)]">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 rounded-2xl border border-white/10 bg-[#0d0d10] p-6 shadow-[0_10px_30px_rgba(0,0,0,0.8)]">
         <div>
           <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-white font-mono">
             GLOBAL SITE SETTINGS
           </h1>
-          <p className="text-xs text-white/50 font-mono mt-1">
+          <p className="text-xs text-white/40 font-mono mt-1">
             Site identity, brand assets, navigation links, and SEO tracking defaults.
           </p>
         </div>
@@ -106,7 +107,7 @@ export default function SiteSettingsPage() {
             variant="outline"
             size="sm"
             onClick={handleResetDefaults}
-            className="gap-1.5 font-mono text-xs rounded-xl border-white/10 text-white/70 hover:bg-white/10"
+            className="gap-1.5 font-mono text-xs rounded-full border-white/10 text-white/70 hover:bg-white/10"
           >
             <RotateCcw className="h-3.5 w-3.5" />
             <span>Reset Defaults</span>
@@ -115,7 +116,7 @@ export default function SiteSettingsPage() {
           <Button
             onClick={handleSave}
             size="sm"
-            className="gap-2 font-mono text-xs rounded-xl bg-gradient-to-r from-sky-500 to-blue-600 text-white font-semibold hover:from-sky-400 shadow-[0_0_20px_rgba(56,189,248,0.35)]"
+            className="gap-2 font-mono text-xs rounded-full bg-white text-black font-semibold hover:bg-white/90 px-5 shadow-lg"
           >
             <Save className="h-3.5 w-3.5" />
             <span>Save Settings</span>
@@ -124,24 +125,24 @@ export default function SiteSettingsPage() {
       </div>
 
       <Tabs defaultValue="identity" className="space-y-6 font-mono text-xs">
-        <TabsList className="bg-slate-950/70 border border-sky-500/20 rounded-xl p-1">
+        <TabsList className="bg-[#0d0d10] border border-white/10 rounded-xl p-1">
           <TabsTrigger
             value="identity"
-            className="gap-2 data-[state=active]:bg-sky-500/20 data-[state=active]:text-sky-300 data-[state=active]:border-sky-500/40 rounded-lg text-xs"
+            className="gap-2 data-[state=active]:bg-white/15 data-[state=active]:text-white rounded-lg text-xs"
           >
             <Sliders className="h-3.5 w-3.5" />
             <span>Site Identity & Branding</span>
           </TabsTrigger>
           <TabsTrigger
             value="navigation"
-            className="gap-2 data-[state=active]:bg-sky-500/20 data-[state=active]:text-sky-300 data-[state=active]:border-sky-500/40 rounded-lg text-xs"
+            className="gap-2 data-[state=active]:bg-white/15 data-[state=active]:text-white rounded-lg text-xs"
           >
             <Layers className="h-3.5 w-3.5" />
             <span>Navigation Builder</span>
           </TabsTrigger>
           <TabsTrigger
             value="seo"
-            className="gap-2 data-[state=active]:bg-sky-500/20 data-[state=active]:text-sky-300 data-[state=active]:border-sky-500/40 rounded-lg text-xs"
+            className="gap-2 data-[state=active]:bg-white/15 data-[state=active]:text-white rounded-lg text-xs"
           >
             <Globe className="h-3.5 w-3.5" />
             <span>SEO & Analytics</span>
@@ -150,7 +151,7 @@ export default function SiteSettingsPage() {
 
         {/* Tab 1: Identity */}
         <TabsContent value="identity">
-          <div className="rounded-2xl border border-sky-500/20 bg-slate-950/80 p-6 space-y-6 backdrop-blur-xl shadow-[0_4px_24px_rgba(0,0,0,0.4)]">
+          <div className="rounded-2xl border border-white/10 bg-[#0d0d10] p-6 space-y-6 shadow-[0_10px_30px_rgba(0,0,0,0.8)]">
             <h2 className="text-sm font-semibold uppercase text-white tracking-wider">
               Branding & Global Contact Information
             </h2>
@@ -161,7 +162,7 @@ export default function SiteSettingsPage() {
                 <Input
                   value={siteName}
                   onChange={(e) => setSiteName(e.target.value)}
-                  className="rounded-xl border-sky-500/20 bg-black/50 text-white"
+                  className="rounded-xl border-white/10 bg-black/60 text-white"
                 />
               </div>
 
@@ -181,7 +182,7 @@ export default function SiteSettingsPage() {
                 <Input
                   value={contactEmail}
                   onChange={(e) => setContactEmail(e.target.value)}
-                  className="rounded-xl border-sky-500/20 bg-black/50 text-white"
+                  className="rounded-xl border-white/10 bg-black/60 text-white"
                 />
               </div>
 
@@ -190,7 +191,7 @@ export default function SiteSettingsPage() {
                 <Input
                   value={contactPhone}
                   onChange={(e) => setContactPhone(e.target.value)}
-                  className="rounded-xl border-sky-500/20 bg-black/50 text-white"
+                  className="rounded-xl border-white/10 bg-black/60 text-white"
                 />
               </div>
 
@@ -199,7 +200,7 @@ export default function SiteSettingsPage() {
                 <Input
                   value={address}
                   onChange={(e) => setAddress(e.target.value)}
-                  className="rounded-xl border-sky-500/20 bg-black/50 text-white"
+                  className="rounded-xl border-white/10 bg-black/60 text-white"
                 />
               </div>
 
@@ -208,7 +209,7 @@ export default function SiteSettingsPage() {
                 <Input
                   value={headerCtaText}
                   onChange={(e) => setHeaderCtaText(e.target.value)}
-                  className="rounded-xl border-sky-500/20 bg-black/50 text-white"
+                  className="rounded-xl border-white/10 bg-black/60 text-white"
                 />
               </div>
 
@@ -217,14 +218,14 @@ export default function SiteSettingsPage() {
                 <Input
                   value={headerCtaLink}
                   onChange={(e) => setHeaderCtaLink(e.target.value)}
-                  className="rounded-xl border-sky-500/20 bg-black/50 text-white"
+                  className="rounded-xl border-white/10 bg-black/60 text-white"
                 />
               </div>
             </div>
 
             <Button
               onClick={handleSave}
-              className="rounded-xl bg-gradient-to-r from-sky-500 to-blue-600 text-white font-semibold hover:from-sky-400 shadow-[0_0_20px_rgba(56,189,248,0.3)]"
+              className="rounded-full bg-white text-black font-semibold hover:bg-white/90 px-6"
             >
               Save Identity Settings
             </Button>
@@ -233,7 +234,7 @@ export default function SiteSettingsPage() {
 
         {/* Tab 2: Navigation Builder */}
         <TabsContent value="navigation">
-          <div className="rounded-2xl border border-sky-500/20 bg-slate-950/80 p-6 space-y-6 backdrop-blur-xl shadow-[0_4px_24px_rgba(0,0,0,0.4)]">
+          <div className="rounded-2xl border border-white/10 bg-[#0d0d10] p-6 space-y-6 shadow-[0_10px_30px_rgba(0,0,0,0.8)]">
             <div className="flex items-center justify-between">
               <div>
                 <h2 className="text-sm font-semibold uppercase text-white tracking-wider">
@@ -248,7 +249,7 @@ export default function SiteSettingsPage() {
                 variant="outline"
                 size="sm"
                 onClick={handleAddNavItem}
-                className="gap-1.5 text-xs rounded-xl border-sky-500/30 text-sky-300 hover:bg-sky-500/10"
+                className="gap-1.5 text-xs rounded-full border-white/15 text-white hover:bg-white/10"
               >
                 <Plus className="h-3.5 w-3.5" />
                 <span>Add Link</span>
@@ -259,7 +260,7 @@ export default function SiteSettingsPage() {
               {navItems.map((item, idx) => (
                 <div
                   key={item.id}
-                  className="flex items-center gap-3 rounded-xl border border-sky-500/20 bg-black/50 p-3"
+                  className="flex items-center gap-3 rounded-xl border border-white/10 bg-black/60 p-3"
                 >
                   <span className="text-white/40 w-6 font-mono text-[11px]">#{idx + 1}</span>
                   <div className="flex-1 grid sm:grid-cols-2 gap-3">
@@ -304,7 +305,7 @@ export default function SiteSettingsPage() {
 
             <Button
               onClick={handleSave}
-              className="rounded-xl bg-gradient-to-r from-sky-500 to-blue-600 text-white font-semibold hover:from-sky-400 shadow-[0_0_20px_rgba(56,189,248,0.3)]"
+              className="rounded-full bg-white text-black font-semibold hover:bg-white/90 px-6"
             >
               Save Navigation Menu
             </Button>
@@ -313,7 +314,7 @@ export default function SiteSettingsPage() {
 
         {/* Tab 3: SEO & Analytics */}
         <TabsContent value="seo">
-          <div className="rounded-2xl border border-sky-500/20 bg-slate-950/80 p-6 space-y-6 backdrop-blur-xl shadow-[0_4px_24px_rgba(0,0,0,0.4)]">
+          <div className="rounded-2xl border border-white/10 bg-[#0d0d10] p-6 space-y-6 shadow-[0_10px_30px_rgba(0,0,0,0.8)]">
             <div>
               <h2 className="text-sm font-semibold uppercase text-white tracking-wider">
                 Analytics & Global Fallback SEO
@@ -332,7 +333,7 @@ export default function SiteSettingsPage() {
                   value={analyticsId}
                   onChange={(e) => setAnalyticsId(e.target.value)}
                   placeholder="G-XXXXXXXXXX"
-                  className="rounded-xl border-sky-500/20 bg-black/50 text-white"
+                  className="rounded-xl border-white/10 bg-black/60 text-white"
                 />
               </div>
 
@@ -348,7 +349,7 @@ export default function SiteSettingsPage() {
 
             <Button
               onClick={handleSave}
-              className="rounded-xl bg-gradient-to-r from-sky-500 to-blue-600 text-white font-semibold hover:from-sky-400 shadow-[0_0_20px_rgba(56,189,248,0.3)]"
+              className="rounded-full bg-white text-black font-semibold hover:bg-white/90 px-6"
             >
               Save Analytics & SEO Defaults
             </Button>
