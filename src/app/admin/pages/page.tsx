@@ -160,17 +160,17 @@ export default function PageManagerPage() {
   return (
     <div className="space-y-4 font-[var(--font-poppins)]">
       {/* Page Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 rounded-xl border border-white/10 bg-[#0c0c0f] p-4 shadow-md">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 rounded-xl border border-white/10 bg-[#0c0c0f] p-3 shadow-md">
         <div>
           <div className="flex items-center gap-2">
-            <h1 className="text-base sm:text-lg font-semibold tracking-tight text-white">
+            <h1 className="text-[13px] font-semibold tracking-tight text-white">
               Page Manager
             </h1>
-            <Badge className="bg-red-500/10 text-red-400 border-red-500/20 text-[9px] px-1.5 py-0.5 rounded-md">
+            <Badge className="bg-red-500/10 text-red-400 border-red-500/20 text-[9px] px-1.5 py-0 rounded-md">
               {pages.length} Pages
             </Badge>
           </div>
-          <p className="text-[11px] text-white/40 mt-0.5">
+          <p className="text-[10px] text-white/40 mt-0.5">
             Author, reorder, and configure blocks and multimedia across all website routes.
           </p>
         </div>
@@ -180,19 +180,19 @@ export default function PageManagerPage() {
           className="admin-glass-btn-accent"
         >
           <Plus className="h-3 w-3 text-red-300" />
-          <span className="text-[10.5px]">New Page</span>
+          <span className="text-[10px]">New Page</span>
         </button>
       </div>
 
       {/* Filter and Search Bar */}
-      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5 rounded-xl border border-white/10 bg-[#0c0c0f] p-2.5">
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2 rounded-xl border border-white/10 bg-[#0c0c0f] p-2">
         <div className="relative flex-1 max-w-md">
-          <Search className="absolute left-2.5 top-2 h-3.5 w-3.5 text-white/40" />
+          <Search className="absolute left-2 top-1.5 h-3 w-3 text-white/40" />
           <Input
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Search pages by title or slug..."
-            className="pl-8 h-7 rounded-md border-white/10 bg-black/60 text-[11px] text-white placeholder:text-white/30 focus:border-red-500/40"
+            className="pl-7 h-6 rounded-md border-white/10 bg-black/60 text-[10px] placeholder:text-[10px] text-white placeholder:text-white/30 focus:border-red-500/40"
           />
         </div>
 
@@ -208,10 +208,10 @@ export default function PageManagerPage() {
               <button
                 key={id}
                 onClick={() => setStatusFilter(id)}
-                className={`px-2.5 py-1 rounded text-[10.5px] font-medium transition-all ${
+                className={`px-2 py-0.5 rounded text-[10px] font-medium transition-all ${
                   statusFilter === id
                     ? "bg-white/15 text-white shadow-sm"
-                    : "text-white/45 hover:text-white"
+                    : "text-white/40 hover:text-white"
                 }`}
               >
                 {label}
@@ -222,7 +222,7 @@ export default function PageManagerPage() {
           {selectedIds.length > 0 && (
             <button
               onClick={handleBatchDelete}
-              className="inline-flex items-center gap-1 h-7 text-[11px] rounded-md bg-red-600 hover:bg-red-700 text-white px-2.5 transition-colors"
+              className="inline-flex items-center gap-1 h-6 text-[10px] rounded-md bg-red-600 hover:bg-red-700 text-white px-2 transition-colors"
             >
               <Trash2 className="h-3 w-3" />
               <span>Delete ({selectedIds.length})</span>

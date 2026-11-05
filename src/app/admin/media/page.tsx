@@ -126,17 +126,17 @@ export default function MediaLibraryPage() {
   return (
     <div className="space-y-4 font-[var(--font-poppins)]">
       {/* Page Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 rounded-xl border border-white/10 bg-[#0c0c0f] p-4 shadow-md">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 rounded-xl border border-white/10 bg-[#0c0c0f] p-3 shadow-md">
         <div>
           <div className="flex items-center gap-2">
-            <h1 className="text-base sm:text-lg font-semibold tracking-tight text-white">
+            <h1 className="text-[13px] font-semibold tracking-tight text-white">
               Media Asset Library
             </h1>
-            <Badge className="bg-red-500/10 text-red-400 border-red-500/20 text-[9px] px-1.5 py-0.5 rounded-md">
+            <Badge className="bg-red-500/10 text-red-400 border-red-500/20 text-[9px] px-1.5 py-0 rounded-md">
               {mediaAssets.length} Assets
             </Badge>
           </div>
-          <p className="text-[11px] text-white/40 mt-0.5">
+          <p className="text-[10px] text-white/40 mt-0.5">
             Central repository for images, video loops, banners, and logos with instant upload.
           </p>
         </div>
@@ -152,7 +152,7 @@ export default function MediaLibraryPage() {
             ) : (
               <Upload className="h-3 w-3 text-red-300" />
             )}
-            <span className="text-[10.5px]">Upload Media</span>
+            <span className="text-[10px]">Upload Media</span>
           </button>
           <input
             ref={fileInputRef}
@@ -178,25 +178,25 @@ export default function MediaLibraryPage() {
         onDragLeave={() => setDragActive(false)}
         onDrop={handleDrop}
         onClick={() => fileInputRef.current?.click()}
-        className={`relative cursor-pointer rounded-xl border border-dashed p-4 text-center transition-all ${
+        className={`relative cursor-pointer rounded-xl border border-dashed p-3.5 text-center transition-all ${
           dragActive
             ? "border-red-500/50 bg-red-500/[0.04] shadow-lg"
             : "border-white/15 bg-[#0c0c0f] hover:border-red-500/40 hover:bg-white/[0.02]"
         }`}
       >
-        <div className="flex flex-col items-center justify-center space-y-2">
-          <div className="h-9 w-9 rounded-lg border border-white/10 bg-white/5 flex items-center justify-center text-white/70">
+        <div className="flex flex-col items-center justify-center space-y-1.5">
+          <div className="h-8 w-8 rounded-lg border border-white/10 bg-white/5 flex items-center justify-center text-white/70">
             {isUploading ? (
-              <Loader2 className="h-4 w-4 animate-spin text-red-400" />
+              <Loader2 className="h-3.5 w-3.5 animate-spin text-red-400" />
             ) : (
-              <Upload className="h-4 w-4 text-white/70" />
+              <Upload className="h-3.5 w-3.5 text-white/70" />
             )}
           </div>
           <div>
-            <p className="text-xs font-medium text-white">
+            <p className="text-[11px] font-medium text-white">
               Drop images or video loops here to upload
             </p>
-            <p className="text-[10.5px] text-white/40 mt-0.5">
+            <p className="text-[9px] text-white/40 mt-0.5">
               Supports PNG, JPG, WebP, SVG, and MP4 videos up to 100MB
             </p>
           </div>
@@ -204,14 +204,14 @@ export default function MediaLibraryPage() {
       </div>
 
       {/* Filter and Search Bar */}
-      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5 rounded-xl border border-white/10 bg-[#0c0c0f] p-2.5">
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2 rounded-xl border border-white/10 bg-[#0c0c0f] p-2">
         <div className="relative flex-1 max-w-md">
-          <Search className="absolute left-2.5 top-2 h-3.5 w-3.5 text-white/40" />
+          <Search className="absolute left-2 top-1.5 h-3 w-3 text-white/40" />
           <Input
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Search assets by filename or alt text..."
-            className="pl-8 h-7 rounded-md border-white/10 bg-black/60 text-[11px] text-white placeholder:text-white/30 focus:border-red-500/40"
+            className="pl-7 h-6 rounded-md border-white/10 bg-black/60 text-[10px] placeholder:text-[10px] text-white placeholder:text-white/30 focus:border-red-500/40"
           />
         </div>
 
@@ -226,7 +226,7 @@ export default function MediaLibraryPage() {
               <button
                 key={id}
                 onClick={() => setFilterType(id as any)}
-                className={`px-2.5 py-1 rounded text-[10.5px] font-medium transition-all ${
+                className={`px-2 py-0.5 rounded text-[10px] font-medium transition-all ${
                   filterType === id
                     ? "bg-white/15 text-white shadow-sm"
                     : "text-white/40 hover:text-white"
@@ -247,7 +247,7 @@ export default function MediaLibraryPage() {
                   : "text-white/40 hover:text-white"
               }`}
             >
-              <Grid className="h-3.5 w-3.5" />
+              <Grid className="h-3 w-3" />
             </button>
             <button
               onClick={() => setViewMode("list")}
@@ -257,7 +257,7 @@ export default function MediaLibraryPage() {
                   : "text-white/40 hover:text-white"
               }`}
             >
-              <List className="h-3.5 w-3.5" />
+              <List className="h-3 w-3" />
             </button>
           </div>
         </div>
@@ -469,7 +469,7 @@ export default function MediaLibraryPage() {
           <div className="space-y-3 py-3">
             <div className="space-y-1">
               <label className="text-white/50 text-[10px] uppercase font-medium">Asset File Name</label>
-              <div className="text-white font-medium text-[11.5px] truncate">{editingAsset?.name}</div>
+              <div className="text-white font-medium text-[11px] truncate">{editingAsset?.name}</div>
             </div>
 
             <div className="space-y-1">

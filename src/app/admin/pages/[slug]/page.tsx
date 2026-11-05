@@ -241,7 +241,7 @@ export default function PageEditorPage() {
           </Link>
           <div>
             <div className="flex items-center gap-2">
-              <h1 className="text-sm font-semibold text-white">
+              <h1 className="text-[13px] font-semibold text-white">
                 {page.title}
               </h1>
               <Badge
@@ -360,7 +360,7 @@ export default function PageEditorPage() {
                   className="admin-glass-btn-accent"
                 >
                   <Plus className="mr-1 h-3 w-3 inline text-red-300" />
-                  <span className="text-[10.5px]">Add Block</span>
+                  <span className="text-[10px]">Add Block</span>
                 </button>
               </div>
             ) : (
@@ -1050,7 +1050,7 @@ export default function PageEditorPage() {
               className="admin-glass-btn-accent"
             >
               <Save className="mr-1 h-3 w-3 inline text-red-300" />
-              <span className="text-[10.5px]">Save SEO Settings</span>
+              <span className="text-[10px]">Save SEO Settings</span>
             </button>
           </div>
         </TabsContent>
@@ -1120,7 +1120,7 @@ export default function PageEditorPage() {
               className="admin-glass-btn-accent"
             >
               <Save className="mr-1 h-3 w-3 inline text-red-300" />
-              <span className="text-[10.5px]">Save Configuration</span>
+              <span className="text-[10px]">Save Configuration</span>
             </button>
           </div>
         </TabsContent>

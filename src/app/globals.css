@@ -18,11 +18,30 @@
   --ease-ui: cubic-bezier(0.44, 0, 0.56, 1);
 }
 
-/* Force Poppins on the entire admin portal */
+/* Force Poppins & Modern Compact Typography across the entire admin portal */
 [data-admin-root="true"],
-.admin-scope,
+.admin-scope {
+  font-family: var(--font-poppins) !important;
+  font-size: 11px;
+  line-height: 1.4;
+  letter-spacing: -0.01em;
+}
+
+[data-admin-root="true"] *,
 .admin-scope * {
   font-family: var(--font-poppins) !important;
+}
+
+/* Compact scale for form controls and text in admin */
+.admin-scope input,
+.admin-scope textarea,
+.admin-scope select {
+  font-size: 10.5px !important;
+}
+
+.admin-scope input::placeholder,
+.admin-scope textarea::placeholder {
+  font-size: 10px !important;
 }
 
 * { box-sizing: border-box; }

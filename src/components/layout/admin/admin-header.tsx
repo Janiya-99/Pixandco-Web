@@ -88,7 +88,7 @@ export function AdminHeader({ onMobileMenuToggle }: AdminHeaderProps) {
               <Search className="h-3 w-3 text-white/40" />
               <span className="hidden sm:inline text-white/40 text-[10px]">Search pages or jump...</span>
             </div>
-            <kbd className="pointer-events-none hidden sm:inline-flex h-3.5 select-none items-center gap-0.5 rounded border border-white/15 bg-black/60 px-1 text-[8.5px] font-medium text-white/50">
+            <kbd className="pointer-events-none hidden sm:inline-flex h-3.5 select-none items-center gap-0.5 rounded border border-white/15 bg-black/60 px-1 text-[8px] font-medium text-white/50">
               ⌘K
             </kbd>
           </button>
@@ -113,7 +113,7 @@ export function AdminHeader({ onMobileMenuToggle }: AdminHeaderProps) {
                 {unreadNotifications > 0 && (
                   <button
                     onClick={markAllRead}
-                    className="text-[9.5px] text-red-400 hover:text-red-300 flex items-center gap-1 transition-colors"
+                    className="text-[9px] text-red-400 hover:text-red-300 flex items-center gap-1 transition-colors"
                   >
                     <Check className="h-2.5 w-2.5" /> Mark all read
                   </button>
@@ -123,10 +123,10 @@ export function AdminHeader({ onMobileMenuToggle }: AdminHeaderProps) {
                 {notifications.map((item) => (
                   <div key={item.id} className="p-3 hover:bg-white/[0.02] transition-colors space-y-0.5">
                     <div className="flex items-center justify-between">
-                      <span className="text-[10.5px] font-medium text-white/90">{item.title}</span>
+                      <span className="text-[10px] font-medium text-white/90">{item.title}</span>
                       <span className="text-[9px] text-white/40">{item.time}</span>
                     </div>
-                    <p className="text-[9.5px] text-white/50 leading-relaxed">{item.desc}</p>
+                    <p className="text-[9px] text-white/50 leading-relaxed">{item.desc}</p>
                   </div>
                 ))}
               </div>
