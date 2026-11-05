@@ -12,12 +12,18 @@ import {
   ChevronUp,
   ChevronDown,
   Layers,
-  Settings,
   Sparkles,
   ExternalLink,
   Check,
   Globe,
   Sliders,
+  Image as ImageIcon,
+  Video,
+  FileText,
+  HelpCircle,
+  BarChart3,
+  Flame,
+  Layout,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -36,12 +42,12 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
   DialogFooter,
 } from "@/components/ui/dialog"
 import { useCMSStore } from "@/hooks/use-cms-store"
 import { BlockType, PageBlock, PageStatus } from "@/types/cms.types"
 import { LivePreviewDrawer } from "@/components/cms/live-preview-drawer"
+import { MediaUploadField } from "@/components/cms/media-upload-field"
 import { toast } from "sonner"
 
 export default function PageEditorPage() {
@@ -93,21 +99,26 @@ export default function PageEditorPage() {
 
   if (!page) {
     return (
-      <div className="py-20 text-center font-mono space-y-4">
-        <h2 className="text-xl font-bold">Page Not Found</h2>
-        <p className="text-xs text-muted-foreground">
-          No page matching slug &ldquo;{slug}&rdquo; exists.
+      <div className="py-24 text-center font-mono space-y-4">
+        <div className="inline-flex h-12 w-12 items-center justify-center rounded-2xl border border-red-500/30 bg-red-500/10 text-red-400">
+          <Trash2 className="h-6 w-6" />
+        </div>
+        <h2 className="text-xl font-bold text-white">Page Not Found</h2>
+        <p className="text-xs text-white/50">
+          No page matching slug &ldquo;{slug}&rdquo; exists in the CMS store.
         </p>
-        <Link href="/admin/pages">
-          <Button variant="outline" size="sm">
-            Back to Page Manager
-          </Button>
-        </Link>
+        <div className="pt-2">
+          <Link href="/admin/pages">
+            <Button variant="outline" size="sm" className="font-mono text-xs border-sky-500/40 text-sky-400">
+              <ArrowLeft className="mr-2 h-4 w-4" /> Return to Page Manager
+            </Button>
+          </Link>
+        </div>
       </div>
     )
   }
 
-  const handleSavePage = () => {
+  const handleSavePageMeta = () => {
     updatePage(page.id, {
       title,
       slug: pageSlug,
@@ -120,173 +131,185 @@ export default function PageEditorPage() {
         noIndex,
       },
     })
-    toast.success("Page configuration updated successfully")
+    toast.success("Page settings & meta saved successfully")
+    if (pageSlug !== slug) {
+      router.push(`/admin/pages/${pageSlug}`)
+    }
   }
 
   const handleCreateBlock = () => {
-    let newBlock: PageBlock
-
-    const baseId = `blk_${Date.now()}`
-
-    switch (selectedBlockType) {
-      case "hero":
-        newBlock = {
-          id: baseId,
-          type: "hero",
-          name: "Hero Section",
-          visible: true,
-          title: "NEW IMPACTFUL HEADLINE",
-          subtitle: "Clear, concise subtitle explaining your offering.",
-          primaryCtaText: "Explore More",
-          primaryCtaLink: "/contact",
-        }
-        break
-      case "features":
-        newBlock = {
-          id: baseId,
-          type: "features",
-          name: "Feature Grid",
-          visible: true,
-          eyebrow: "CAPABILITIES",
-          heading: "Core Solutions Built for Speed",
-          subheading: "Custom architecture designed for performance.",
-          features: [
-            {
-              id: `f_${Date.now()}_1`,
-              icon: "Layers",
-              title: "Modular Architecture",
-              description: "Robust components built to scale effortlessly.",
-            },
-            {
-              id: `f_${Date.now()}_2`,
-              icon: "Zap",
-              title: "High Performance",
-              description: "Instant response times and zero bloat.",
-            },
-          ],
-        }
-        break
-      case "richtext":
-        newBlock = {
-          id: baseId,
-          type: "richtext",
-          name: "Editorial Text Block",
-          visible: true,
-          headline: "Editorial Headline",
-          content: "Write rich editorial paragraphs here...",
-        }
-        break
-      case "stats":
-        newBlock = {
-          id: baseId,
-          type: "stats",
-          name: "Performance Statistics",
-          visible: true,
-          stats: [
-            { id: `s_${Date.now()}_1`, value: "99.9%", label: "Reliability" },
-            { id: `s_${Date.now()}_2`, value: "<100ms", label: "Latency" },
-          ],
-        }
-        break
-      case "faq":
-        newBlock = {
-          id: baseId,
-          type: "faq",
-          name: "FAQ Accordion",
-          visible: true,
-          heading: "Frequently Asked Questions",
-          items: [
-            {
-              id: `faq_${Date.now()}_1`,
-              question: "How does this block work?",
-              answer: "Edit question and answers directly inside the inspector.",
-            },
-          ],
-        }
-        break
-      case "cta":
-        newBlock = {
-          id: baseId,
-          type: "cta",
-          name: "Call to Action",
-          visible: true,
-          title: "START YOUR ARCHITECTURE DISCOVERY",
-          description: "Connect with our team to elevate your digital operations.",
-          buttonText: "Schedule Call",
-          buttonLink: "/contact",
-        }
-        break
-      default:
-        newBlock = {
-          id: baseId,
-          type: "richtext",
-          name: "Custom Content Block",
-          visible: true,
-          content: "Content block details",
-        }
+    const timestamp = Date.now()
+    let newBlockData: any = {
+      id: `blk_${selectedBlockType}_${timestamp}`,
+      type: selectedBlockType,
+      name: `${selectedBlockType.toUpperCase()} Section`,
+      visible: true,
     }
 
-    addBlock(page.id, newBlock)
+    if (selectedBlockType === "hero") {
+      newBlockData = {
+        ...newBlockData,
+        title: "NEW HERO TITLE",
+        subtitle: "High precision engineering and strategic brand systems.",
+        badge: "FEATURED / ACTIVE",
+        primaryCtaText: "Get in touch",
+        primaryCtaLink: "/contact",
+        mediaUrl: "/videos/hero-system.mp4",
+        mediaType: "video",
+      }
+    } else if (selectedBlockType === "features") {
+      newBlockData = {
+        ...newBlockData,
+        heading: "CORE WORKFLOWS & CAPABILITIES",
+        subheading: "Tailored to modern enterprise operations.",
+        features: [
+          {
+            id: `f_${timestamp}_1`,
+            icon: "Layers",
+            title: "Modular Architecture",
+            description: "Scalable systems built on modern cloud frameworks.",
+          },
+          {
+            id: `f_${timestamp}_2`,
+            icon: "Sparkles",
+            title: "Real-time Intelligence",
+            description: "Instant data flows and predictive operational automation.",
+          },
+        ],
+      }
+    } else if (selectedBlockType === "richtext") {
+      newBlockData = {
+        ...newBlockData,
+        headline: "Editorial Headline",
+        content: "Write detailed page copy or formatted markdown content here.",
+      }
+    } else if (selectedBlockType === "media") {
+      newBlockData = {
+        ...newBlockData,
+        caption: "System architectural schematic",
+        mediaUrl: "/images/site/2l8Wl4e6GvRUtl6qrfXsaZKZassb2ef.jpg",
+        mediaType: "image",
+        aspectRatio: "16:9",
+      }
+    } else if (selectedBlockType === "stats") {
+      newBlockData = {
+        ...newBlockData,
+        stats: [
+          { id: `s_${timestamp}_1`, value: "99.9%", label: "Uptime" },
+          { id: `s_${timestamp}_2`, value: "<15ms", label: "Latency" },
+          { id: `s_${timestamp}_3`, value: "10+", label: "Years Experience" },
+        ],
+      }
+    } else if (selectedBlockType === "faq") {
+      newBlockData = {
+        ...newBlockData,
+        heading: "Frequently Asked Questions",
+        items: [
+          {
+            id: `faq_${timestamp}_1`,
+            question: "How do we get started?",
+            answer: "Begin with a discovery call where we outline project specifications.",
+          },
+        ],
+      }
+    } else if (selectedBlockType === "cta") {
+      newBlockData = {
+        ...newBlockData,
+        title: "Ready to discuss your enterprise requirements?",
+        description: "Speak with our software engineers and digital architects.",
+        buttonText: "Discuss a Project",
+        buttonLink: "/contact",
+      }
+    }
+
+    addBlock(page.id, newBlockData)
+    toast.success(`Added ${selectedBlockType} block`)
     setIsAddBlockOpen(false)
-    toast.success(`Added ${newBlock.name}`)
+  }
+
+  const handleMoveBlock = (index: number, direction: "up" | "down") => {
+    const newIndex = direction === "up" ? index - 1 : index + 1
+    if (newIndex < 0 || newIndex >= page.blocks.length) return
+
+    reorderBlocks(page.id, index, newIndex)
+    toast.success("Block position updated")
   }
 
   return (
     <div className="space-y-6">
-      {/* Top Action Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-border/60 pb-6">
+      {/* Top Floating Control Bar */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 rounded-2xl border border-sky-500/20 bg-slate-950/70 p-4 backdrop-blur-xl shadow-[0_4px_24px_rgba(0,0,0,0.5)]">
         <div className="flex items-center gap-3">
           <Link href="/admin/pages">
-            <Button variant="ghost" size="icon" className="h-8 w-8">
+            <Button
+              variant="outline"
+              size="icon"
+              className="h-9 w-9 rounded-xl border-sky-500/30 bg-black/40 text-white/80 hover:bg-sky-500/10 hover:border-sky-400 hover:text-white"
+            >
               <ArrowLeft className="h-4 w-4" />
             </Button>
           </Link>
           <div>
             <div className="flex items-center gap-2">
-              <h1 className="text-xl font-bold font-mono tracking-tight text-foreground">
-                {title || page.title}
+              <h1 className="text-lg font-bold tracking-tight text-white font-mono">
+                {page.title}
               </h1>
               <Badge
                 variant={
-                  status === "published"
+                  page.status === "published"
                     ? "success"
-                    : status === "draft"
-                    ? "warning"
-                    : "secondary"
+                    : page.status === "archived"
+                    ? "destructive"
+                    : "outline"
                 }
+                className="text-[10px] font-mono uppercase"
               >
-                {status}
+                {page.status}
               </Badge>
             </div>
-            <p className="text-xs text-muted-foreground font-mono">
-              Route: /{pageSlug || page.slug} • {page.blocks.length} blocks
+            <p className="text-xs font-mono text-sky-400/80 flex items-center gap-1.5 mt-0.5">
+              <span>Path: /{page.slug === "home" ? "" : page.slug}</span>
+              <a
+                href={page.slug === "home" ? "/" : `/${page.slug}`}
+                target="_blank"
+                rel="noreferrer"
+                className="hover:text-white inline-flex items-center"
+              >
+                <ExternalLink className="h-3 w-3 ml-1" />
+              </a>
             </p>
           </div>
         </div>
 
+        {/* Action Controls */}
         <div className="flex items-center gap-2.5">
-          {/* Live Preview Sheet Drawer */}
+          {/* Live Simulator Drawer */}
           <Sheet>
             <SheetTrigger asChild>
-              <Button variant="outline" size="sm" className="gap-2 font-mono text-xs">
-                <Eye className="h-3.5 w-3.5" />
-                <span>Live Simulator</span>
+              <Button
+                variant="outline"
+                size="sm"
+                className="h-9 gap-2 font-mono text-xs rounded-xl border-sky-500/30 bg-sky-950/20 text-sky-300 hover:bg-sky-500/20 hover:border-sky-400 shadow-[0_0_15px_rgba(56,189,248,0.15)]"
+              >
+                <Eye className="h-3.5 w-3.5 text-sky-400" />
+                <span className="hidden sm:inline">Live Simulator</span>
               </Button>
             </SheetTrigger>
-            <SheetContent side="right" className="w-full sm:max-w-2xl lg:max-w-4xl p-6">
-              <SheetHeader>
-                <SheetTitle>LIVE PAGE SIMULATION</SheetTitle>
+            <SheetContent side="right" className="w-full sm:max-w-2xl bg-slate-950/95 border-sky-500/30 p-6 backdrop-blur-2xl">
+              <SheetHeader className="mb-4">
+                <SheetTitle className="font-mono text-sm tracking-widest text-sky-400 flex items-center gap-2">
+                  <Globe className="h-4 w-4" />
+                  PAGE SIMULATOR : /{page.slug}
+                </SheetTitle>
               </SheetHeader>
-              <div className="mt-4 h-[calc(100vh-120px)]">
-                <LivePreviewDrawer page={page} />
-              </div>
+              <LivePreviewDrawer page={page} />
             </SheetContent>
           </Sheet>
 
           <Button
-            onClick={handleSavePage}
+            onClick={handleSavePageMeta}
             size="sm"
-            className="gap-2 font-mono text-xs"
+            className="h-9 gap-2 font-mono text-xs rounded-xl bg-gradient-to-r from-sky-500 to-blue-600 text-white font-semibold hover:from-sky-400 hover:to-blue-500 shadow-[0_0_20px_rgba(56,189,248,0.35)]"
           >
             <Save className="h-3.5 w-3.5" />
             <span>Save Changes</span>
@@ -294,528 +317,836 @@ export default function PageEditorPage() {
         </div>
       </div>
 
-      {/* Main Tabs Container */}
-      <Tabs defaultValue="blocks" className="space-y-6">
-        <TabsList className="font-mono text-xs">
-          <TabsTrigger value="blocks" className="gap-2">
+      {/* Main Tabbed Interface */}
+      <Tabs defaultValue="blocks" className="space-y-6 font-mono text-xs">
+        <TabsList className="bg-slate-950/70 border border-sky-500/20 rounded-xl p-1">
+          <TabsTrigger
+            value="blocks"
+            className="gap-2 data-[state=active]:bg-sky-500/20 data-[state=active]:text-sky-300 data-[state=active]:border-sky-500/40 rounded-lg text-xs"
+          >
             <Layers className="h-3.5 w-3.5" />
-            <span>Content Blocks ({page.blocks.length})</span>
+            <span>Section Blocks ({page.blocks.length})</span>
           </TabsTrigger>
-          <TabsTrigger value="settings" className="gap-2">
-            <Sliders className="h-3.5 w-3.5" />
-            <span>Page Details & Status</span>
-          </TabsTrigger>
-          <TabsTrigger value="seo" className="gap-2">
+          <TabsTrigger
+            value="seo"
+            className="gap-2 data-[state=active]:bg-sky-500/20 data-[state=active]:text-sky-300 data-[state=active]:border-sky-500/40 rounded-lg text-xs"
+          >
             <Globe className="h-3.5 w-3.5" />
-            <span>SEO & Metadata</span>
+            <span>SEO & OpenGraph</span>
+          </TabsTrigger>
+          <TabsTrigger
+            value="settings"
+            className="gap-2 data-[state=active]:bg-sky-500/20 data-[state=active]:text-sky-300 data-[state=active]:border-sky-500/40 rounded-lg text-xs"
+          >
+            <Sliders className="h-3.5 w-3.5" />
+            <span>Page Config</span>
           </TabsTrigger>
         </TabsList>
 
-        {/* Tab 1: Block-Based Builder */}
-        <TabsContent value="blocks" className="space-y-6">
-          <div className="flex items-center justify-between">
-            <p className="text-xs text-muted-foreground font-mono">
-              Reorder, toggle visibility, and edit individual content modules.
-            </p>
-
-            <Dialog open={isAddBlockOpen} onOpenChange={setIsAddBlockOpen}>
-              <DialogTrigger asChild>
-                <Button size="sm" className="gap-1.5 font-mono text-xs">
-                  <Plus className="h-3.5 w-3.5" />
-                  <span>Add Section Block</span>
-                </Button>
-              </DialogTrigger>
-              <DialogContent className="max-w-md font-mono">
-                <DialogHeader>
-                  <DialogTitle>SELECT BLOCK TYPE</DialogTitle>
-                </DialogHeader>
-
-                <div className="grid grid-cols-2 gap-3 py-4 text-xs">
-                  {[
-                    { type: "hero", label: "Hero Block", desc: "Title, badge, CTAs" },
-                    { type: "features", label: "Feature Matrix", desc: "Grid with icons" },
-                    { type: "richtext", label: "Editorial Text", desc: "Markdown & body" },
-                    { type: "stats", label: "Key Stats", desc: "KPI counters" },
-                    { type: "faq", label: "FAQ Accordion", desc: "Questions & answers" },
-                    { type: "cta", label: "Call to Action", desc: "Final conversion" },
-                  ].map((item) => (
-                    <button
-                      key={item.type}
-                      type="button"
-                      onClick={() => setSelectedBlockType(item.type as BlockType)}
-                      className={`flex flex-col text-left p-3 rounded-md border transition-all ${
-                        selectedBlockType === item.type
-                          ? "border-foreground bg-muted/40 font-semibold"
-                          : "border-border/60 hover:border-border hover:bg-muted/20"
-                      }`}
-                    >
-                      <span className="text-foreground">{item.label}</span>
-                      <span className="text-[10px] text-muted-foreground mt-0.5">
-                        {item.desc}
-                      </span>
-                    </button>
-                  ))}
-                </div>
-
-                <DialogFooter>
-                  <Button variant="outline" onClick={() => setIsAddBlockOpen(false)}>
-                    Cancel
-                  </Button>
-                  <Button onClick={handleCreateBlock}>Insert Block</Button>
-                </DialogFooter>
-              </DialogContent>
-            </Dialog>
+        {/* TAB 1: SECTION BLOCKS BUILDER */}
+        <TabsContent value="blocks" className="space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-1">
+            <div>
+              <p className="text-xs text-white/60">
+                Compose this page by rearranging, toggling, or editing modular section blocks.
+              </p>
+            </div>
+            <Button
+              onClick={() => setIsAddBlockOpen(true)}
+              size="sm"
+              className="gap-2 font-mono text-xs rounded-xl border border-sky-500/40 bg-sky-950/30 text-sky-300 hover:bg-sky-500/20 hover:border-sky-400"
+            >
+              <Plus className="h-3.5 w-3.5" />
+              <span>Add New Section</span>
+            </Button>
           </div>
 
-          {/* Block List */}
+          {/* Block Cards List */}
           <div className="space-y-4">
             {page.blocks.length === 0 ? (
-              <div className="rounded-lg border border-dashed border-border/80 p-12 text-center font-mono">
-                <p className="text-sm text-muted-foreground">
-                  No section blocks configured on this page yet.
+              <div className="rounded-2xl border-2 border-dashed border-sky-500/20 bg-slate-950/50 p-12 text-center space-y-3">
+                <Layers className="mx-auto h-8 w-8 text-sky-400/50" />
+                <h3 className="text-sm font-bold text-white">No section blocks configured</h3>
+                <p className="text-xs text-white/40 max-w-sm mx-auto">
+                  Click below to add your first Hero, Feature Matrix, or Media block.
                 </p>
                 <Button
                   onClick={() => setIsAddBlockOpen(true)}
-                  variant="outline"
                   size="sm"
-                  className="mt-4 gap-1.5"
+                  className="rounded-xl border border-sky-500/30 bg-sky-500/10 text-sky-300 hover:bg-sky-500/20"
                 >
-                  <Plus className="h-3.5 w-3.5" />
-                  <span>Add First Block</span>
+                  <Plus className="mr-2 h-4 w-4" /> Add Section Block
                 </Button>
               </div>
             ) : (
-              page.blocks.map((block, idx) => (
-                <div
-                  key={block.id}
-                  className={`rounded-lg border transition-all ${
-                    block.visible
-                      ? "border-border/80 bg-card/50"
-                      : "border-border/40 bg-card/20 opacity-60"
-                  } p-5 space-y-4`}
-                >
-                  {/* Block Header */}
-                  <div className="flex items-center justify-between border-b border-border/60 pb-3">
-                    <div className="flex items-center gap-3">
-                      <span className="rounded bg-muted px-2 py-0.5 text-[10px] font-mono text-muted-foreground uppercase">
-                        #{idx + 1} • {block.type}
-                      </span>
-                      <span className="font-mono text-xs font-semibold text-foreground">
-                        {block.name}
-                      </span>
-                    </div>
+              page.blocks.map((block, index) => {
+                const isFirst = index === 0
+                const isLast = index === page.blocks.length - 1
 
-                    <div className="flex items-center gap-2">
-                      {/* Visibility Switch */}
-                      <label className="flex items-center gap-1.5 text-[10px] font-mono text-muted-foreground mr-2">
-                        <span>Visible</span>
-                        <Switch
-                          checked={block.visible}
-                          onCheckedChange={(checked) =>
-                            updateBlock(page.id, block.id, { visible: checked })
-                          }
-                        />
-                      </label>
-
-                      {/* Reorder Up */}
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        disabled={idx === 0}
-                        onClick={() => reorderBlocks(page.id, idx, idx - 1)}
-                        className="h-7 w-7"
-                        title="Move Up"
-                      >
-                        <ChevronUp className="h-4 w-4" />
-                      </Button>
-
-                      {/* Reorder Down */}
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        disabled={idx === page.blocks.length - 1}
-                        onClick={() => reorderBlocks(page.id, idx, idx + 1)}
-                        className="h-7 w-7"
-                        title="Move Down"
-                      >
-                        <ChevronDown className="h-4 w-4" />
-                      </Button>
-
-                      {/* Remove */}
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => {
-                          if (confirm(`Remove block "${block.name}"?`)) {
-                            removeBlock(page.id, block.id)
-                            toast.success("Block removed")
-                          }
-                        }}
-                        className="h-7 w-7 text-muted-foreground hover:text-destructive"
-                        title="Delete block"
-                      >
-                        <Trash2 className="h-3.5 w-3.5" />
-                      </Button>
-                    </div>
-                  </div>
-
-                  {/* Block Field Form according to type */}
-                  <div className="grid gap-4 text-xs font-mono">
-                    {block.type === "hero" && (
-                      <div className="grid sm:grid-cols-2 gap-4">
-                        <div className="space-y-1.5 sm:col-span-2">
-                          <label className="text-muted-foreground uppercase">Badge Text</label>
-                          <Input
-                            value={block.badge || ""}
-                            onChange={(e) =>
-                              updateBlock(page.id, block.id, { badge: e.target.value })
-                            }
-                            placeholder="e.g. AI AUTOMATION / OPERATIONS"
-                          />
+                return (
+                  <div
+                    key={block.id}
+                    className={`rounded-2xl border transition-all duration-300 bg-slate-950/80 backdrop-blur-xl ${
+                      block.visible
+                        ? "border-sky-500/25 shadow-[0_4px_24px_rgba(0,0,0,0.4)] hover:border-sky-400/50"
+                        : "border-white/10 opacity-60 bg-black/40"
+                    }`}
+                  >
+                    {/* Block Header */}
+                    <div className="flex items-center justify-between border-b border-white/5 p-4 bg-white/[0.02]">
+                      <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-1 text-white/40">
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            disabled={isFirst}
+                            onClick={() => handleMoveBlock(index, "up")}
+                            className="h-7 w-7 text-white/50 hover:text-sky-300 hover:bg-sky-500/10 rounded-lg disabled:opacity-20"
+                          >
+                            <ChevronUp className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            disabled={isLast}
+                            onClick={() => handleMoveBlock(index, "down")}
+                            className="h-7 w-7 text-white/50 hover:text-sky-300 hover:bg-sky-500/10 rounded-lg disabled:opacity-20"
+                          >
+                            <ChevronDown className="h-4 w-4" />
+                          </Button>
                         </div>
-                        <div className="space-y-1.5 sm:col-span-2">
-                          <label className="text-muted-foreground uppercase">Headline</label>
-                          <Input
-                            value={block.title || ""}
-                            onChange={(e) =>
-                              updateBlock(page.id, block.id, { title: e.target.value })
-                            }
-                            placeholder="Main Hero Title"
-                          />
-                        </div>
-                        <div className="space-y-1.5 sm:col-span-2">
-                          <label className="text-muted-foreground uppercase">Subtitle</label>
-                          <textarea
-                            value={block.subtitle || ""}
-                            onChange={(e) =>
-                              updateBlock(page.id, block.id, { subtitle: e.target.value })
-                            }
-                            rows={3}
-                            className="w-full rounded-md border border-border/80 bg-background/60 p-3 text-xs font-mono"
-                            placeholder="Hero description"
-                          />
-                        </div>
-                        <div className="space-y-1.5">
-                          <label className="text-muted-foreground uppercase">Primary CTA Text</label>
-                          <Input
-                            value={block.primaryCtaText || ""}
-                            onChange={(e) =>
-                              updateBlock(page.id, block.id, { primaryCtaText: e.target.value })
-                            }
-                          />
-                        </div>
-                        <div className="space-y-1.5">
-                          <label className="text-muted-foreground uppercase">Primary CTA Link</label>
-                          <Input
-                            value={block.primaryCtaLink || ""}
-                            onChange={(e) =>
-                              updateBlock(page.id, block.id, { primaryCtaLink: e.target.value })
-                            }
-                          />
+
+                        <div className="flex items-center gap-2">
+                          <span className="rounded-lg border border-sky-500/30 bg-sky-950/40 px-2 py-0.5 text-[10px] font-mono uppercase text-sky-300">
+                            {block.type}
+                          </span>
+                          <span className="font-semibold text-white text-xs">
+                            {block.name}
+                          </span>
                         </div>
                       </div>
-                    )}
 
-                    {block.type === "features" && (
-                      <div className="space-y-4">
+                      <div className="flex items-center gap-4">
+                        <div className="flex items-center gap-2">
+                          <span className="text-[10px] text-white/50 hidden sm:inline">
+                            {block.visible ? "Active" : "Hidden"}
+                          </span>
+                          <Switch
+                            checked={block.visible}
+                            onCheckedChange={(checked) =>
+                              updateBlock(page.id, block.id, { visible: checked })
+                            }
+                          />
+                        </div>
+
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => {
+                            if (confirm(`Remove block "${block.name}"?`)) {
+                              removeBlock(page.id, block.id)
+                              toast.success("Block removed")
+                            }
+                          }}
+                          className="h-7 w-7 text-white/40 hover:text-red-400 hover:bg-red-500/10 rounded-lg"
+                        >
+                          <Trash2 className="h-3.5 w-3.5" />
+                        </Button>
+                      </div>
+                    </div>
+
+                    {/* Block Fields Editor */}
+                    <div className="p-5 space-y-4 text-xs font-mono">
+                      {/* HERO BLOCK */}
+                      {block.type === "hero" && (
                         <div className="grid sm:grid-cols-2 gap-4">
-                          <div className="space-y-1.5">
-                            <label className="text-muted-foreground uppercase">Eyebrow</label>
+                          <div className="space-y-1.5 sm:col-span-2">
+                            <label className="text-white/50 uppercase text-[11px]">Badge Text</label>
                             <Input
-                              value={block.eyebrow || ""}
+                              value={block.badge || ""}
                               onChange={(e) =>
-                                updateBlock(page.id, block.id, { eyebrow: e.target.value })
+                                updateBlock(page.id, block.id, { badge: e.target.value })
                               }
+                              placeholder="e.g. AI AUTOMATION / OPERATIONS"
+                              className="rounded-xl border-sky-500/20 bg-black/50 text-white focus:border-sky-400"
+                            />
+                          </div>
+
+                          <div className="space-y-1.5 sm:col-span-2">
+                            <label className="text-white/50 uppercase text-[11px]">Headline</label>
+                            <Input
+                              value={block.title || ""}
+                              onChange={(e) =>
+                                updateBlock(page.id, block.id, { title: e.target.value })
+                              }
+                              placeholder="Main Hero Title"
+                              className="rounded-xl border-sky-500/20 bg-black/50 text-white focus:border-sky-400"
+                            />
+                          </div>
+
+                          <div className="space-y-1.5 sm:col-span-2">
+                            <label className="text-white/50 uppercase text-[11px]">Subtitle</label>
+                            <textarea
+                              value={block.subtitle || ""}
+                              onChange={(e) =>
+                                updateBlock(page.id, block.id, { subtitle: e.target.value })
+                              }
+                              rows={3}
+                              className="w-full rounded-xl border border-sky-500/20 bg-black/50 p-3 text-xs font-mono text-white focus:border-sky-400 focus:outline-none"
+                              placeholder="Hero description"
+                            />
+                          </div>
+
+                          <div className="space-y-1.5">
+                            <label className="text-white/50 uppercase text-[11px]">Primary CTA Text</label>
+                            <Input
+                              value={block.primaryCtaText || ""}
+                              onChange={(e) =>
+                                updateBlock(page.id, block.id, { primaryCtaText: e.target.value })
+                              }
+                              placeholder="e.g. Start a Project"
+                              className="rounded-xl border-sky-500/20 bg-black/50 text-white"
+                            />
+                          </div>
+
+                          <div className="space-y-1.5">
+                            <label className="text-white/50 uppercase text-[11px]">Primary CTA Link</label>
+                            <Input
+                              value={block.primaryCtaLink || ""}
+                              onChange={(e) =>
+                                updateBlock(page.id, block.id, { primaryCtaLink: e.target.value })
+                              }
+                              placeholder="e.g. /contact"
+                              className="rounded-xl border-sky-500/20 bg-black/50 text-white"
+                            />
+                          </div>
+
+                          {/* HERO MEDIA UPLOAD (IMAGE OR VIDEO) */}
+                          <div className="sm:col-span-2 pt-2 border-t border-white/5">
+                            <MediaUploadField
+                              label="Hero Media Asset (Background Video or Image)"
+                              value={block.mediaUrl}
+                              onChange={(url) => {
+                                const isVid =
+                                  url.endsWith(".mp4") ||
+                                  url.endsWith(".webm") ||
+                                  url.includes("/videos/")
+                                updateBlock(page.id, block.id, {
+                                  mediaUrl: url,
+                                  mediaType: isVid ? "video" : "image",
+                                })
+                              }}
+                              mediaType="any"
+                              placeholder="/videos/hero-system.mp4 or /images/..."
+                            />
+                          </div>
+                        </div>
+                      )}
+
+                      {/* FEATURES BLOCK */}
+                      {block.type === "features" && (
+                        <div className="space-y-4">
+                          <div className="grid sm:grid-cols-2 gap-4">
+                            <div className="space-y-1.5">
+                              <label className="text-white/50 uppercase text-[11px]">Eyebrow</label>
+                              <Input
+                                value={block.eyebrow || ""}
+                                onChange={(e) =>
+                                updateBlock(page.id, block.id, { eyebrow: e.target.value })
+                                }
+                                placeholder="e.g. WHAT WE DELIVER"
+                                className="rounded-xl border-sky-500/20 bg-black/50 text-white"
+                              />
+                            </div>
+
+                            <div className="space-y-1.5">
+                              <label className="text-white/50 uppercase text-[11px]">Section Heading</label>
+                              <Input
+                                value={block.heading}
+                                onChange={(e) =>
+                                  updateBlock(page.id, block.id, { heading: e.target.value })
+                                }
+                                className="rounded-xl border-sky-500/20 bg-black/50 text-white"
+                              />
+                            </div>
+                          </div>
+
+                          {/* Repeating items */}
+                          <div className="space-y-2 pt-2">
+                            <div className="flex items-center justify-between">
+                              <label className="text-white/50 uppercase text-[11px]">
+                                Feature Items ({block.features.length})
+                              </label>
+                              <Button
+                                type="button"
+                                variant="outline"
+                                size="sm"
+                                onClick={() => {
+                                  const updated = [
+                                    ...block.features,
+                                    {
+                                      id: `f_${Date.now()}`,
+                                      icon: "Layers",
+                                      title: "New Capability",
+                                      description: "Workflow description.",
+                                    },
+                                  ]
+                                  updateBlock(page.id, block.id, { features: updated })
+                                }}
+                                className="h-7 text-[10px] rounded-lg border-sky-500/30 text-sky-300 hover:bg-sky-500/10"
+                              >
+                                <Plus className="h-3 w-3 mr-1" /> Add Feature
+                              </Button>
+                            </div>
+
+                            <div className="grid sm:grid-cols-2 gap-3">
+                              {block.features.map((feat, fIdx) => (
+                                <div
+                                  key={feat.id}
+                                  className="rounded-xl border border-sky-500/20 bg-black/50 p-3 space-y-2"
+                                >
+                                  <div className="flex items-center justify-between">
+                                    <Input
+                                      value={feat.title}
+                                      onChange={(e) => {
+                                        const updated = [...block.features]
+                                        const target = updated[fIdx]
+                                        if (target) {
+                                          target.title = e.target.value
+                                          updateBlock(page.id, block.id, { features: updated })
+                                        }
+                                      }}
+                                      className="h-7 text-xs font-semibold rounded-lg border-white/10 bg-black/40 text-white"
+                                      placeholder="Feature Title"
+                                    />
+                                    <Button
+                                      type="button"
+                                      variant="ghost"
+                                      size="icon"
+                                      onClick={() => {
+                                        const updated = block.features.filter((_, i) => i !== fIdx)
+                                        updateBlock(page.id, block.id, { features: updated })
+                                      }}
+                                      className="h-7 w-7 text-white/40 hover:text-red-400 ml-1"
+                                    >
+                                      <Trash2 className="h-3 w-3" />
+                                    </Button>
+                                  </div>
+                                  <textarea
+                                    value={feat.description}
+                                    onChange={(e) => {
+                                      const updated = [...block.features]
+                                      const target = updated[fIdx]
+                                      if (target) {
+                                        target.description = e.target.value
+                                        updateBlock(page.id, block.id, { features: updated })
+                                      }
+                                    }}
+                                    rows={2}
+                                    className="w-full rounded-lg border border-white/10 bg-black/40 p-2 text-[11px] text-white/80 focus:border-sky-400 focus:outline-none"
+                                    placeholder="Feature description"
+                                  />
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* RICHTEXT BLOCK */}
+                      {block.type === "richtext" && (
+                        <div className="space-y-3">
+                          <div className="space-y-1.5">
+                            <label className="text-white/50 uppercase text-[11px]">Headline</label>
+                            <Input
+                              value={block.headline || ""}
+                              onChange={(e) =>
+                                updateBlock(page.id, block.id, { headline: e.target.value })
+                              }
+                              placeholder="Section Heading"
+                              className="rounded-xl border-sky-500/20 bg-black/50 text-white"
                             />
                           </div>
                           <div className="space-y-1.5">
-                            <label className="text-muted-foreground uppercase">Main Heading</label>
+                            <label className="text-white/50 uppercase text-[11px]">Content (Markdown / Multi-paragraph)</label>
+                            <textarea
+                              value={block.content}
+                              onChange={(e) =>
+                                updateBlock(page.id, block.id, { content: e.target.value })
+                              }
+                              rows={6}
+                              className="w-full rounded-xl border border-sky-500/20 bg-black/50 p-3 text-xs font-mono text-white focus:border-sky-400 focus:outline-none leading-relaxed"
+                              placeholder="Write your editorial copy..."
+                            />
+                          </div>
+                        </div>
+                      )}
+
+                      {/* MEDIA BLOCK WITH UPLOAD */}
+                      {block.type === "media" && (
+                        <div className="space-y-4">
+                          <MediaUploadField
+                            label="Media Asset (Image or Video)"
+                            value={block.mediaUrl}
+                            onChange={(url) => {
+                              const isVid =
+                                url.endsWith(".mp4") ||
+                                url.endsWith(".webm") ||
+                                url.includes("/videos/")
+                              updateBlock(page.id, block.id, {
+                                mediaUrl: url,
+                                mediaType: isVid ? "video" : "image",
+                              })
+                            }}
+                            mediaType="any"
+                            placeholder="/images/... or /videos/..."
+                          />
+
+                          <div className="grid sm:grid-cols-2 gap-4">
+                            <div className="space-y-1.5">
+                              <label className="text-white/50 uppercase text-[11px]">Caption</label>
+                              <Input
+                                value={block.caption || ""}
+                                onChange={(e) =>
+                                  updateBlock(page.id, block.id, { caption: e.target.value })
+                                }
+                                placeholder="Optional description or credit"
+                                className="rounded-xl border-sky-500/20 bg-black/50 text-white"
+                              />
+                            </div>
+                            <div className="space-y-1.5">
+                              <label className="text-white/50 uppercase text-[11px]">Aspect Ratio</label>
+                              <select
+                                value={block.aspectRatio || "16:9"}
+                                onChange={(e) =>
+                                  updateBlock(page.id, block.id, {
+                                    aspectRatio: e.target.value as any,
+                                  })
+                                }
+                                className="w-full rounded-xl border border-sky-500/20 bg-black/50 p-2 text-xs font-mono text-white focus:border-sky-400 focus:outline-none"
+                              >
+                                <option value="16:9">16:9 Landscape</option>
+                                <option value="4:3">4:3 Standard</option>
+                                <option value="1:1">1:1 Square</option>
+                                <option value="auto">Auto Native</option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* STATS BLOCK */}
+                      {block.type === "stats" && (
+                        <div className="space-y-3">
+                          <div className="flex items-center justify-between">
+                            <label className="text-white/50 uppercase text-[11px]">
+                              Key Metric Counters
+                            </label>
+                            <Button
+                              type="button"
+                              variant="outline"
+                              size="sm"
+                              onClick={() => {
+                                const updated = [
+                                  ...block.stats,
+                                  { id: `s_${Date.now()}`, value: "100%", label: "Metric" },
+                                ]
+                                updateBlock(page.id, block.id, { stats: updated })
+                              }}
+                              className="h-7 text-[10px] rounded-lg border-sky-500/30 text-sky-300 hover:bg-sky-500/10"
+                            >
+                              <Plus className="h-3 w-3 mr-1" /> Add Counter
+                            </Button>
+                          </div>
+
+                          <div className="grid sm:grid-cols-3 gap-3">
+                            {block.stats.map((st, sIdx) => (
+                              <div
+                                key={st.id}
+                                className="rounded-xl border border-sky-500/20 bg-black/50 p-3 space-y-2"
+                              >
+                                <div className="flex items-center justify-between">
+                                  <span className="text-[10px] text-white/40">#{sIdx + 1}</span>
+                                  <Button
+                                    type="button"
+                                    variant="ghost"
+                                    size="icon"
+                                    onClick={() => {
+                                      const updated = block.stats.filter((_, i) => i !== sIdx)
+                                      updateBlock(page.id, block.id, { stats: updated })
+                                    }}
+                                    className="h-6 w-6 text-white/40 hover:text-red-400"
+                                  >
+                                    <Trash2 className="h-3 w-3" />
+                                  </Button>
+                                </div>
+                                <Input
+                                  value={st.value}
+                                  onChange={(e) => {
+                                    const updated = [...block.stats]
+                                    const target = updated[sIdx]
+                                    if (target) {
+                                      target.value = e.target.value
+                                      updateBlock(page.id, block.id, { stats: updated })
+                                    }
+                                  }}
+                                  placeholder="e.g. 10+"
+                                  className="h-8 font-bold text-white bg-black/40 border-white/10 rounded-lg"
+                                />
+                                <Input
+                                  value={st.label}
+                                  onChange={(e) => {
+                                    const updated = [...block.stats]
+                                    const target = updated[sIdx]
+                                    if (target) {
+                                      target.label = e.target.value
+                                      updateBlock(page.id, block.id, { stats: updated })
+                                    }
+                                  }}
+                                  placeholder="e.g. Years Experience"
+                                  className="h-7 text-[11px] text-white/70 bg-black/40 border-white/10 rounded-lg"
+                                />
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* FAQ BLOCK */}
+                      {block.type === "faq" && (
+                        <div className="space-y-4">
+                          <div className="space-y-1.5">
+                            <label className="text-white/50 uppercase text-[11px]">FAQ Section Title</label>
                             <Input
-                              value={block.heading || ""}
+                              value={block.heading}
                               onChange={(e) =>
                                 updateBlock(page.id, block.id, { heading: e.target.value })
                               }
+                              className="rounded-xl border-sky-500/20 bg-black/50 text-white"
+                            />
+                          </div>
+
+                          <div className="space-y-2">
+                            <div className="flex items-center justify-between">
+                              <label className="text-white/50 uppercase text-[11px]">
+                                Questions & Answers ({block.items.length})
+                              </label>
+                              <Button
+                                type="button"
+                                variant="outline"
+                                size="sm"
+                                onClick={() => {
+                                  const updated = [
+                                    ...block.items,
+                                    {
+                                      id: `faq_${Date.now()}`,
+                                      question: "New Question?",
+                                      answer: "Detailed answer explaining process or details.",
+                                    },
+                                  ]
+                                  updateBlock(page.id, block.id, { items: updated })
+                                }}
+                                className="h-7 text-[10px] rounded-lg border-sky-500/30 text-sky-300 hover:bg-sky-500/10"
+                              >
+                                <Plus className="h-3 w-3 mr-1" /> Add FAQ
+                              </Button>
+                            </div>
+
+                            <div className="space-y-3">
+                              {block.items.map((item, qIdx) => (
+                                <div
+                                  key={item.id}
+                                  className="rounded-xl border border-sky-500/20 bg-black/50 p-4 space-y-2"
+                                >
+                                  <div className="flex items-center justify-between">
+                                    <Input
+                                      value={item.question}
+                                      onChange={(e) => {
+                                        const updated = [...block.items]
+                                        const target = updated[qIdx]
+                                        if (target) {
+                                          target.question = e.target.value
+                                          updateBlock(page.id, block.id, { items: updated })
+                                        }
+                                      }}
+                                      className="h-8 font-semibold text-white bg-black/40 border-white/10 rounded-lg"
+                                      placeholder="Question title"
+                                    />
+                                    <Button
+                                      type="button"
+                                      variant="ghost"
+                                      size="icon"
+                                      onClick={() => {
+                                        const updated = block.items.filter((_, i) => i !== qIdx)
+                                        updateBlock(page.id, block.id, { items: updated })
+                                      }}
+                                      className="h-7 w-7 text-white/40 hover:text-red-400 ml-2"
+                                    >
+                                      <Trash2 className="h-3.5 w-3.5" />
+                                    </Button>
+                                  </div>
+                                  <textarea
+                                    value={item.answer}
+                                    onChange={(e) => {
+                                      const updated = [...block.items]
+                                      const target = updated[qIdx]
+                                      if (target) {
+                                        target.answer = e.target.value
+                                        updateBlock(page.id, block.id, { items: updated })
+                                      }
+                                    }}
+                                    rows={2}
+                                    className="w-full rounded-lg border border-white/10 bg-black/40 p-2.5 text-xs text-white/80 focus:border-sky-400 focus:outline-none"
+                                    placeholder="Answer explanation"
+                                  />
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* CTA BLOCK */}
+                      {block.type === "cta" && (
+                        <div className="grid sm:grid-cols-2 gap-4">
+                          <div className="space-y-1.5 sm:col-span-2">
+                            <label className="text-white/50 uppercase text-[11px]">Headline</label>
+                            <Input
+                              value={block.title}
+                              onChange={(e) =>
+                                updateBlock(page.id, block.id, { title: e.target.value })
+                              }
+                              className="rounded-xl border-sky-500/20 bg-black/50 text-white"
+                            />
+                          </div>
+                          <div className="space-y-1.5 sm:col-span-2">
+                            <label className="text-white/50 uppercase text-[11px]">Description</label>
+                            <Input
+                              value={block.description || ""}
+                              onChange={(e) =>
+                                updateBlock(page.id, block.id, { description: e.target.value })
+                              }
+                              className="rounded-xl border-sky-500/20 bg-black/50 text-white"
+                            />
+                          </div>
+                          <div className="space-y-1.5">
+                            <label className="text-white/50 uppercase text-[11px]">Button Text</label>
+                            <Input
+                              value={block.buttonText}
+                              onChange={(e) =>
+                                updateBlock(page.id, block.id, { buttonText: e.target.value })
+                              }
+                              className="rounded-xl border-sky-500/20 bg-black/50 text-white"
+                            />
+                          </div>
+                          <div className="space-y-1.5">
+                            <label className="text-white/50 uppercase text-[11px]">Button Link</label>
+                            <Input
+                              value={block.buttonLink}
+                              onChange={(e) =>
+                                updateBlock(page.id, block.id, { buttonLink: e.target.value })
+                              }
+                              className="rounded-xl border-sky-500/20 bg-black/50 text-white"
                             />
                           </div>
                         </div>
-
-                        {/* Feature Items List */}
-                        <div className="space-y-3 pt-2">
-                          <label className="text-muted-foreground uppercase block">
-                            Feature Grid Items ({block.features.length})
-                          </label>
-                          {block.features.map((feat, fIdx) => (
-                            <div
-                              key={feat.id}
-                              className="rounded border border-border/60 bg-muted/20 p-3 grid sm:grid-cols-3 gap-3"
-                            >
-                              <div className="space-y-1">
-                                <label className="text-[10px] text-muted-foreground">Title</label>
-                                <Input
-                                  value={feat.title}
-                                  onChange={(e) => {
-                                    const updated = [...block.features]
-                                    const item = updated[fIdx]
-                                    if (item) {
-                                      item.title = e.target.value
-                                      updateBlock(page.id, block.id, { features: updated })
-                                    }
-                                  }}
-                                />
-                              </div>
-                              <div className="space-y-1 sm:col-span-2">
-                                <label className="text-[10px] text-muted-foreground">Description</label>
-                                <Input
-                                  value={feat.description}
-                                  onChange={(e) => {
-                                    const updated = [...block.features]
-                                    const item = updated[fIdx]
-                                    if (item) {
-                                      item.description = e.target.value
-                                      updateBlock(page.id, block.id, { features: updated })
-                                    }
-                                  }}
-                                />
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-
-                    {block.type === "richtext" && (
-                      <div className="space-y-4">
-                        <div className="space-y-1.5">
-                          <label className="text-muted-foreground uppercase">Section Headline</label>
-                          <Input
-                            value={block.headline || ""}
-                            onChange={(e) =>
-                              updateBlock(page.id, block.id, { headline: e.target.value })
-                            }
-                          />
-                        </div>
-                        <div className="space-y-1.5">
-                          <label className="text-muted-foreground uppercase">Body Content</label>
-                          <textarea
-                            value={block.content || ""}
-                            onChange={(e) =>
-                              updateBlock(page.id, block.id, { content: e.target.value })
-                            }
-                            rows={6}
-                            className="w-full rounded-md border border-border/80 bg-background/60 p-3 text-xs font-mono"
-                            placeholder="Write paragraphs or markdown..."
-                          />
-                        </div>
-                      </div>
-                    )}
-
-                    {block.type === "cta" && (
-                      <div className="grid sm:grid-cols-2 gap-4">
-                        <div className="space-y-1.5 sm:col-span-2">
-                          <label className="text-muted-foreground uppercase">Title</label>
-                          <Input
-                            value={block.title || ""}
-                            onChange={(e) =>
-                              updateBlock(page.id, block.id, { title: e.target.value })
-                            }
-                          />
-                        </div>
-                        <div className="space-y-1.5 sm:col-span-2">
-                          <label className="text-muted-foreground uppercase">Description</label>
-                          <Input
-                            value={block.description || ""}
-                            onChange={(e) =>
-                              updateBlock(page.id, block.id, { description: e.target.value })
-                            }
-                          />
-                        </div>
-                        <div className="space-y-1.5">
-                          <label className="text-muted-foreground uppercase">Button Text</label>
-                          <Input
-                            value={block.buttonText || ""}
-                            onChange={(e) =>
-                              updateBlock(page.id, block.id, { buttonText: e.target.value })
-                            }
-                          />
-                        </div>
-                        <div className="space-y-1.5">
-                          <label className="text-muted-foreground uppercase">Button Link</label>
-                          <Input
-                            value={block.buttonLink || ""}
-                            onChange={(e) =>
-                              updateBlock(page.id, block.id, { buttonLink: e.target.value })
-                            }
-                          />
-                        </div>
-                      </div>
-                    )}
-
-                    {block.type === "faq" && (
-                      <div className="space-y-3">
-                        <div className="space-y-1.5">
-                          <label className="text-muted-foreground uppercase">Heading</label>
-                          <Input
-                            value={block.heading}
-                            onChange={(e) =>
-                              updateBlock(page.id, block.id, { heading: e.target.value })
-                            }
-                          />
-                        </div>
-                        <div className="space-y-2">
-                          {block.items.map((item, qIdx) => (
-                            <div
-                              key={item.id}
-                              className="rounded border border-border/60 p-3 space-y-2 bg-muted/20"
-                            >
-                              <Input
-                                value={item.question}
-                                onChange={(e) => {
-                                  const updated = [...block.items]
-                                  const itm = updated[qIdx]
-                                  if (itm) {
-                                    itm.question = e.target.value
-                                    updateBlock(page.id, block.id, { items: updated })
-                                  }
-                                }}
-                                placeholder="Question"
-                              />
-                              <textarea
-                                value={item.answer}
-                                onChange={(e) => {
-                                  const updated = [...block.items]
-                                  const itm = updated[qIdx]
-                                  if (itm) {
-                                    itm.answer = e.target.value
-                                    updateBlock(page.id, block.id, { items: updated })
-                                  }
-                                }}
-                                rows={2}
-                                className="w-full rounded border border-border/80 bg-background/60 p-2 text-xs font-mono"
-                                placeholder="Answer"
-                              />
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    )}
+                      )}
+                    </div>
                   </div>
-                </div>
-              ))
+                )
+              })
             )}
           </div>
         </TabsContent>
 
-        {/* Tab 2: Page Details & Status */}
-        <TabsContent value="settings" className="space-y-6">
-          <div className="rounded-lg border border-border/80 bg-card/40 p-6 space-y-5 font-mono text-xs">
-            <h2 className="text-sm font-semibold uppercase text-foreground">
-              General Settings
-            </h2>
-
-            <div className="grid sm:grid-cols-2 gap-4">
-              <div className="space-y-1.5">
-                <label className="text-muted-foreground uppercase">Page Title</label>
-                <Input
-                  value={title}
-                  onChange={(e) => setTitle(e.target.value)}
-                  placeholder="Page title"
-                />
-              </div>
-
-              <div className="space-y-1.5">
-                <label className="text-muted-foreground uppercase">URL Path Slug</label>
-                <div className="relative">
-                  <span className="absolute left-3 top-2.5 text-muted-foreground">/</span>
-                  <Input
-                    value={pageSlug}
-                    onChange={(e) =>
-                      setPageSlug(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ""))
-                    }
-                    className="pl-6"
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-1.5 sm:col-span-2">
-                <label className="text-muted-foreground uppercase">Internal Description</label>
-                <Input
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                  placeholder="Notes on this page's purpose..."
-                />
-              </div>
-
-              <div className="space-y-1.5">
-                <label className="text-muted-foreground uppercase">Publishing Status</label>
-                <select
-                  value={status}
-                  onChange={(e) => setStatus(e.target.value as PageStatus)}
-                  className="w-full rounded-md border border-border/80 bg-background px-3 py-2 text-xs font-mono"
-                >
-                  <option value="published">Published (Live to public)</option>
-                  <option value="draft">Draft (Admin view only)</option>
-                  <option value="archived">Archived</option>
-                </select>
-              </div>
+        {/* TAB 2: SEO & OPENGRAPH */}
+        <TabsContent value="seo">
+          <div className="rounded-2xl border border-sky-500/20 bg-slate-950/80 p-6 space-y-6 backdrop-blur-xl shadow-[0_4px_24px_rgba(0,0,0,0.4)]">
+            <div>
+              <h2 className="text-sm font-semibold uppercase text-white tracking-wider flex items-center gap-2">
+                <Globe className="h-4 w-4 text-sky-400" />
+                SEO Metadata & Social Previews
+              </h2>
+              <p className="text-xs text-white/50 mt-1">
+                Configure browser tab titles, search engine descriptions, and social share banners.
+              </p>
             </div>
-
-            <Button onClick={handleSavePage} className="font-mono text-xs mt-2">
-              Save Details
-            </Button>
-          </div>
-        </TabsContent>
-
-        {/* Tab 3: SEO & Meta */}
-        <TabsContent value="seo" className="space-y-6">
-          <div className="rounded-lg border border-border/80 bg-card/40 p-6 space-y-5 font-mono text-xs">
-            <h2 className="text-sm font-semibold uppercase text-foreground">
-              Search Engine Optimization (SEO)
-            </h2>
 
             <div className="space-y-4">
               <div className="space-y-1.5">
-                <label className="text-muted-foreground uppercase">Meta Title Tag</label>
+                <label className="text-white/50 uppercase text-[11px]">Meta Title</label>
                 <Input
                   value={metaTitle}
                   onChange={(e) => setMetaTitle(e.target.value)}
-                  placeholder="Title shown on Google results"
+                  placeholder="e.g. Pix & Co — Business Software"
+                  className="rounded-xl border-sky-500/20 bg-black/50 text-white"
                 />
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-muted-foreground uppercase">Meta Description</label>
+                <label className="text-white/50 uppercase text-[11px]">Meta Description</label>
                 <textarea
                   value={metaDescription}
                   onChange={(e) => setMetaDescription(e.target.value)}
                   rows={3}
-                  className="w-full rounded-md border border-border/80 bg-background/60 p-3 text-xs font-mono"
-                  placeholder="Summary snippet displayed by search engines..."
+                  className="w-full rounded-xl border border-sky-500/20 bg-black/50 p-3 text-xs font-mono text-white focus:border-sky-400 focus:outline-none"
+                  placeholder="Appears in Google search snippets..."
                 />
               </div>
 
-              <div className="space-y-1.5">
-                <label className="text-muted-foreground uppercase">Social Sharing (OG Image URL)</label>
-                <Input
+              {/* Social OG Image Upload */}
+              <div className="pt-2">
+                <MediaUploadField
+                  label="OpenGraph Social Share Image (1200x630)"
                   value={ogImage}
-                  onChange={(e) => setOgImage(e.target.value)}
+                  onChange={(url) => setOgImage(url)}
+                  mediaType="image"
                   placeholder="/images/site/2l8Wl4e6GvRUtl6qrfXsaZKZassb2ef.jpg"
                 />
               </div>
 
-              <div className="flex items-center gap-3 pt-2">
+              <div className="flex items-center justify-between rounded-xl border border-sky-500/20 bg-black/40 p-4">
+                <div className="space-y-0.5">
+                  <div className="font-semibold text-white">Search Engine Indexing</div>
+                  <div className="text-[11px] text-white/50">
+                    Instruct crawlers not to index this page (noindex tag).
+                  </div>
+                </div>
                 <Switch checked={noIndex} onCheckedChange={setNoIndex} />
-                <span className="text-muted-foreground">
-                  Prevent search engines from indexing this page (noindex)
-                </span>
               </div>
             </div>
 
-            <Button onClick={handleSavePage} className="font-mono text-xs mt-2">
+            <Button
+              onClick={handleSavePageMeta}
+              className="rounded-xl bg-gradient-to-r from-sky-500 to-blue-600 text-white font-semibold hover:from-sky-400 hover:to-blue-500 shadow-[0_0_20px_rgba(56,189,248,0.3)]"
+            >
               Save SEO Settings
             </Button>
           </div>
         </TabsContent>
+
+        {/* TAB 3: PAGE CONFIG */}
+        <TabsContent value="settings">
+          <div className="rounded-2xl border border-sky-500/20 bg-slate-950/80 p-6 space-y-6 backdrop-blur-xl shadow-[0_4px_24px_rgba(0,0,0,0.4)]">
+            <div>
+              <h2 className="text-sm font-semibold uppercase text-white tracking-wider flex items-center gap-2">
+                <Sliders className="h-4 w-4 text-sky-400" />
+                Page Identity & Routing Configuration
+              </h2>
+              <p className="text-xs text-white/50 mt-1">
+                Manage publication status, internal description, and custom URL slug.
+              </p>
+            </div>
+
+            <div className="grid sm:grid-cols-2 gap-4">
+              <div className="space-y-1.5 sm:col-span-2">
+                <label className="text-white/50 uppercase text-[11px]">Page Title</label>
+                <Input
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  className="rounded-xl border-sky-500/20 bg-black/50 text-white"
+                />
+              </div>
+
+              <div className="space-y-1.5">
+                <label className="text-white/50 uppercase text-[11px]">URL Slug</label>
+                <div className="relative">
+                  <span className="absolute left-3 top-2.5 text-white/40">/</span>
+                  <Input
+                    value={pageSlug}
+                    onChange={(e) => setPageSlug(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ""))}
+                    className="pl-6 rounded-xl border-sky-500/20 bg-black/50 text-white"
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-1.5">
+                <label className="text-white/50 uppercase text-[11px]">Publication Status</label>
+                <select
+                  value={status}
+                  onChange={(e) => setStatus(e.target.value as PageStatus)}
+                  className="w-full rounded-xl border border-sky-500/20 bg-black/50 px-3 py-2 text-xs font-mono text-white focus:border-sky-400 focus:outline-none"
+                >
+                  <option value="draft">Draft (Unpublished)</option>
+                  <option value="published">Published (Live Online)</option>
+                  <option value="archived">Archived</option>
+                </select>
+              </div>
+
+              <div className="space-y-1.5 sm:col-span-2">
+                <label className="text-white/50 uppercase text-[11px]">Internal Description / Notes</label>
+                <Input
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                  placeholder="Brief internal note regarding this page..."
+                  className="rounded-xl border-sky-500/20 bg-black/50 text-white"
+                />
+              </div>
+            </div>
+
+            <Button
+              onClick={handleSavePageMeta}
+              className="rounded-xl bg-gradient-to-r from-sky-500 to-blue-600 text-white font-semibold hover:from-sky-400 hover:to-blue-500 shadow-[0_0_20px_rgba(56,189,248,0.3)]"
+            >
+              Save Configuration
+            </Button>
+          </div>
+        </TabsContent>
       </Tabs>
+
+      {/* Add Block Modal */}
+      <Dialog open={isAddBlockOpen} onOpenChange={setIsAddBlockOpen}>
+        <DialogContent className="max-w-lg bg-slate-950/95 border-sky-500/30 p-6 backdrop-blur-2xl rounded-2xl shadow-[0_0_40px_rgba(56,189,248,0.2)] font-mono text-xs">
+          <DialogHeader>
+            <DialogTitle className="text-sm tracking-wider uppercase text-sky-400 flex items-center gap-2">
+              <Plus className="h-4 w-4" />
+              INSERT SECTION BLOCK
+            </DialogTitle>
+          </DialogHeader>
+
+          <div className="grid grid-cols-2 gap-3 py-4">
+            {[
+              { type: "hero", label: "Hero Block", desc: "Badge, title, CTAs, media upload" },
+              { type: "features", label: "Feature Matrix", desc: "Multi-item capability grid" },
+              { type: "richtext", label: "Editorial Text", desc: "Multi-paragraph markdown" },
+              { type: "media", label: "Media Showcase", desc: "Single image or video embed" },
+              { type: "stats", label: "Metric Counters", desc: "Key numerical achievements" },
+              { type: "faq", label: "FAQ Accordion", desc: "Question & answer accordion" },
+              { type: "cta", label: "Conversion CTA", desc: "Bottom action banner" },
+            ].map((item) => (
+              <button
+                key={item.type}
+                type="button"
+                onClick={() => setSelectedBlockType(item.type as BlockType)}
+                className={`flex flex-col text-left p-3.5 rounded-xl border transition-all ${
+                  selectedBlockType === item.type
+                    ? "border-sky-400 bg-sky-500/20 shadow-[0_0_15px_rgba(56,189,248,0.25)] font-semibold"
+                    : "border-sky-500/20 bg-black/40 hover:border-sky-500/40 hover:bg-sky-500/5 text-white/70"
+                }`}
+              >
+                <span className="text-white font-medium">{item.label}</span>
+                <span className="text-[10px] text-white/40 mt-1">{item.desc}</span>
+              </button>
+            ))}
+          </div>
+
+          <DialogFooter className="gap-2">
+            <Button
+              variant="outline"
+              onClick={() => setIsAddBlockOpen(false)}
+              className="rounded-xl border-white/10 text-white/70 hover:bg-white/10"
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={handleCreateBlock}
+              className="rounded-xl bg-gradient-to-r from-sky-500 to-blue-600 text-white font-semibold hover:from-sky-400 shadow-[0_0_20px_rgba(56,189,248,0.3)]"
+            >
+              Insert Block
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }
