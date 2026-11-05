@@ -13,6 +13,7 @@ import {
   LogOut,
   ExternalLink,
   X,
+  Sparkles,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -77,31 +78,32 @@ export function AdminSidebar({ mobileOpen = false, setMobileOpen }: AdminSidebar
       {/* Mobile Backdrop overlay */}
       {mobileOpen && (
         <div
-          className="fixed inset-0 z-40 bg-black/80 backdrop-blur-sm lg:hidden"
+          className="fixed inset-0 z-40 bg-black/80 backdrop-blur-md lg:hidden"
           onClick={() => setMobileOpen?.(false)}
         />
       )}
 
       <aside
         className={cn(
-          "fixed inset-y-0 left-0 z-50 flex flex-col border-r border-border/70 bg-card/95 backdrop-blur-xl transition-all duration-300 select-none lg:static",
-          collapsed ? "lg:w-16" : "lg:w-64",
-          mobileOpen ? "translate-x-0 w-72" : "-translate-x-full lg:translate-x-0"
+          "fixed inset-y-0 left-0 z-50 flex flex-col border-r border-sky-500/20 bg-slate-950/90 backdrop-blur-2xl transition-all duration-300 select-none lg:static",
+          collapsed ? "lg:w-20" : "lg:w-64",
+          mobileOpen ? "translate-x-0 w-72 shadow-[0_0_50px_rgba(14,165,233,0.3)]" : "-translate-x-full lg:translate-x-0"
         )}
       >
         {/* Brand Header */}
-        <div className="flex h-16 items-center justify-between px-4 border-b border-border/60">
-          <Link href="/admin/dashboard" onClick={handleLinkClick} className="flex items-center gap-2.5">
-            <div className="h-7 w-7 rounded bg-foreground text-background flex items-center justify-center font-mono font-bold text-xs">
+        <div className="flex h-16 items-center justify-between px-4 border-b border-sky-500/20 bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950">
+          <Link href="/admin/dashboard" onClick={handleLinkClick} className="flex items-center gap-3">
+            <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-sky-400 to-blue-600 flex items-center justify-center font-mono font-bold text-slate-950 text-xs shadow-[0_0_15px_rgba(56,189,248,0.5)]">
               P
             </div>
             {(!collapsed || mobileOpen) && (
               <div className="flex flex-col">
-                <span className="font-mono text-xs font-semibold tracking-wider text-foreground uppercase">
+                <span className="font-mono text-xs font-bold tracking-wider text-white uppercase flex items-center gap-1.5">
                   Pix&Co CMS
+                  <span className="h-1.5 w-1.5 rounded-full bg-sky-400 shadow-[0_0_8px_#38bdf8]" />
                 </span>
-                <span className="text-[10px] text-muted-foreground font-mono">
-                  Enterprise Portal
+                <span className="text-[10px] text-sky-400/80 font-mono">
+                  Luminous Core
                 </span>
               </div>
             )}
@@ -111,7 +113,7 @@ export function AdminSidebar({ mobileOpen = false, setMobileOpen }: AdminSidebar
           <Button
             variant="ghost"
             size="icon"
-            className="h-7 w-7 text-muted-foreground hover:text-foreground hidden lg:flex"
+            className="h-7 w-7 text-slate-400 hover:text-sky-300 hover:bg-sky-500/10 hidden lg:flex rounded-lg"
             onClick={() => setCollapsed(!collapsed)}
             title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
           >
@@ -122,7 +124,7 @@ export function AdminSidebar({ mobileOpen = false, setMobileOpen }: AdminSidebar
           <Button
             variant="ghost"
             size="icon"
-            className="h-7 w-7 text-muted-foreground hover:text-foreground lg:hidden"
+            className="h-8 w-8 text-slate-400 hover:text-white lg:hidden rounded-lg"
             onClick={() => setMobileOpen?.(false)}
           >
             <X className="h-4 w-4" />
@@ -130,11 +132,11 @@ export function AdminSidebar({ mobileOpen = false, setMobileOpen }: AdminSidebar
         </div>
 
         {/* Navigation Sections */}
-        <div className="flex-1 overflow-y-auto py-4 px-2 space-y-6">
+        <div className="flex-1 overflow-y-auto py-5 px-3 space-y-6">
           {navItems.map((group) => (
-            <div key={group.title} className="space-y-1">
+            <div key={group.title} className="space-y-1.5">
               {(!collapsed || mobileOpen) && (
-                <h4 className="px-3 text-[10px] font-mono uppercase tracking-widest text-muted-foreground/80 mb-2">
+                <h4 className="px-3 text-[10px] font-mono uppercase tracking-widest text-sky-400/60 mb-2 font-semibold">
                   {group.title}
                 </h4>
               )}
@@ -151,17 +153,17 @@ export function AdminSidebar({ mobileOpen = false, setMobileOpen }: AdminSidebar
                     href={item.href}
                     onClick={handleLinkClick}
                     className={cn(
-                      "flex items-center gap-3 rounded-md px-3 py-2 text-xs font-medium transition-all group",
+                      "flex items-center gap-3 rounded-xl px-3 py-2.5 text-xs font-medium transition-all group relative font-mono",
                       isActive
-                        ? "bg-foreground/10 text-foreground font-semibold border-l-2 border-foreground"
-                        : "text-muted-foreground hover:bg-muted/40 hover:text-foreground"
+                        ? "bg-gradient-to-r from-sky-500/20 via-sky-500/10 to-transparent text-sky-300 font-semibold border-l-2 border-sky-400 shadow-[0_0_20px_rgba(56,189,248,0.15)]"
+                        : "text-slate-400 hover:bg-slate-900/60 hover:text-slate-100 hover:border-l-2 hover:border-slate-600"
                     )}
                     title={collapsed && !mobileOpen ? item.label : undefined}
                   >
                     <Icon
                       className={cn(
                         "h-4 w-4 shrink-0 transition-colors",
-                        isActive ? "text-foreground" : "text-muted-foreground group-hover:text-foreground"
+                        isActive ? "text-sky-400 drop-shadow-[0_0_8px_rgba(56,189,248,0.7)]" : "text-slate-500 group-hover:text-slate-300"
                       )}
                     />
                     {(!collapsed || mobileOpen) && <span className="truncate">{item.label}</span>}
@@ -173,12 +175,12 @@ export function AdminSidebar({ mobileOpen = false, setMobileOpen }: AdminSidebar
         </div>
 
         {/* User & Quick Actions Footer */}
-        <div className="p-3 border-t border-border/60 space-y-2">
+        <div className="p-3 border-t border-sky-500/20 space-y-2 bg-slate-950/60">
           <Link
             href="/"
             target="_blank"
             className={cn(
-              "flex items-center gap-2 rounded-md px-3 py-1.5 text-xs text-muted-foreground hover:text-foreground hover:bg-muted/40 transition-colors font-mono",
+              "flex items-center gap-2 rounded-xl px-3 py-2 text-xs text-slate-400 hover:text-sky-300 hover:bg-sky-500/10 transition-all font-mono border border-transparent hover:border-sky-500/20",
               collapsed && !mobileOpen && "justify-center px-0"
             )}
           >
@@ -188,18 +190,18 @@ export function AdminSidebar({ mobileOpen = false, setMobileOpen }: AdminSidebar
 
           <div
             className={cn(
-              "flex items-center justify-between rounded-lg border border-border/60 bg-muted/20 p-2",
+              "flex items-center justify-between rounded-xl border border-sky-500/20 bg-slate-900/60 p-2.5 shadow-sm",
               collapsed && !mobileOpen && "flex-col gap-2"
             )}
           >
             <div className="flex items-center gap-2.5 overflow-hidden">
-              <div className="h-7 w-7 shrink-0 rounded-full bg-border flex items-center justify-center font-mono text-xs font-medium text-foreground">
+              <div className="h-8 w-8 shrink-0 rounded-lg bg-sky-500/20 border border-sky-500/30 flex items-center justify-center font-mono text-xs font-bold text-sky-400 shadow-[0_0_10px_rgba(56,189,248,0.2)]">
                 {user?.email?.charAt(0).toUpperCase() || "A"}
               </div>
               {(!collapsed || mobileOpen) && (
                 <div className="overflow-hidden">
-                  <p className="truncate text-xs font-medium text-foreground">{user?.email || "admin@pixandco.lk"}</p>
-                  <p className="text-[10px] text-muted-foreground capitalize font-mono">{user?.role || "Administrator"}</p>
+                  <p className="truncate text-xs font-medium text-slate-200">{user?.email || "admin@pixandco.lk"}</p>
+                  <p className="text-[10px] text-sky-400/70 capitalize font-mono">{user?.role || "Administrator"}</p>
                 </div>
               )}
             </div>
@@ -207,7 +209,7 @@ export function AdminSidebar({ mobileOpen = false, setMobileOpen }: AdminSidebar
             <Button
               variant="ghost"
               size="icon"
-              className="h-7 w-7 text-muted-foreground hover:text-destructive"
+              className="h-7 w-7 text-slate-400 hover:text-red-400 hover:bg-red-500/10 rounded-lg"
               onClick={logout}
               title="Log out"
             >
